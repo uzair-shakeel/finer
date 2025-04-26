@@ -130,12 +130,12 @@ const WatchInfo = ({ product }) => {
   return (
     <div className="bg-white rounded-[20px] w-full p-6">
       {/* Header */}
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
+      <div className="flex items-start justify-end gap-3">
+        {/* <h3 className="text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
           213 views in 48 hours
-        </h3>
+        </h3> */}
         <div className="flex items-center gap-2 sm:gap-[18px]">
-          <div
+          {/* <div
             className="w-8 h-8 sm:w-[36px] sm:h-[36px] rounded-full bg-[#ECF0F3] flex items-center justify-center cursor-pointer"
             onClick={toggleFavorite}
           >
@@ -171,7 +171,7 @@ const WatchInfo = ({ product }) => {
                 />
               </svg>
             )}
-          </div>
+          </div> */}
 
           <button
             className="w-8 h-8 sm:w-[36px] sm:h-[36px] rounded-full bg-[#ECF0F3] flex items-center justify-center"
