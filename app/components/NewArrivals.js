@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { scrollToHomeFormSection } from "../utils/navigation";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import Link from 'next/link';
+import Link from "next/link";
 
 const NewArrivals = () => {
   const { t } = useTranslation();
@@ -112,8 +112,8 @@ const NewArrivals = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-6">
           {products.map((product) => (
-            <Link 
-              href={`/single-product/${product._id}`} 
+            <Link
+              href={`/single-product/${product._id}`}
               key={product._id}
               className="block"
             >
@@ -215,14 +215,14 @@ const NewArrivals = () => {
                     </del>
                   )}
                 </div>
-                <div className="flex items-center justify-start">
+                {/* <div className="flex items-center justify-start">
                   <button
                     onClick={() => handleBuyClick(product)}
                     className="bg-[#017EFE] hover:bg-[#003D7B] transition-all duration-300 h-[35px] sm:h-[39px] rounded-[60px] flex items-center justify-center px-10 text-white font-medium text-[12px] sm:text-[16px] sm:!leading-[19px] leading-[100%] w-fit"
                   >
                     {t("newArrivals.buy")}
                   </button>
-                </div>
+                </div> */}
               </div>
             </Link>
           ))}
