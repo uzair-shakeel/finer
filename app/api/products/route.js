@@ -4,7 +4,7 @@ import {
   getProducts,
   getFilteredProducts,
   createProduct,
-} from "@/app/lib/products";
+} from "@/app/lib/mongodb-products";
 
 // Helper to check authentication
 const isAuthenticated = (request) => {
@@ -24,14 +24,14 @@ export async function GET(request) {
     // Get filtered products
     let products;
     if (status || featured) {
-      products = getFilteredProducts({ status, featured });
+      products = await getFilteredProducts({ status, featured });
     } else {
       // For public access, only show live products unless admin
       const isAdmin = request.headers.get("x-is-admin") === "true";
       if (!isAdmin) {
-        products = getFilteredProducts({ status: "live" });
+        products = await getFilteredProducts({ status: "live" });
       } else {
-        products = getProducts();
+        products = await getProducts();
       }
     }
 
@@ -43,7 +43,11 @@ export async function GET(request) {
   } catch (error) {
     console.error("Fetch products error:", error);
     return NextResponse.json(
-      { success: false, message: "Internal server error" },
+      {
+        success: false,
+        message: "Internal server error",
+        error: error.message,
+      },
       { status: 500 }
     );
   }
@@ -100,7 +104,7 @@ export async function POST(request) {
     // Create product with more detailed error handling
     let product;
     try {
-      product = createProduct(productData);
+      product = await createProduct(productData);
     } catch (createError) {
       console.error("Error in createProduct function:", createError);
       return NextResponse.json(

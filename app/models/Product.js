@@ -1,5 +1,30 @@
 import mongoose from "mongoose";
 
+const PriceHistorySchema = new mongoose.Schema({
+  price: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const ConditionSchema = new mongoose.Schema(
+  {
+    hasBox: {
+      type: Boolean,
+      default: false,
+    },
+    hasPapers: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { _id: false }
+);
+
 const ProductSchema = new mongoose.Schema(
   {
     brand: {
@@ -17,18 +42,19 @@ const ProductSchema = new mongoose.Schema(
       trim: true,
     },
     year: {
-      type: Number,
-    },
-    condition: {
       type: String,
       trim: true,
     },
+    condition: {
+      type: ConditionSchema,
+      default: { hasBox: false, hasPapers: false },
+    },
     price: {
-      type: Number,
+      type: String,
       required: [true, "Please provide a price"],
     },
     originalPrice: {
-      type: Number,
+      type: String,
     },
     discount: {
       type: Number,
@@ -58,13 +84,38 @@ const ProductSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
+    // Specification fields
+    itemCode: {
+      type: String,
+      trim: true,
     },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
+    caseSize: {
+      type: [String],
+      default: [],
+    },
+    caseMaterial: {
+      type: [String],
+      default: [],
+    },
+    dialColour: {
+      type: [String],
+      default: [],
+    },
+    bracelet: {
+      type: [String],
+      default: [],
+    },
+    movement: {
+      type: [String],
+      default: [],
+    },
+    waterResistance: {
+      type: Boolean,
+      default: false,
+    },
+    priceHistory: {
+      type: [PriceHistorySchema],
+      default: [],
     },
   },
   {

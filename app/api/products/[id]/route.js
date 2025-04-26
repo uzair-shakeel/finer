@@ -4,7 +4,7 @@ import {
   getProductById,
   updateProduct,
   deleteProduct,
-} from "@/app/lib/products";
+} from "@/app/lib/mongodb-products";
 
 // Helper to check authentication
 const isAuthenticated = (request) => {
@@ -18,7 +18,7 @@ export async function GET(request, { params }) {
     const { id } = params;
 
     // Find product
-    const product = getProductById(id);
+    const product = await getProductById(id);
 
     if (!product) {
       return NextResponse.json(
@@ -43,7 +43,11 @@ export async function GET(request, { params }) {
   } catch (error) {
     console.error("Fetch product error:", error);
     return NextResponse.json(
-      { success: false, message: "Internal server error" },
+      {
+        success: false,
+        message: "Internal server error",
+        error: error.message,
+      },
       { status: 500 }
     );
   }
@@ -61,10 +65,24 @@ export async function PUT(request, { params }) {
     }
 
     const { id } = params;
-    const updateData = await request.json();
+
+    // Parse JSON with error handling
+    let updateData;
+    try {
+      updateData = await request.json();
+    } catch (parseError) {
+      console.error("Error parsing request body:", parseError);
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid request body - failed to parse JSON",
+        },
+        { status: 400 }
+      );
+    }
 
     // Find and update product
-    const product = updateProduct(id, updateData);
+    const product = await updateProduct(id, updateData);
 
     if (!product) {
       return NextResponse.json(
@@ -81,7 +99,11 @@ export async function PUT(request, { params }) {
   } catch (error) {
     console.error("Update product error:", error);
     return NextResponse.json(
-      { success: false, message: "Internal server error" },
+      {
+        success: false,
+        message: "Internal server error",
+        error: error.message,
+      },
       { status: 500 }
     );
   }
@@ -101,7 +123,7 @@ export async function DELETE(request, { params }) {
     const { id } = params;
 
     // Find and delete product
-    const product = deleteProduct(id);
+    const product = await deleteProduct(id);
 
     if (!product) {
       return NextResponse.json(
@@ -117,7 +139,11 @@ export async function DELETE(request, { params }) {
   } catch (error) {
     console.error("Delete product error:", error);
     return NextResponse.json(
-      { success: false, message: "Internal server error" },
+      {
+        success: false,
+        message: "Internal server error",
+        error: error.message,
+      },
       { status: 500 }
     );
   }
