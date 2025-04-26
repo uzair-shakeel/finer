@@ -18,6 +18,7 @@ const SingleProduct = ({ product }) => {
       (img) => img.url || "/placeholder.svg"
     ),
   ];
+  console.log(productImages);
 
   return (
     <div className="px-5 pt-[85px] sm:pt-[110px]">

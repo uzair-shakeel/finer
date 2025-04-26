@@ -1,37 +1,37 @@
-'use client'
-import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
-import SingleProduct from '@/app/components/SingleProduct/SingleProduct'
-import LoadingSpinner from '@/app/components/LoadingSpinner'
+"use client";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import SingleProduct from "@/app/components/SingleProduct/SingleProduct";
+import LoadingSpinner from "@/app/components/LoadingSpinner";
 
 export default function ProductPage() {
-  const { id } = useParams()
-  const [product, setProduct] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        setLoading(true)
-        const response = await fetch(`/api/products/${id}`)
+        setLoading(true);
+        const response = await fetch(`/api/products/${id}`);
         if (!response.ok) {
-          throw new Error('Product not found')
+          throw new Error("Product not found");
         }
-        const data = await response.json()
-        setProduct(data)
+        const data = await response.json();
+        setProduct(data);
       } catch (err) {
-        setError(err.message)
+        setError(err.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchProduct()
-  }, [id])
+    fetchProduct();
+  }, [id]);
 
   if (loading) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   if (error) {
@@ -42,18 +42,20 @@ export default function ProductPage() {
           <p className="text-gray-600">{error}</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-700">Product not found</h2>
+          <h2 className="text-2xl font-semibold text-gray-700">
+            Product not found
+          </h2>
         </div>
       </div>
-    )
+    );
   }
 
-  return <SingleProduct product={product} />
-} 
+  return <SingleProduct product={product.product} />;
+}
