@@ -59,51 +59,113 @@ export const getFilteredProducts = ({ status, featured }) => {
 // Create a new product
 export const createProduct = (productData) => {
   try {
-    const products = getProducts();
+    // Ensure data directory exists
+    ensureDataDir();
+
+    // Check if products file exists, if not create it
+    if (!fs.existsSync(dataFilePath)) {
+      fs.writeFileSync(dataFilePath, JSON.stringify({ products: [] }), "utf8");
+    }
+
+    // Read existing products
+    let products = [];
+    try {
+      const fileData = fs.readFileSync(dataFilePath, "utf8");
+      products = JSON.parse(fileData).products || [];
+    } catch (readError) {
+      console.error(
+        "Error reading products file, creating new file:",
+        readError
+      );
+      products = [];
+    }
+
     const currentDate = new Date().toISOString();
 
     // Format price and originalPrice
-    const formattedPrice =
-      typeof productData.price === "string"
-        ? productData.price.replace(/,/g, "")
-        : productData.price?.toString();
+    let formattedPrice = "";
+    let formattedOriginalPrice = "";
 
-    const formattedOriginalPrice =
-      typeof productData.originalPrice === "string"
-        ? productData.originalPrice.replace(/,/g, "")
-        : productData.originalPrice?.toString();
+    try {
+      formattedPrice =
+        typeof productData.price === "string"
+          ? productData.price.replace(/,/g, "")
+          : productData.price?.toString() || "0";
+    } catch (error) {
+      console.error("Error formatting price:", error);
+      formattedPrice = "0";
+    }
 
-    // Ensure specification fields are arrays if not already
+    try {
+      formattedOriginalPrice =
+        typeof productData.originalPrice === "string"
+          ? productData.originalPrice.replace(/,/g, "")
+          : productData.originalPrice?.toString() || formattedPrice;
+    } catch (error) {
+      console.error("Error formatting originalPrice:", error);
+      formattedOriginalPrice = formattedPrice;
+    }
+
+    // Ensure specification fields are arrays (more robust checking)
     const caseSize = Array.isArray(productData.caseSize)
       ? productData.caseSize
+      : productData.caseSize
+      ? [productData.caseSize.toString()]
       : [];
+
     const caseMaterial = Array.isArray(productData.caseMaterial)
       ? productData.caseMaterial
+      : productData.caseMaterial
+      ? [productData.caseMaterial.toString()]
       : [];
+
     const dialColour = Array.isArray(productData.dialColour)
       ? productData.dialColour
+      : productData.dialColour
+      ? [productData.dialColour.toString()]
       : [];
+
     const bracelet = Array.isArray(productData.bracelet)
       ? productData.bracelet
+      : productData.bracelet
+      ? [productData.bracelet.toString()]
       : [];
+
     const movement = Array.isArray(productData.movement)
       ? productData.movement
+      : productData.movement
+      ? [productData.movement.toString()]
       : [];
+
+    // Create a sanitized version of condition
+    let condition = { hasBox: false, hasPapers: false };
+    if (productData.condition) {
+      if (typeof productData.condition === "object") {
+        condition = productData.condition;
+      } else if (typeof productData.condition === "string") {
+        try {
+          condition = JSON.parse(productData.condition);
+        } catch (e) {
+          console.error("Error parsing condition:", e);
+        }
+      }
+    }
 
     const newProduct = {
       ...productData,
       price: formattedPrice,
-      originalPrice: formattedOriginalPrice,
+      originalPrice: formattedOriginalPrice || formattedPrice,
       _id: uuidv4(),
       createdAt: currentDate,
       updatedAt: currentDate,
+      condition: condition,
       priceHistory: [
         {
           price: formattedPrice,
           date: currentDate,
         },
       ],
-      // Set default values for spec fields if not provided
+      // Set default values for spec fields
       itemCode: productData.itemCode || "",
       caseSize: caseSize,
       caseMaterial: caseMaterial,
@@ -111,15 +173,26 @@ export const createProduct = (productData) => {
       bracelet: bracelet,
       movement: movement,
       waterResistance: productData.waterResistance === true,
+      additionalImages: Array.isArray(productData.additionalImages)
+        ? productData.additionalImages
+        : [],
+      status: productData.status || "draft",
+      featured: productData.featured || false,
     };
 
     products.push(newProduct);
 
-    fs.writeFileSync(
-      dataFilePath,
-      JSON.stringify({ products }, null, 2),
-      "utf8"
-    );
+    // Write to file with more error handling
+    try {
+      fs.writeFileSync(
+        dataFilePath,
+        JSON.stringify({ products }, null, 2),
+        "utf8"
+      );
+    } catch (writeError) {
+      console.error("Error writing to products file:", writeError);
+      throw new Error(`Failed to save product: ${writeError.message}`);
+    }
 
     return newProduct;
   } catch (error) {

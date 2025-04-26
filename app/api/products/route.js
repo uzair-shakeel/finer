@@ -60,21 +60,58 @@ export async function POST(request) {
       );
     }
 
-    const productData = await request.json();
+    // Parse JSON with error handling
+    let productData;
+    try {
+      productData = await request.json();
+    } catch (parseError) {
+      console.error("Error parsing request body:", parseError);
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid request body - failed to parse JSON",
+        },
+        { status: 400 }
+      );
+    }
 
     // Validate required fields
     const requiredFields = ["brand", "model", "price", "imageUrl"];
+    const missingFields = [];
+
     for (const field of requiredFields) {
       if (!productData[field]) {
-        return NextResponse.json(
-          { success: false, message: `Please provide ${field}` },
-          { status: 400 }
-        );
+        missingFields.push(field);
       }
     }
 
-    // Create product
-    const product = createProduct(productData);
+    if (missingFields.length > 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Please provide the following required fields: ${missingFields.join(
+            ", "
+          )}`,
+        },
+        { status: 400 }
+      );
+    }
+
+    // Create product with more detailed error handling
+    let product;
+    try {
+      product = createProduct(productData);
+    } catch (createError) {
+      console.error("Error in createProduct function:", createError);
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Failed to create product",
+          error: createError.message || "Unknown error",
+        },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
       {
@@ -87,7 +124,11 @@ export async function POST(request) {
   } catch (error) {
     console.error("Create product error:", error);
     return NextResponse.json(
-      { success: false, message: "Internal server error" },
+      {
+        success: false,
+        message: "Internal server error",
+        error: error.message || "Unknown error",
+      },
       { status: 500 }
     );
   }
