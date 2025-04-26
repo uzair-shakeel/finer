@@ -1,0 +1,10 @@
+{
+  "users": [
+    {
+      "username": "finerlux_admin",
+      "password": "84e5ff3cb4226d0830d184337c783b294fee9af077dddf4f8e8d508b82314609",
+      "role": "admin",
+      "createdAt": "2025-04-25T06:16:37.371Z"
+    }
+  ]
+}

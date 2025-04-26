@@ -1,0 +1,155 @@
+{
+     "navbar": {
+          "main": "Main",
+          "ourServices": "Our Services",
+          "chat": "Chat",
+          "needHelp": "Need help?"
+     },
+     "hero": {
+          "title": "We help watch collectors do more of what they love.",
+          "description": "We buy, sell, and source luxury timepieces and jewelry that help customers save time and enjoy more of what they love.",
+          "buyBtn": "Buy",
+          "sellBtn": "Sell",
+          "learnMoreBtn": "Learn more"
+     },
+     "newArrivals": {
+          "title": "New Arrivals",
+          "year": "Year",
+          "box": "Box",
+          "papers": "Papers",
+          "buy": "Buy"
+     },
+     "withUsYouCan": {
+          "title": "With Us You Can",
+          "sell": {
+               "title": "Sell",
+               "description": "Sell to us with confidence. Instant payment on the spot — via direct bank transfer, cash or crypto."
+          },
+          "buy": {
+               "title": "Buy",
+               "description": "Shop authentic luxury watches and fine jewellery. Only authenticated pieces, sourced with care and guaranteed for quality."
+          },
+          "partExchange": {
+               "title": "Part Exchange",
+               "description": "Trade your luxury watch or jewellery for another luxury piece. Fair valuations, instant offers, and secure transactions with trusted experts."
+          },
+          "source": {
+               "title": "Source",
+               "description": "We help you find rare watches and jewellery from luxury brands. Personalised service to find the perfect piece."
+          },
+          "authenticate": {
+               "title": "Authenticate",
+               "description": "Ensure your watch or jewellery is 100% authentic. Expert verification, detailed assessments, and certification for guaranteed authenticity."
+          }
+     },
+     "tab": {
+          "sell": "Sell",
+          "buy": "Buy",
+          "partExchange": "Part Exchange",
+          "source": "Source",
+          "authenticate": "Authenticate",
+          "titleSellOne": "Want to Sell pre-owned watches or jewellery?",
+          "titleSellTwo": "Want to Sell pre-owned watch or jewellery?",
+          "descSellOne": "We offer instant payment on the spot via bank transfer, cash, or cryptocurrency. Receive a fast, fair offer and turn your item into money. Guarantee transparency on transactions — no hidden fees, no delays.",
+          "descSellTwo": "We offer instant payment on the spot via bank transfer, cash, or cryptocurrency.",
+          "titleBuyOne": "Want to Buy a luxury watch or jewellery?",
+          "titleBuyTwo": "Want to Buy a luxury watch or jewellery?",
+          "descBuyOne": "Enjoy next-day delivery with full insurance and a 14-day refund policy for added peace of mind. Our team is available 24/7 to assist you in finding the perfect piece. We have a diverse collection of renowned brands like Rolex, Cartier and others.",
+          "descBuyTwo": "Our team is available 24/7 to assist you in finding the perfect piece.",
+          "titlePartExchangeOne": "Want to Part Exchange for something new?",
+          "titlePartExchangeTwo": "Want to Part Exchange for something new?",
+          "descPartExchangeOne": "Share the details of your pieces, and we'll provide detailed valuation breakdown — for free. Our team ensures accurate, fair evaluations with highly competitive quotes. Once your piece is valued, you can browse our collection and put your offer towards something you love. We value your time, offering same-day service for a fast, efficient experience.",
+          "descPartExchangeTwo": "Our team ensures accurate, fair evaluations with highly competitive quotes.",
+          "titleSourceOne": "Want us to Source a rare watch or jewellery?",
+          "titleSourceTwo": "Want us to Source a rare watch or jewellery?",
+          "descSourceOne": "We base our search on your budget, brand preferences, and any specific requirements to ensure you get exactly what you're looking for. Tell us the details, and we'll search our trusted global network to find the best available match. Our team will keep you updated at every step.",
+          "descSourceTwo": "Can't find it elsewhere? We'll scour our global network to deliver your dream item.",
+          "titleAuthenticateOne": "Want to Authenticate your luxury goods?",
+          "titleAuthenticateTwo": "Want to Authenticate your luxury goods?",
+          "descAuthenticateOne": "Get your watch and jewellery verified by our experts. Whether you're buying, selling, or just want peace of mind, our authentication service provides a detailed inspection to confirm authenticity. Trusted by collectors and professionals worldwide.",
+          "descAuthenticateTwo": "Ensure confidence in your purchase or sale with our expert verification service."
+     },
+     "form": {
+          "submit": "Submit",
+          "submitting": "Submitting...",
+          "uploadFileTitle": " Upload photos and videos of item",
+          "dragAndDrop": "Drag and drop files here or click to upload",
+          "supportsImages": "Supports images and videos (GIFs not allowed)",
+          "mandatoryField": "It is mandatory field",
+          "nameContainNumbers": "Name cannot contain numbers",
+          "phoneNumberContainNumbers": "Phone number cannot contain letters",
+          "positiveNumber": "Please enter a valid positive number",
+          "emailAddress": "Please enter a valid email address",
+          "contactedBy": "I am happy to be contacted by",
+          "submittedSuccessfully": "Form submitted successfully! We'll get back to you soon.",
+          "errorSubmitting": "There was an error submitting the form. Please try again later.",
+          "name": "Name",
+          "namePlaceholder": "Full Name",
+          "email": "Email",
+          "phone": "Phone number",
+          "description": "Description",
+          "descriptionplaceholder": "Enter your description",
+          "price": "Your Price",
+          "item": "Item",
+          "itemOptions": {
+               "watch": "Watch",
+               "jewellery": "Jewellery",
+               "other": "Other"
+          },
+          "condition": "Condition",
+          "conditionOption": {
+               "new": "New",
+               "unworn": "Unworn",
+               "veryGood": "Very Good",
+               "good": "Good",
+               "fair": "Fair",
+               "incomplete": "Incomplete"
+          }
+     },
+     "contactMethods": {
+          "telephone": "Telephone",
+          "sms": "SMS",
+          "email": "Email",
+          "whatsapp": "WhatsApp"
+     },
+     "modal": {
+          "title": "Conditions",
+          "conditionTitles": {
+               "new": "New",
+               "unworn": "Unworn",
+               "veryGood": "Very Good",
+               "good": "Good",
+               "fair": "Fair",
+               "incomplete": "Incomplete"
+          },
+          "conditions": {
+               "new": "The item is brand new, never used, and in perfect condition. It has no scratches, marks, or signs of wear. It comes with all original packaging and warranty, just like buying directly from a store.",
+               "unworn": "The item has never been worn, but it might not be straight from the store. It has no signs of use but could have tiny marks from handling or storage. Any original stickers or packaging might still be there.",
+               "veryGood": "The item has been worn but taken care of really well. It may have small, barely noticeable scratches, but nothing major. It might have been cleaned or polished to look better. Any markings or engravings are still clear.",
+               "good": "The item has been used and shows clear signs of wear, like scratches or small dents. The bracelet or strap might be a bit stretched. Some markings or engravings may be faded, but they're still visible.",
+               "fair": "The item has been worn a lot and shows major signs of use, like deep scratches or dents. The bracelet or strap is visibly worn. It may have been polished, but you can still see the damage.",
+               "incomplete": "The item is not fully functional because it's missing parts or is broken. It is meant for repair or to be used for spare parts."
+          }
+     },
+     "footer": {
+          "headline": "We help watch collectors do more of what they love.",
+          "contacts": {
+               "title": "Contacts"
+          },
+          "services": {
+               "title": "Services",
+               "partExchange": "Part exchange",
+               "authenticate": "Authenticate",
+               "source": "Source",
+               "sell": "Sell",
+               "buy": "Buy"
+          },
+          "privacy": {
+               "title": "Privacy"
+          },
+          "currencyLabel": "Currency",
+          "language": "Language",
+          "rights": "All rights reserved",
+          "designBy": "Website design by Toxarolik"
+     }
+}

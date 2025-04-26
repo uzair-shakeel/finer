@@ -1,0 +1,165 @@
+{
+  "products": [
+    {
+      "brand": "Rolex",
+      "model": "Daytona",
+      "reference": "126500LN",
+      "year": "2022",
+      "condition": {
+        "hasBox": true,
+        "hasPapers": true
+      },
+      "price": "15,150",
+      "originalPrice": "15,150",
+      "discount": 0,
+      "description": "The Rolex Daytona, named after the race circuit in Florida that hosts the Rolex twenty-four hour race, epitomises the ultimate driver’s watch. The dial, unburdened by a date window, is clear and easy to read. The tachymeter offers quick speed calculations, while the shape is instantly recognisable and supremely comfortable. Its smaller size and smart design makes it a versatile watch capable ",
+      "imageUrl": "https://res.cloudinary.com/dfudkmrpe/image/upload/v1745662265/finerlux-products/y5usjtca8g6srskerugv.webp",
+      "backsideImageUrl": "https://res.cloudinary.com/dfudkmrpe/image/upload/v1745662270/finerlux-products/fvu4bwiii39pvhtsgzmb.webp",
+      "additionalImages": [],
+      "status": "live",
+      "featured": true,
+      "createdAt": "2025-04-26T10:25:06.614Z",
+      "updatedAt": "2025-04-26T10:25:06.614Z",
+      "priceHistory": [
+        {
+          "price": "15,150",
+          "date": "2025-04-26T10:25:06.614Z"
+        }
+      ],
+      "_id": "8d871358-b839-4b69-ae65-66b543f6af37"
+    },
+    {
+      "brand": "Rolex",
+      "model": "GMT-Master II",
+      "reference": "126711CHNR",
+      "year": "2021",
+      "condition": {
+        "hasBox": true,
+        "hasPapers": true
+      },
+      "price": "13,900",
+      "originalPrice": "14,456",
+      "discount": "4",
+      "description": "Coming Soon",
+      "imageUrl": "https://res.cloudinary.com/dfudkmrpe/image/upload/v1745662780/finerlux-products/tr3qc8hlzzoxafeom4sx.webp",
+      "backsideImageUrl": "https://res.cloudinary.com/dfudkmrpe/image/upload/v1745662784/finerlux-products/wgw5npcj1himtfcpzdgy.webp",
+      "additionalImages": [],
+      "status": "live",
+      "featured": true,
+      "createdAt": "2025-04-26T10:25:20.914Z",
+      "updatedAt": "2025-04-26T10:25:20.914Z",
+      "priceHistory": [
+        {
+          "price": "13,900",
+          "date": "2025-04-26T10:25:20.914Z"
+        }
+      ],
+      "_id": "c3248588-b35d-4f25-a7e2-c78782257ce7"
+    },
+    {
+      "brand": "Rolex",
+      "model": "Daytona",
+      "reference": "126500LN",
+      "year": "2022",
+      "condition": {
+        "hasBox": true,
+        "hasPapers": true
+      },
+      "price": "15150",
+      "originalPrice": "15150",
+      "discount": 0,
+      "description": "The Rolex Daytona, named after the race circuit in Florida that hosts the Rolex twenty-four hour race, epitomises the ultimate driver’s watch. The dial, unburdened by a date window, is clear and easy to read. The tachymeter offers quick speed calculations, while the shape is instantly recognisable and supremely comfortable. Its smaller size and smart design makes it a versatile watch capable ",
+      "imageUrl": "https://res.cloudinary.com/dfudkmrpe/image/upload/v1745662265/finerlux-products/y5usjtca8g6srskerugv.webp",
+      "backsideImageUrl": "https://res.cloudinary.com/dfudkmrpe/image/upload/v1745662270/finerlux-products/fvu4bwiii39pvhtsgzmb.webp",
+      "additionalImages": [],
+      "status": "live",
+      "featured": true,
+      "createdAt": "2025-04-26T16:46:27.042Z",
+      "updatedAt": "2025-04-26T16:46:27.042Z",
+      "priceHistory": [
+        {
+          "price": "15150",
+          "date": "2025-04-26T16:46:27.042Z"
+        }
+      ],
+      "_id": "a8f4a9e0-051e-4f21-82f5-e4a3f6d8bf34",
+      "itemCode": "",
+      "caseSize": "",
+      "caseMaterial": "",
+      "dialColour": "",
+      "bracelet": "",
+      "movement": "",
+      "waterResistance": false
+    },
+    {
+      "brand": "Rolex",
+      "model": "Daytona",
+      "reference": "126500LN",
+      "year": "2022",
+      "condition": {
+        "hasBox": true,
+        "hasPapers": true
+      },
+      "price": "15150",
+      "originalPrice": "15150",
+      "discount": 0,
+      "description": "The Rolex Daytona, named after the race circuit in Florida that hosts the Rolex twenty-four hour race, epitomises the ultimate driver’s watch. The dial, unburdened by a date window, is clear and easy to read. The tachymeter offers quick speed calculations, while the shape is instantly recognisable and supremely comfortable. Its smaller size and smart design makes it a versatile watch capable ",
+      "imageUrl": "https://res.cloudinary.com/dfudkmrpe/image/upload/v1745662265/finerlux-products/y5usjtca8g6srskerugv.webp",
+      "backsideImageUrl": "https://res.cloudinary.com/dfudkmrpe/image/upload/v1745662270/finerlux-products/fvu4bwiii39pvhtsgzmb.webp",
+      "additionalImages": [],
+      "status": "live",
+      "featured": true,
+      "createdAt": "2025-04-26T16:46:27.933Z",
+      "updatedAt": "2025-04-26T16:46:27.933Z",
+      "priceHistory": [
+        {
+          "price": "15150",
+          "date": "2025-04-26T16:46:27.933Z"
+        }
+      ],
+      "_id": "cf926e88-68bf-4188-b538-a7c8b4141561",
+      "itemCode": "",
+      "caseSize": "",
+      "caseMaterial": "",
+      "dialColour": "",
+      "bracelet": "",
+      "movement": "",
+      "waterResistance": false
+    },
+    {
+      "brand": "Rolex",
+      "model": "Daytona",
+      "reference": "126500LN",
+      "year": "2022",
+      "condition": {
+        "hasBox": true,
+        "hasPapers": true
+      },
+      "price": "15150",
+      "originalPrice": "15150",
+      "discount": 0,
+      "description": "The Rolex Daytona, named after the race circuit in Florida that hosts the Rolex twenty-four hour race, epitomises the ultimate driver’s watch. The dial, unburdened by a date window, is clear and easy to read. The tachymeter offers quick speed calculations, while the shape is instantly recognisable and supremely comfortable. Its smaller size and smart design makes it a versatile watch capable ",
+      "imageUrl": "https://res.cloudinary.com/dfudkmrpe/image/upload/v1745662265/finerlux-products/y5usjtca8g6srskerugv.webp",
+      "backsideImageUrl": "https://res.cloudinary.com/dfudkmrpe/image/upload/v1745662270/finerlux-products/fvu4bwiii39pvhtsgzmb.webp",
+      "additionalImages": [],
+      "status": "live",
+      "featured": true,
+      "createdAt": "2025-04-26T16:46:28.620Z",
+      "updatedAt": "2025-04-26T16:46:28.620Z",
+      "priceHistory": [
+        {
+          "price": "15150",
+          "date": "2025-04-26T16:46:28.620Z"
+        }
+      ],
+      "_id": "50ecc3d7-958b-4e00-81fd-ff2d949dbf15",
+      "itemCode": "",
+      "caseSize": "",
+      "caseMaterial": "",
+      "dialColour": "",
+      "bracelet": "",
+      "movement": "",
+      "waterResistance": false
+    }
+  ]
+}
