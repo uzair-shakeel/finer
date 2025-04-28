@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 export default function Tab() {
   const { t } = useTranslation();
 
-  const [activeTab, setActiveTab] = useState("buy");
+  const [activeTab, setActiveTab] = useState("sell");
 
   useEffect(() => {
     const checkSessionStorageForTab = () => {

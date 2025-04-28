@@ -21,6 +21,30 @@ const ConditionSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    status: {
+      type: String,
+      enum: ["New", "Excellent", "Very Good", "Good", "Fair", "Poor"],
+      default: "Good",
+    },
+    details: {
+      type: String,
+      trim: true,
+    },
+  },
+  { _id: false }
+);
+
+// Define schema for additional images with order information
+const AdditionalImageSchema = new mongoose.Schema(
+  {
+    url: {
+      type: String,
+      required: true,
+    },
+    order: {
+      type: Number,
+      default: 0,
+    },
   },
   { _id: false }
 );
@@ -47,7 +71,7 @@ const ProductSchema = new mongoose.Schema(
     },
     condition: {
       type: ConditionSchema,
-      default: { hasBox: false, hasPapers: false },
+      default: { hasBox: false, hasPapers: false, status: "Good" },
     },
     price: {
       type: String,
@@ -60,7 +84,16 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    rrpStatus: {
+      type: String,
+      enum: ["Regular", "Discounted", "Discontinued", "Hidden"],
+      default: "Regular",
+    },
     description: {
+      type: String,
+      trim: true,
+    },
+    subdescription: {
       type: String,
       trim: true,
     },
@@ -72,7 +105,7 @@ const ProductSchema = new mongoose.Schema(
       type: String,
     },
     additionalImages: {
-      type: [String],
+      type: [AdditionalImageSchema],
       default: [],
     },
     status: {
@@ -88,30 +121,57 @@ const ProductSchema = new mongoose.Schema(
     itemCode: {
       type: String,
       trim: true,
+      unique: true,
     },
     caseSize: {
-      type: [String],
-      default: [],
+      type: String,
+      default: "",
     },
     caseMaterial: {
-      type: [String],
-      default: [],
+      type: String,
+      default: "",
     },
     dialColour: {
-      type: [String],
-      default: [],
+      type: String,
+      default: "",
     },
     bracelet: {
-      type: [String],
-      default: [],
+      type: String,
+      default: "",
+    },
+    braceletLength: {
+      type: String,
+      trim: true,
     },
     movement: {
-      type: [String],
-      default: [],
+      type: String,
+      default: "",
     },
     waterResistance: {
       type: Boolean,
       default: false,
+    },
+    depth: {
+      type: String,
+      default: "100m",
+    },
+    depthCustom: {
+      type: String,
+      trim: true,
+    },
+    // New fields
+    extra: {
+      type: String,
+      trim: true,
+    },
+    // Private CRM fields (not shown to customers)
+    purchasePrice: {
+      type: String,
+      trim: true,
+    },
+    serialNumber: {
+      type: String,
+      trim: true,
     },
     priceHistory: {
       type: [PriceHistorySchema],

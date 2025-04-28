@@ -93,6 +93,11 @@ const SingleProduct = ({ product }) => {
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Model:</span>{" "}
                     {product?.model}
+                    {product?.extra && (
+                      <span className="ml-2 text-[#017EFE]">
+                        "{product.extra}"
+                      </span>
+                    )}
                   </h2>
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Reference:</span>{" "}
@@ -121,33 +126,26 @@ const SingleProduct = ({ product }) => {
                   </h2>
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Case Size:</span>{" "}
-                    {product?.caseSize && product.caseSize.length > 0
-                      ? product.caseSize.join(", ")
-                      : "N/A"}
+                    {product?.caseSize || "N/A"}
                   </h2>
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Case Material:</span>{" "}
-                    {product?.caseMaterial && product.caseMaterial.length > 0
-                      ? product.caseMaterial.join(", ")
-                      : "N/A"}
+                    {product?.caseMaterial || "N/A"}
                   </h2>
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Dial Colour:</span>{" "}
-                    {product?.dialColour && product.dialColour.length > 0
-                      ? product.dialColour.join(", ")
-                      : "N/A"}
+                    {product?.dialColour || "N/A"}
                   </h2>
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Bracelet:</span>{" "}
-                    {product?.bracelet && product.bracelet.length > 0
-                      ? product.bracelet.join(", ")
-                      : "N/A"}
+                    {product?.bracelet || "N/A"}
+                    {product?.braceletLength && (
+                      <span> ({product.braceletLength})</span>
+                    )}
                   </h2>
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Movement:</span>{" "}
-                    {product?.movement && product.movement.length > 0
-                      ? product.movement.join(", ")
-                      : "N/A"}
+                    {product?.movement || "N/A"}
                   </h2>
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Water Resistance:</span>{" "}

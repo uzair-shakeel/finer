@@ -43,12 +43,10 @@ const Footer = () => {
     return fallbackTranslation[key] || key;
   };
 
-  
   // Move conditional return AFTER all hooks are called
   if (pathname?.includes("/admin")) {
     return null;
   }
-
 
   return (
     <div className="w-full">
@@ -135,10 +133,10 @@ const Footer = () => {
                 <li className="text-black text-[18px] md:text-[24px] font-semibold mb-3 lg:mb-6 !leading-[29px]">
                   {t("footer.privacy.title")}
                 </li>
-                <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px]">
+                <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors">
                   <Link href="/terms-condition">Terms & Conditions</Link>
                 </li>
-                <li className="text-black text-[14px] md:text-[18px] font-normal !leading-[22px]">
+                <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors">
                   <Link href="/privacy-policy">Privacy policy</Link>
                 </li>
               </ul>

@@ -2,6 +2,53 @@ import connectToDatabase from "./mongodb";
 import Product from "../models/Product";
 import { v4 as uuidv4 } from "uuid";
 
+// Helper function to generate next item code
+const generateNextItemCode = async () => {
+  try {
+    await connectToDatabase();
+
+    // Get the latest product with an itemCode
+    const latestProduct = await Product.findOne(
+      { itemCode: { $regex: /^[A-Z]{2}\d{3}$/ } },
+      { itemCode: 1 }
+    ).sort({ itemCode: -1 });
+
+    if (!latestProduct || !latestProduct.itemCode) {
+      return "AA001"; // First item code
+    }
+
+    const currentCode = latestProduct.itemCode;
+    const prefix = currentCode.substring(0, 2);
+    const numericPart = parseInt(currentCode.substring(2), 10);
+
+    if (numericPart < 999) {
+      // Increment numeric part
+      return `${prefix}${(numericPart + 1).toString().padStart(3, "0")}`;
+    } else {
+      // Move to next prefix
+      const firstChar = prefix.charCodeAt(0);
+      const secondChar = prefix.charCodeAt(1);
+
+      if (secondChar < 90) {
+        // 'Z' is 90
+        // Increment second character
+        return `${String.fromCharCode(firstChar)}${String.fromCharCode(
+          secondChar + 1
+        )}001`;
+      } else if (firstChar < 90) {
+        // Increment first character, reset second to 'A'
+        return `${String.fromCharCode(firstChar + 1)}A001`;
+      } else {
+        // We've reached ZZ999, could implement further logic if needed
+        throw new Error("Item code sequence exhausted");
+      }
+    }
+  } catch (error) {
+    console.error("Error generating item code:", error);
+    throw error;
+  }
+};
+
 // Get all products
 export const getProducts = async () => {
   try {
@@ -56,6 +103,11 @@ export const createProduct = async (productData) => {
   try {
     await connectToDatabase();
 
+    // Ensure productData is an object
+    if (!productData || typeof productData !== "object") {
+      throw new Error("Invalid product data provided");
+    }
+
     const currentDate = new Date();
 
     // Format price and originalPrice
@@ -69,6 +121,12 @@ export const createProduct = async (productData) => {
         ? productData.originalPrice.replace(/,/g, "")
         : productData.originalPrice?.toString() || formattedPrice;
 
+    // Generate item code if not provided
+    let itemCode = productData.itemCode;
+    if (!itemCode) {
+      itemCode = await generateNextItemCode();
+    }
+
     // Process specification fields
     const specFields = [
       "caseSize",
@@ -78,11 +136,22 @@ export const createProduct = async (productData) => {
       "movement",
     ];
 
+    // Ensure all spec fields are arrays
     specFields.forEach((field) => {
-      if (productData[field] && !Array.isArray(productData[field])) {
+      // Handle undefined/null values
+      if (!productData[field]) {
+        productData[field] = "";
+      }
+      // Convert non-array values to arrays
+      else if (!Array.isArray(productData[field])) {
+        productData[field] = productData[field].toString();
+      }
+      // Convert arrays to strings (join with comma)
+      else {
         productData[field] = productData[field]
-          ? [productData[field].toString()]
-          : [];
+          .map((item) => (item ? item.toString() : ""))
+          .filter(Boolean)
+          .join(", ");
       }
     });
 
@@ -94,23 +163,64 @@ export const createProduct = async (productData) => {
       },
     ];
 
-    // Create a new product document
+    // Process additional images to include order information
+    const processedAdditionalImages = Array.isArray(
+      productData.additionalImages
+    )
+      ? productData.additionalImages
+          .map((img, index) => {
+            if (typeof img === "string") {
+              return { url: img, order: index };
+            } else if (img && img.url) {
+              return { ...img, order: img.order || index };
+            }
+            return null;
+          })
+          .filter(Boolean)
+      : [];
+
+    // Create a new product document with safe default values
     const newProduct = new Product({
-      ...productData,
+      brand: productData.brand || "",
+      model: productData.model || "",
+      reference: productData.reference || "",
+      year: productData.year || "",
+      condition: {
+        hasBox: !!productData.condition?.hasBox,
+        hasPapers: !!productData.condition?.hasPapers,
+        status: productData.condition?.status || "Good",
+        details: productData.condition?.details || "",
+      },
       price: formattedPrice,
       originalPrice: formattedOriginalPrice || formattedPrice,
       priceHistory,
-      // Add default empty arrays for spec fields if they don't exist
-      caseSize: productData.caseSize || [],
-      caseMaterial: productData.caseMaterial || [],
-      dialColour: productData.dialColour || [],
-      bracelet: productData.bracelet || [],
-      movement: productData.movement || [],
+      itemCode,
+      // Convert spec fields to strings for MongoDB
+      caseSize: productData.caseSize || "",
+      caseMaterial: productData.caseMaterial || "",
+      dialColour: productData.dialColour || "",
+      bracelet: productData.bracelet || "",
+      movement: productData.movement || "",
       waterResistance: productData.waterResistance === true,
-      additionalImages: Array.isArray(productData.additionalImages)
-        ? productData.additionalImages
-        : [],
-      itemCode: productData.itemCode || "",
+      additionalImages: processedAdditionalImages,
+      // Include new fields
+      braceletLength: productData.braceletLength || "",
+      extra: productData.extra || "",
+      purchasePrice: productData.purchasePrice || "",
+      serialNumber: productData.serialNumber || "",
+      description: productData.description || "",
+      subdescription: productData.subdescription || "",
+      discount:
+        typeof productData.discount === "number" ? productData.discount : 0,
+      rrpStatus: productData.rrpStatus || "Regular",
+      status: ["live", "archive", "draft"].includes(productData.status)
+        ? productData.status
+        : "draft",
+      featured: productData.featured === true,
+      backsideImageUrl: productData.backsideImageUrl || "",
+      depth: productData.depth || "100m",
+      depthCustom: productData.depthCustom || "",
+      imageUrl: productData.imageUrl || "",
     });
 
     const savedProduct = await newProduct.save();
@@ -160,12 +270,39 @@ export const updateProduct = async (id, productData) => {
     ];
 
     specFields.forEach((field) => {
-      if (productData[field] && !Array.isArray(productData[field])) {
-        productData[field] = productData[field]
-          ? [productData[field].toString()]
-          : [];
+      if (productData[field]) {
+        if (!Array.isArray(productData[field])) {
+          productData[field] = productData[field].toString();
+        } else {
+          // Convert arrays to strings (join with comma)
+          productData[field] = productData[field]
+            .map((item) => (item ? item.toString() : ""))
+            .filter(Boolean)
+            .join(", ");
+        }
       }
     });
+
+    // Process additional images to include order information if provided
+    if (productData.additionalImages) {
+      if (Array.isArray(productData.additionalImages)) {
+        productData.additionalImages = productData.additionalImages
+          .map((img, index) => {
+            if (typeof img === "string") {
+              return { url: img, order: index };
+            } else if (img && img.url) {
+              return {
+                ...img,
+                order: img.order !== undefined ? img.order : index,
+              };
+            }
+            return null;
+          })
+          .filter(Boolean);
+      } else {
+        productData.additionalImages = [];
+      }
+    }
 
     // Check if price has changed
     if (productData.price && productData.price !== currentProduct.price) {

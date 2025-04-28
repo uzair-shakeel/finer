@@ -131,6 +131,12 @@ export default function EditProduct({ params }) {
     bracelet: [],
     movement: [],
     waterResistance: false,
+    depth: "",
+    depthCustom: "",
+    braceletLength: "",
+    extra: "",
+    purchasePrice: "",
+    serialNumber: "",
   });
 
   const [allImages, setAllImages] = useState([]);
@@ -174,6 +180,31 @@ export default function EditProduct({ params }) {
             hasPapers: false,
           };
         }
+
+        // Convert specification fields from strings to arrays if needed
+        const specFields = [
+          "caseSize",
+          "caseMaterial",
+          "dialColour",
+          "bracelet",
+          "movement",
+        ];
+        specFields.forEach((field) => {
+          if (
+            product[field] &&
+            typeof product[field] === "string" &&
+            product[field].trim() !== ""
+          ) {
+            // Convert comma-separated string to array
+            product[field] = [product[field].split(",")[0].trim()];
+          } else if (
+            !product[field] ||
+            (typeof product[field] === "string" && product[field].trim() === "")
+          ) {
+            // Initialize empty fields as arrays
+            product[field] = [];
+          }
+        });
 
         setFormData(product);
 
@@ -222,6 +253,58 @@ export default function EditProduct({ params }) {
       return;
     }
 
+    // Handle the depth field
+    if (name === "depth") {
+      if (value === "Other") {
+        setFormData((prev) => ({
+          ...prev,
+          depth: value,
+          // Keep depthCustom as is
+        }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          depth: value, // Store the selected depth value as a string
+          depthCustom: "", // Clear custom depth when a predefined option is selected
+        }));
+      }
+      return;
+    }
+
+    // Handle the depthCustom field
+    if (name === "depthCustom") {
+      setFormData((prev) => ({
+        ...prev,
+        depthCustom: value,
+      }));
+      return;
+    }
+
+    // Handle specification fields (caseSize, caseMaterial, dialColour, bracelet, movement)
+    const specFields = [
+      "caseSize",
+      "caseMaterial",
+      "dialColour",
+      "bracelet",
+      "movement",
+    ];
+    if (specFields.includes(name)) {
+      if (value === "") {
+        // If empty value, set as empty array
+        setFormData((prev) => ({
+          ...prev,
+          [name]: [],
+        }));
+      } else {
+        // Otherwise, set as array with single value
+        setFormData((prev) => ({
+          ...prev,
+          [name]: [value],
+        }));
+      }
+      return;
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -245,6 +328,28 @@ export default function EditProduct({ params }) {
           ((originalPrice - price) / originalPrice) * 100
         );
         setFormData((prev) => ({ ...prev, discount }));
+      }
+    }
+
+    // If user entered a discount percentage, calculate discounted price
+    if (name === "discount" && formData.price) {
+      const priceNum = parseFloat(formData.price);
+      const discount = parseFloat(value);
+
+      if (
+        !isNaN(discount) &&
+        discount > 0 &&
+        !isNaN(priceNum) &&
+        priceNum > 0
+      ) {
+        // Calculate discounted price based on price and discount
+        const newDiscountedPrice = Math.round(priceNum * (1 - discount / 100));
+        if (newDiscountedPrice >= 0) {
+          setFormData((prev) => ({
+            ...prev,
+            discountedPrice: newDiscountedPrice.toString(),
+          }));
+        }
       }
     }
   };
@@ -365,6 +470,37 @@ export default function EditProduct({ params }) {
         url !== submissionData.imageUrl &&
         url !== submissionData.backsideImageUrl
     );
+
+    // Process depth field - if "Other" is selected, use the custom depth value
+    if (submissionData.depth === "Other" && submissionData.depthCustom) {
+      submissionData.depth = submissionData.depthCustom;
+    }
+
+    // Ensure waterResistance is a boolean
+    submissionData.waterResistance = !!submissionData.waterResistance;
+
+    // Convert specification fields to strings for MongoDB
+    const specFields = [
+      "caseSize",
+      "caseMaterial",
+      "dialColour",
+      "bracelet",
+      "movement",
+    ];
+
+    specFields.forEach((field) => {
+      // Convert arrays to strings (joined with comma)
+      if (Array.isArray(submissionData[field])) {
+        submissionData[field] = submissionData[field]
+          .filter(Boolean)
+          .join(", ");
+      } else if (!submissionData[field]) {
+        submissionData[field] = "";
+      } else {
+        // Ensure any non-arrays are converted to strings
+        submissionData[field] = submissionData[field].toString();
+      }
+    });
 
     return submissionData;
   };
@@ -625,6 +761,24 @@ export default function EditProduct({ params }) {
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="discountedPrice"
+                >
+                  Discounted Price
+                </label>
+                <input
+                  type="text"
+                  id="discountedPrice"
+                  name="discountedPrice"
+                  value={formData.discountedPrice || ""}
+                  onChange={handleChange}
+                  placeholder="Auto-calculated from discount"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                />
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
                   htmlFor="discount"
                 >
                   Discount (%)
@@ -657,6 +811,24 @@ export default function EditProduct({ params }) {
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 ></textarea>
               </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="subdescription"
+                >
+                  Subdescription
+                </label>
+                <textarea
+                  id="subdescription"
+                  name="subdescription"
+                  value={formData.subdescription || ""}
+                  onChange={handleChange}
+                  rows="2"
+                  placeholder="Optional shorter description"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                ></textarea>
+              </div>
             </div>
 
             {/* Specifications */}
@@ -681,16 +853,45 @@ export default function EditProduct({ params }) {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Bracelet Length
+                  </label>
+                  <input
+                    type="text"
+                    name="braceletLength"
+                    value={formData.braceletLength || ""}
+                    onChange={handleChange}
+                    placeholder="e.g. 20cm"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Extra Info
+                  </label>
+                  <input
+                    type="text"
+                    name="extra"
+                    value={formData.extra || ""}
+                    onChange={handleChange}
+                    placeholder="e.g. No-Date"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Case Size
                   </label>
                   <select
                     name="caseSize"
-                    multiple
-                    value={formData.caseSize}
-                    onChange={(e) => handleMultiSelectChange(e, "caseSize")}
+                    value={
+                      formData.caseSize?.length > 0 ? formData.caseSize[0] : ""
+                    }
+                    onChange={handleChange}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    size="3"
                   >
+                    <option value="">Select case size</option>
                     <option value="20mm">20mm</option>
                     <option value="22mm">22mm</option>
                     <option value="24mm">24mm</option>
@@ -713,9 +914,6 @@ export default function EditProduct({ params }) {
                     <option value="49mm">49mm</option>
                     <option value="50mm">50mm</option>
                   </select>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Hold Ctrl/Cmd to select multiple
-                  </p>
                 </div>
 
                 <div>
@@ -724,12 +922,15 @@ export default function EditProduct({ params }) {
                   </label>
                   <select
                     name="caseMaterial"
-                    multiple
-                    value={formData.caseMaterial}
-                    onChange={(e) => handleMultiSelectChange(e, "caseMaterial")}
+                    value={
+                      formData.caseMaterial?.length > 0
+                        ? formData.caseMaterial[0]
+                        : ""
+                    }
+                    onChange={handleChange}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    size="3"
                   >
+                    <option value="">Select case material</option>
                     <option value="Stainless Steel">Stainless Steel</option>
                     <option value="Yellow Gold">Yellow Gold</option>
                     <option value="White Gold">White Gold</option>
@@ -742,9 +943,6 @@ export default function EditProduct({ params }) {
                     <option value="PVD">PVD</option>
                     <option value="Two-Tone">Two-Tone</option>
                   </select>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Hold Ctrl/Cmd to select multiple
-                  </p>
                 </div>
 
                 <div>
@@ -753,12 +951,15 @@ export default function EditProduct({ params }) {
                   </label>
                   <select
                     name="dialColour"
-                    multiple
-                    value={formData.dialColour}
-                    onChange={(e) => handleMultiSelectChange(e, "dialColour")}
+                    value={
+                      formData.dialColour?.length > 0
+                        ? formData.dialColour[0]
+                        : ""
+                    }
+                    onChange={handleChange}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    size="3"
                   >
+                    <option value="">Select dial colour</option>
                     <option value="Black">Black</option>
                     <option value="White">White</option>
                     <option value="Silver">Silver</option>
@@ -776,9 +977,6 @@ export default function EditProduct({ params }) {
                     <option value="Meteorite">Meteorite</option>
                     <option value="Skeleton">Skeleton</option>
                   </select>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Hold Ctrl/Cmd to select multiple
-                  </p>
                 </div>
 
                 <div>
@@ -787,12 +985,13 @@ export default function EditProduct({ params }) {
                   </label>
                   <select
                     name="bracelet"
-                    multiple
-                    value={formData.bracelet}
-                    onChange={(e) => handleMultiSelectChange(e, "bracelet")}
+                    value={
+                      formData.bracelet?.length > 0 ? formData.bracelet[0] : ""
+                    }
+                    onChange={handleChange}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    size="3"
                   >
+                    <option value="">Select bracelet</option>
                     <option value="Stainless Steel">Stainless Steel</option>
                     <option value="Leather">Leather</option>
                     <option value="Rubber">Rubber</option>
@@ -807,9 +1006,6 @@ export default function EditProduct({ params }) {
                     <option value="Ceramic">Ceramic</option>
                     <option value="Two-Tone">Two-Tone</option>
                   </select>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Hold Ctrl/Cmd to select multiple
-                  </p>
                 </div>
 
                 <div>
@@ -818,12 +1014,13 @@ export default function EditProduct({ params }) {
                   </label>
                   <select
                     name="movement"
-                    multiple
-                    value={formData.movement}
-                    onChange={(e) => handleMultiSelectChange(e, "movement")}
+                    value={
+                      formData.movement?.length > 0 ? formData.movement[0] : ""
+                    }
+                    onChange={handleChange}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    size="3"
                   >
+                    <option value="">Select movement</option>
                     <option value="Automatic">Automatic</option>
                     <option value="Manual">Manual</option>
                     <option value="Quartz">Quartz</option>
@@ -834,9 +1031,6 @@ export default function EditProduct({ params }) {
                     <option value="Mechanical">Mechanical</option>
                     <option value="In-House">In-House</option>
                   </select>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Hold Ctrl/Cmd to select multiple
-                  </p>
                 </div>
 
                 <div>
@@ -861,6 +1055,39 @@ export default function EditProduct({ params }) {
                         Water Resistant
                       </span>
                     </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Depth Rating
+                  </label>
+                  <div className="mt-2">
+                    <select
+                      name="depth"
+                      value={formData.depth || ""}
+                      onChange={handleChange}
+                      className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Not specified</option>
+                      <option value="30m">30m</option>
+                      <option value="50m">50m</option>
+                      <option value="100m">100m</option>
+                      <option value="200m">200m</option>
+                      <option value="300m">300m</option>
+                      <option value="Other">Other (custom)</option>
+                    </select>
+
+                    {formData.depth === "Other" && (
+                      <input
+                        type="text"
+                        name="depthCustom"
+                        value={formData.depthCustom || ""}
+                        onChange={handleChange}
+                        placeholder="Enter custom depth (e.g., 150m)"
+                        className="mt-2 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -1084,6 +1311,49 @@ export default function EditProduct({ params }) {
                 </button>
               </div>
               <div className="border-b-2 border-blue-500 pb-2 mb-4"></div>
+            </div>
+
+            {/* Private CRM Fields */}
+            <div className="space-y-4 md:col-span-2">
+              <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
+                Private CRM Information
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Purchase Price
+                  </label>
+                  <input
+                    type="text"
+                    name="purchasePrice"
+                    value={formData.purchasePrice || ""}
+                    onChange={handleChange}
+                    placeholder="Purchase price"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Internal information - not shown to customers
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Serial Number
+                  </label>
+                  <input
+                    type="text"
+                    name="serialNumber"
+                    value={formData.serialNumber || ""}
+                    onChange={handleChange}
+                    placeholder="Serial number"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Internal information - not shown to customers
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
