@@ -1677,7 +1677,7 @@ export default function AddProduct() {
                       />
                     </svg>
                     <p className="mt-1 text-sm text-gray-500">
-                      No product images yet. Click the "Upload Images" button
+                      No product images yet. Click the Upload Images button
                       above to add images.
                     </p>
                   </div>
