@@ -117,6 +117,7 @@ export default function EditProduct({ params }) {
     originalPrice: "",
     discount: 0,
     description: "",
+    pageTitle: "",
     imageUrl: "",
     backsideImageUrl: "",
     additionalImages: [],
@@ -137,6 +138,7 @@ export default function EditProduct({ params }) {
     extra: "",
     purchasePrice: "",
     serialNumber: "",
+    notes: "",
   });
 
   const [allImages, setAllImages] = useState([]);
@@ -151,7 +153,6 @@ export default function EditProduct({ params }) {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-
         const response = await fetch(`/api/products/${id}`, {
           headers: {
             "x-is-admin": "true",
@@ -163,63 +164,81 @@ export default function EditProduct({ params }) {
         }
 
         const data = await response.json();
+        if (data.success && data.product) {
+          const product = data.product;
 
-        console.log("object", data);
+          // Initialize form data with product data
+          setFormData({
+            brand: product.brand || "",
+            model: product.model || "",
+            reference: product.reference || "",
+            year: product.year || "",
+            condition: product.condition || {
+              hasBox: false,
+              hasPapers: false,
+              status: "Good",
+              details: "",
+            },
+            price: product.price || "",
+            discountedPrice: product.discountedPrice || "",
+            originalPrice: product.originalPrice || "",
+            discount: product.discount || 0,
+            rrpStatus: product.rrpStatus || "Regular",
+            description: product.description || "",
+            subdescription: product.subdescription || "",
+            pageTitle: product.pageTitle || "",
+            imageUrl: product.imageUrl || "",
+            backsideImageUrl: product.backsideImageUrl || "",
+            additionalImages: product.additionalImages || [],
+            status: product.status || "draft",
+            featured: product.featured || false,
+            itemCode: product.itemCode || "",
+            caseSize: product.caseSize
+              ? typeof product.caseSize === "string"
+                ? [product.caseSize]
+                : product.caseSize
+              : [],
+            caseMaterial: product.caseMaterial
+              ? typeof product.caseMaterial === "string"
+                ? [product.caseMaterial]
+                : product.caseMaterial
+              : [],
+            dialColour: product.dialColour
+              ? typeof product.dialColour === "string"
+                ? [product.dialColour]
+                : product.dialColour
+              : [],
+            bracelet: product.bracelet
+              ? typeof product.bracelet === "string"
+                ? [product.bracelet]
+                : product.bracelet
+              : [],
+            braceletLength: product.braceletLength || "",
+            movement: product.movement
+              ? typeof product.movement === "string"
+                ? [product.movement]
+                : product.movement
+              : [],
+            waterResistance: product.waterResistance || false,
+            depth: product.depth || "100m",
+            depthCustom: product.depthCustom || "",
+            extra: product.extra || "",
+            purchasePrice: product.purchasePrice || "",
+            serialNumber: product.serialNumber || "",
+            priceHistory: product.priceHistory || [],
+            notes: product.notes || "",
+          });
 
-        // Handle the condition field appropriately
-        const product = data.product;
-        if (typeof product.condition === "string") {
-          // Convert the string condition to the object format
-          product.condition = {
-            hasBox: product.condition && product.condition.includes("Box"),
-            hasPapers:
-              product.condition && product.condition.includes("Papers"),
-          };
-        } else if (!product.condition) {
-          // Initialize if missing
-          product.condition = {
-            hasBox: false,
-            hasPapers: false,
-          };
+          // Build the initial allImages array from all image URLs in the product
+          const imagesList = [
+            product.imageUrl,
+            ...(product.backsideImageUrl ? [product.backsideImageUrl] : []),
+            ...(product.additionalImages?.map((img) => img.url) || []),
+          ].filter(Boolean); // Remove any undefined or null values
+
+          console.log("all list here", imagesList);
+          setAllImages(imagesList);
         }
-
-        // Convert specification fields from strings to arrays if needed
-        const specFields = [
-          "caseSize",
-          "caseMaterial",
-          "dialColour",
-          "bracelet",
-          "movement",
-        ];
-        specFields.forEach((field) => {
-          if (
-            product[field] &&
-            typeof product[field] === "string" &&
-            product[field].trim() !== ""
-          ) {
-            // Convert comma-separated string to array
-            product[field] = [product[field].split(",")[0].trim()];
-          } else if (
-            !product[field] ||
-            (typeof product[field] === "string" && product[field].trim() === "")
-          ) {
-            // Initialize empty fields as arrays
-            product[field] = [];
-          }
-        });
-
-        setFormData(product);
-
-        const imagesList = [
-          ...(product.imageUrl ? [product.imageUrl] : []),
-          ...(product.backsideImageUrl ? [product.backsideImageUrl] : []),
-          ...(product.additionalImages
-            ? product.additionalImages.map((img) => img.url)
-            : []),
-        ];
-
-        console.log("all list here", imagesList);
-        setAllImages(imagesList);
       } catch (error) {
         console.error("Fetch product error:", error);
         setError("Failed to load product data");
@@ -227,10 +246,9 @@ export default function EditProduct({ params }) {
         setLoading(false);
       }
     };
-    console.log("all images here", allImages);
 
     fetchProduct();
-  }, [id]);
+  }, [id]); // We only need id in the dependency array since this effect only fetches data
 
   // Handle multi-select change
   const handleMultiSelectChange = (e, field) => {
@@ -386,6 +404,10 @@ export default function EditProduct({ params }) {
         newImages[index],
         newImages[index - 1],
       ];
+
+      // Call updateAdditionalImagesOrder with the new image order
+      setTimeout(() => updateAdditionalImagesOrder(newImages), 0);
+
       return newImages;
     });
   };
@@ -400,6 +422,10 @@ export default function EditProduct({ params }) {
         newImages[index + 1],
         newImages[index],
       ];
+
+      // Call updateAdditionalImagesOrder with the new image order
+      setTimeout(() => updateAdditionalImagesOrder(newImages), 0);
+
       return newImages;
     });
   };
@@ -409,10 +435,15 @@ export default function EditProduct({ params }) {
     const mainImage = formData.imageUrl;
     const backsideImage = formData.backsideImageUrl;
 
-    // Filter out main and backside images
+    // Filter out main and backside images, preserve the exact order from allImages
     const additionalImagesWithOrder = images
       .filter((img) => img !== mainImage && img !== backsideImage)
-      .map((img, index) => ({ url: img, order: index }));
+      .map((img, index) => ({
+        url: img,
+        order: index,
+      }));
+
+    console.log("Updating additional images order:", additionalImagesWithOrder);
 
     setFormData((prev) => ({
       ...prev,
@@ -647,11 +678,180 @@ export default function EditProduct({ params }) {
       <div className="bg-white rounded-lg shadow-md">
         <form onSubmit={handleSubmit} className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Private CRM Fields */}
+            <div className="space-y-4 md:col-span-2">
+              <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
+                Private CRM Information
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Purchase Price
+                  </label>
+                  <input
+                    type="text"
+                    name="purchasePrice"
+                    value={formData.purchasePrice || ""}
+                    onChange={handleChange}
+                    placeholder="Purchase price"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Internal information - not shown to customers
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Serial Number
+                  </label>
+                  <input
+                    type="text"
+                    name="serialNumber"
+                    value={formData.serialNumber || ""}
+                    onChange={handleChange}
+                    placeholder="Serial number"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Internal information - not shown to customers
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Content Section */}
+            <div className="space-y-4 md:col-span-2">
+              <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
+                Content
+              </h2>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="pageTitle"
+                >
+                  Page Title
+                </label>
+                <input
+                  type="text"
+                  id="pageTitle"
+                  name="pageTitle"
+                  value={formData.pageTitle || ""}
+                  onChange={handleChange}
+                  placeholder="e.g. Rolex Submariner 126610LN | Luxury Dive Watch"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Used for SEO and browser tab title
+                </p>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="description"
+                >
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows="4"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                  placeholder="Detailed product description shown on the product page"
+                ></textarea>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="subdescription"
+                >
+                  Subdescription
+                </label>
+                <textarea
+                  id="subdescription"
+                  name="subdescription"
+                  value={formData.subdescription || ""}
+                  onChange={handleChange}
+                  rows="2"
+                  placeholder="Optional shorter description for cards and previews"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                ></textarea>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="notes"
+                >
+                  Notes (Private)
+                </label>
+                <textarea
+                  id="notes"
+                  name="notes"
+                  value={formData.notes || ""}
+                  onChange={handleChange}
+                  rows="3"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                  placeholder="Enter private notes (not visible to customers)"
+                ></textarea>
+                <p className="mt-1 text-xs text-gray-500">
+                  Internal notes for staff only - not shown to customers
+                </p>
+              </div>
+            </div>
+
             {/* Basic Information */}
             <div className="space-y-4">
               <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
                 Basic Information
               </h2>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="itemCode"
+                >
+                  Item Code
+                </label>
+                <input
+                  type="text"
+                  id="itemCode"
+                  name="itemCode"
+                  value={formData.itemCode}
+                  onChange={handleChange}
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Unique identifier for this product
+                </p>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="serialNumber"
+                >
+                  Serial Number
+                </label>
+                <input
+                  type="text"
+                  id="serialNumber"
+                  name="serialNumber"
+                  value={formData.serialNumber}
+                  onChange={handleChange}
+                  placeholder="Watch serial number"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  For internal use only - not shown to customers
+                </p>
+              </div>
 
               <div>
                 <label
@@ -769,15 +969,36 @@ export default function EditProduct({ params }) {
             {/* Pricing & Description */}
             <div className="space-y-4">
               <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
-                Pricing & Description
+                Pricing
               </h2>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="purchasePrice"
+                >
+                  Cost (Purchase Price)
+                </label>
+                <input
+                  type="text"
+                  id="purchasePrice"
+                  name="purchasePrice"
+                  value={formData.purchasePrice || ""}
+                  onChange={handleChange}
+                  placeholder="e.g. 10000"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Internal price - not shown to customers
+                </p>
+              </div>
 
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700 mb-1"
                   htmlFor="price"
                 >
-                  Price <span className="text-red-500">*</span>
+                  Price (Selling Price) <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -785,7 +1006,7 @@ export default function EditProduct({ params }) {
                   name="price"
                   value={formData.price}
                   onChange={handleChange}
-                  placeholder="e.g. 1,500"
+                  placeholder="e.g. 12500"
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                   required
                 />
@@ -796,7 +1017,7 @@ export default function EditProduct({ params }) {
                   className="block text-sm font-medium text-gray-700 mb-1"
                   htmlFor="originalPrice"
                 >
-                  Original Price (before discount)
+                  RRP (Recommended Retail Price)
                 </label>
                 <input
                   type="text"
@@ -804,7 +1025,7 @@ export default function EditProduct({ params }) {
                   name="originalPrice"
                   value={formData.originalPrice}
                   onChange={handleChange}
-                  placeholder="e.g. 1,800"
+                  placeholder="e.g. 13000"
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 />
               </div>
@@ -845,41 +1066,6 @@ export default function EditProduct({ params }) {
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 />
               </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="description"
-                >
-                  Description
-                </label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  rows="3"
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                ></textarea>
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="subdescription"
-                >
-                  Subdescription
-                </label>
-                <textarea
-                  id="subdescription"
-                  name="subdescription"
-                  value={formData.subdescription || ""}
-                  onChange={handleChange}
-                  rows="2"
-                  placeholder="Optional shorter description"
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                ></textarea>
-              </div>
             </div>
 
             {/* Specifications */}
@@ -888,48 +1074,6 @@ export default function EditProduct({ params }) {
                 Specifications
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Item Code
-                  </label>
-                  <input
-                    type="text"
-                    name="itemCode"
-                    value={formData.itemCode}
-                    onChange={handleChange}
-                    placeholder="Enter item code"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Bracelet Length
-                  </label>
-                  <input
-                    type="text"
-                    name="braceletLength"
-                    value={formData.braceletLength || ""}
-                    onChange={handleChange}
-                    placeholder="e.g. 20cm"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Extra Info
-                  </label>
-                  <input
-                    type="text"
-                    name="extra"
-                    value={formData.extra || ""}
-                    onChange={handleChange}
-                    placeholder="e.g. No-Date"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Case Size
@@ -1047,9 +1191,52 @@ export default function EditProduct({ params }) {
                     <option value="Leather">Leather</option>
                     <option value="Rubber">Rubber</option>
                     <option value="NATO">NATO</option>
-                    <option value="Oyster">Oyster</option>
-                    <option value="Jubilee">Jubilee</option>
-                    <option value="President">President</option>
+                    <option value="Oyster (Rolex)">Oyster (Rolex)</option>
+                    <option value="Jubilee (Rolex)">Jubilee (Rolex)</option>
+                    <option value="President (Rolex)">President (Rolex)</option>
+                    <option value="Pearlmaster (Rolex)">
+                      Pearlmaster (Rolex)
+                    </option>
+                    <option value="Santos (Cartier)">Santos (Cartier)</option>
+                    <option value="Ballon Bleu (Cartier)">
+                      Ballon Bleu (Cartier)
+                    </option>
+                    <option value="Speedmaster (Omega)">
+                      Speedmaster (Omega)
+                    </option>
+                    <option value="Seamaster (Omega)">Seamaster (Omega)</option>
+                    <option value="Flat Link (Omega)">Flat Link (Omega)</option>
+                    <option value="Professional (Breitling)">
+                      Professional (Breitling)
+                    </option>
+                    <option value="Pilot (Breitling)">Pilot (Breitling)</option>
+                    <option value="Navitimer (Breitling)">
+                      Navitimer (Breitling)
+                    </option>
+                    <option value="Big Bang Integrated (Hublot)">
+                      Big Bang Integrated (Hublot)
+                    </option>
+                    <option value="Royal Oak (Audemars Piguet)">
+                      Royal Oak (Audemars Piguet)
+                    </option>
+                    <option value="Royal Oak Offshore (Audemars Piguet)">
+                      Royal Oak Offshore (Audemars Piguet)
+                    </option>
+                    <option value="Nautilus (Patek Philippe)">
+                      Nautilus (Patek Philippe)
+                    </option>
+                    <option value="Aquanaut (Patek Philippe)">
+                      Aquanaut (Patek Philippe)
+                    </option>
+                    <option value="Overseas (Vacheron Constantin)">
+                      Overseas (Vacheron Constantin)
+                    </option>
+                    <option value="Polaris (Jaeger-LeCoultre)">
+                      Polaris (Jaeger-LeCoultre)
+                    </option>
+                    <option value="Reverso (Jaeger-LeCoultre)">
+                      Reverso (Jaeger-LeCoultre)
+                    </option>
                     <option value="Milanese">Milanese</option>
                     <option value="Fabric">Fabric</option>
                     <option value="Gold">Gold</option>
@@ -1140,6 +1327,20 @@ export default function EditProduct({ params }) {
                       />
                     )}
                   </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Bracelet Length
+                  </label>
+                  <input
+                    type="text"
+                    name="braceletLength"
+                    value={formData.braceletLength || ""}
+                    onChange={handleChange}
+                    placeholder="e.g. 20cm"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
                 </div>
               </div>
             </div>
@@ -1321,6 +1522,7 @@ export default function EditProduct({ params }) {
                     <option value="draft">Draft</option>
                     <option value="live">Live</option>
                     <option value="archive">Archive</option>
+                    <option value="sold_out">Sold Out</option>
                   </select>
                   <p className="mt-1 text-xs text-gray-500">
                     Only &apos;Live&apos; products will be displayed on the
@@ -1390,49 +1592,6 @@ export default function EditProduct({ params }) {
                 </button>
               </div>
               <div className="border-b-2 border-blue-500 pb-2 mb-4"></div>
-            </div>
-
-            {/* Private CRM Fields */}
-            <div className="space-y-4 md:col-span-2">
-              <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
-                Private CRM Information
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Purchase Price
-                  </label>
-                  <input
-                    type="text"
-                    name="purchasePrice"
-                    value={formData.purchasePrice || ""}
-                    onChange={handleChange}
-                    placeholder="Purchase price"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                  <p className="mt-1 text-xs text-gray-500">
-                    Internal information - not shown to customers
-                  </p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Serial Number
-                  </label>
-                  <input
-                    type="text"
-                    name="serialNumber"
-                    value={formData.serialNumber || ""}
-                    onChange={handleChange}
-                    placeholder="Serial number"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                  <p className="mt-1 text-xs text-gray-500">
-                    Internal information - not shown to customers
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
 

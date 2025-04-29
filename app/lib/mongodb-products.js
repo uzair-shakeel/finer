@@ -49,6 +49,19 @@ const generateNextItemCode = async () => {
   }
 };
 
+// Helper function to strip brand information from bracelet names for display
+const stripBrandFromBracelet = (braceletValue) => {
+  if (!braceletValue) return "";
+
+  // If the bracelet value contains a brand in parentheses, remove it
+  const parenthesisIndex = braceletValue.indexOf(" (");
+  if (parenthesisIndex > 0) {
+    return braceletValue.substring(0, parenthesisIndex);
+  }
+
+  return braceletValue;
+};
+
 // Get all products
 export const getProducts = async () => {
   try {
@@ -123,8 +136,9 @@ export const createProduct = async (productData) => {
 
     // Generate item code if not provided
     let itemCode = productData.itemCode;
-    if (!itemCode) {
+    if (!itemCode || itemCode.trim() === "") {
       itemCode = await generateNextItemCode();
+      console.log("Generated item code:", itemCode);
     }
 
     // Process specification fields
@@ -208,12 +222,16 @@ export const createProduct = async (productData) => {
       extra: productData.extra || "",
       purchasePrice: productData.purchasePrice || "",
       serialNumber: productData.serialNumber || "",
+      notes: productData.notes || "",
       description: productData.description || "",
       subdescription: productData.subdescription || "",
+      pageTitle: productData.pageTitle || "",
       discount:
         typeof productData.discount === "number" ? productData.discount : 0,
       rrpStatus: productData.rrpStatus || "Regular",
-      status: ["live", "archive", "draft"].includes(productData.status)
+      status: ["live", "archive", "draft", "sold_out"].includes(
+        productData.status
+      )
         ? productData.status
         : "draft",
       featured: productData.featured === true,

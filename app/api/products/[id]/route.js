@@ -29,7 +29,11 @@ export async function GET(request, { params }) {
 
     // For public access, only return live products
     const isAdmin = request.headers.get("x-is-admin") === "true";
-    if (!isAdmin && product.status !== "live") {
+    if (
+      !isAdmin &&
+      product.status !== "live" &&
+      product.status !== "sold_out"
+    ) {
       return NextResponse.json(
         { success: false, message: "Product not found" },
         { status: 404 }

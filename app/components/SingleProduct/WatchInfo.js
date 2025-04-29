@@ -22,6 +22,9 @@ const WatchInfo = ({ product }) => {
     callToConfirm: false,
   });
 
+  // Check if product is sold out
+  const isSoldOut = product?.status === "sold_out";
+
   const openSendOfferModal = () => setIsSendOfferModalOpen(true);
   const closeSendOfferModal = () => setIsSendOfferModalOpen(false);
 
@@ -111,17 +114,17 @@ const WatchInfo = ({ product }) => {
       product.brand
     }\nModel: ${product.model}\nReference: ${product.reference}\nYear: ${
       product.year
-    }\nCondition: ${product.condition?.overall}\nPrice: ${formatPrice(
-      product.price
-    )}`;
+    }\nCondition: ${product.condition?.overall}\nPrice: ${
+      isSoldOut ? "Sold Out" : formatPrice(product.price)
+    }`;
 
     if (typeof window !== "undefined") {
       sessionStorage.setItem("buyFormProduct", JSON.stringify(product));
       sessionStorage.setItem("buyFormData", prefillText);
-      sessionStorage.setItem("setActiveHomeTab", "buy");
+      sessionStorage.setItem("setActiveHomeTab", isSoldOut ? "source" : "buy");
     }
 
-    scrollToHomeFormSection("buy");
+    scrollToHomeFormSection(isSoldOut ? "source" : "buy");
   };
 
   const hasRRP =
@@ -253,9 +256,15 @@ const WatchInfo = ({ product }) => {
       </div>
 
       <div className="mt-6 md:mt-8">
-        <h3 className="text-[#000000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
-          {formatPrice(product.price)}
-        </h3>
+        {isSoldOut ? (
+          <h3 className="text-[#FF0000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
+            Sold Out
+          </h3>
+        ) : (
+          <h3 className="text-[#000000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
+            {formatPrice(product.price)}
+          </h3>
+        )}
         <div className="mt-2 sm:mt-3 text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
           {hasRRP ? (
             <div>
@@ -303,18 +312,30 @@ const WatchInfo = ({ product }) => {
         />
       </div>
 
-      <button
-        onClick={handleBuyClick}
-        className="mt-3 bg-[#017EFE] w-full px-8 md:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#003D7B]"
-      >
-        Buy
-      </button>
-      <button
-        onClick={openSendOfferModal}
-        className="mt-3 flex items-center justify-center !leading-[19px] w-full px-8 md:px-10 rounded-[60px] text-[#017EFE] text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:text-white hover:bg-[#017EFE] border-2 border-[#017EFE]"
-      >
-        Send an offer
-      </button>
+      {isSoldOut ? (
+        <button
+          onClick={handleBuyClick}
+          className="mt-3 bg-[#017EFE] w-full px-8 md:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#003D7B]"
+        >
+          Source
+        </button>
+      ) : (
+        <button
+          onClick={handleBuyClick}
+          className="mt-3 bg-[#017EFE] w-full px-8 md:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#003D7B]"
+        >
+          Buy
+        </button>
+      )}
+
+      {!isSoldOut && (
+        <button
+          onClick={openSendOfferModal}
+          className="mt-3 flex items-center justify-center !leading-[19px] w-full px-8 md:px-10 rounded-[60px] text-[#017EFE] text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:text-white hover:bg-[#017EFE] border-2 border-[#017EFE]"
+        >
+          Send an offer
+        </button>
+      )}
 
       {/* Modal */}
       {isSendOfferModalOpen && (

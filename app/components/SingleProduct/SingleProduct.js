@@ -12,6 +12,9 @@ import RecentlyViewed from "./RecentlyViewed";
 const SingleProduct = ({ product }) => {
   const coverImage = product?.imageUrl || "/placeholder.svg";
 
+  // Check if product is sold out
+  const isSoldOut = product?.status === "sold_out";
+
   // Process additional images properly
   let additionalImageUrls = [];
   if (product?.additionalImages && Array.isArray(product.additionalImages)) {
@@ -27,6 +30,20 @@ const SingleProduct = ({ product }) => {
       // Extract the URLs
       .map((img) => img.url);
   }
+
+  // Extract bracelet name without brand info
+  const formatBraceletName = (braceletValue) => {
+    if (!braceletValue) return "N/A";
+
+    // Check if the bracelet value has a brand in parentheses
+    const parenthesisIndex = braceletValue.indexOf(" (");
+    if (parenthesisIndex > 0) {
+      // Return just the part before the parenthesis
+      return braceletValue.substring(0, parenthesisIndex);
+    }
+
+    return braceletValue;
+  };
 
   // Combine all images in the right order
   const productImages = [
@@ -171,7 +188,7 @@ const SingleProduct = ({ product }) => {
                   </h2>
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Bracelet:</span>{" "}
-                    {product?.bracelet || "N/A"}
+                    {formatBraceletName(product?.bracelet) || "N/A"}
                     {product?.braceletLength && (
                       <span> ({product.braceletLength})</span>
                     )}

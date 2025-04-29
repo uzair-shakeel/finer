@@ -97,6 +97,10 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    pageTitle: {
+      type: String,
+      trim: true,
+    },
     imageUrl: {
       type: String,
       required: [true, "Please provide an image URL"],
@@ -110,7 +114,7 @@ const ProductSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["live", "archive", "draft"],
+      enum: ["live", "archive", "draft", "sold_out"],
       default: "draft",
     },
     featured: {
@@ -170,6 +174,10 @@ const ProductSchema = new mongoose.Schema(
       trim: true,
     },
     serialNumber: {
+      type: String,
+      trim: true,
+    },
+    notes: {
       type: String,
       trim: true,
     },

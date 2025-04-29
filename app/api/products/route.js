@@ -29,7 +29,13 @@ export async function GET(request) {
       // For public access, only show live products unless admin
       const isAdmin = request.headers.get("x-is-admin") === "true";
       if (!isAdmin) {
-        products = await getFilteredProducts({ status: "live" });
+        // Get both live and sold_out products
+        const liveProducts = await getFilteredProducts({ status: "live" });
+        const soldOutProducts = await getFilteredProducts({
+          status: "sold_out",
+        });
+        // Combine both arrays
+        products = [...liveProducts, ...soldOutProducts];
       } else {
         products = await getProducts();
       }

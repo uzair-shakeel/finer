@@ -117,7 +117,7 @@ const NewArrivals = () => {
               key={product._id}
               className="block"
             >
-              <div className="bg-white rounded-[24px] sm:rounded-[30px] p-[12px] sm:p-[18px] w-full hover:shadow-lg transition-shadow duration-300">
+              <div className="bg-white rounded-[24px] sm:rounded-[30px] p-[12px] sm:p-[18px] w-full  transition-shadow duration-300">
                 <div className="w-full h-[168px] sm:h-[248px] overflow-hidden rounded-[20px] relative flex items-center justify-center group">
                   <Image
                     src={product.imageUrl || "/placeholder.svg"}

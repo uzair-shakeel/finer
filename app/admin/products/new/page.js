@@ -26,7 +26,9 @@ export default function AddProduct() {
     rrpStatus: "Regular",
     description: "",
     subdescription: "",
+    pageTitle: "",
     imageUrl: "",
+    backsideImageUrl: "",
     additionalImages: [],
     status: "draft",
     featured: false,
@@ -46,6 +48,7 @@ export default function AddProduct() {
     // Private CRM fields
     purchasePrice: "",
     serialNumber: "",
+    notes: "",
   });
 
   const [allImages, setAllImages] = useState([]);
@@ -124,6 +127,7 @@ export default function AddProduct() {
         description:
           "The Rolex Submariner Date in Oystersteel with a unidirectional rotatable bezel and black dial with large luminescent hour markers.",
         subdescription: "Waterproof and robust diving watch",
+        pageTitle: "Rolex Submariner Date 126610LN | Luxury Dive Watch",
         imageUrl: mainImageUrl,
         backsideImageUrl: backsideImageUrl,
         additionalImages: additionalImages,
@@ -142,6 +146,7 @@ export default function AddProduct() {
         extra: "No-Date",
         purchasePrice: "10000",
         serialNumber: "RX123456789",
+        notes: "",
       });
 
       console.log("Auto-fill complete with:", {
@@ -338,8 +343,8 @@ export default function AddProduct() {
     setFormData((prev) => {
       console.log("Setting main image to:", imageUrl);
       return {
-        ...prev,
-        imageUrl: imageUrl,
+      ...prev,
+      imageUrl: imageUrl,
       };
     });
 
@@ -532,10 +537,10 @@ export default function AddProduct() {
         }));
 
         toast.success("Additional image uploaded successfully");
-      } catch (error) {
+    } catch (error) {
         console.error("Error uploading additional image:", error);
         toast.error("Error uploading additional image");
-      } finally {
+    } finally {
         setIsUploading(false);
       }
     }
@@ -791,6 +796,48 @@ export default function AddProduct() {
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="itemCode"
+                >
+                  Item Code
+                </label>
+                <input
+                  type="text"
+                  id="itemCode"
+                  name="itemCode"
+                  value={formData.itemCode}
+                  onChange={handleChange}
+                  placeholder="Auto-generated if empty"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Starting with AA001, auto-generated if left blank
+                </p>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="serialNumber"
+                >
+                  Serial Number
+                </label>
+                <input
+                  type="text"
+                  id="serialNumber"
+                  name="serialNumber"
+                  value={formData.serialNumber}
+                  onChange={handleChange}
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                  placeholder="Enter watch serial number"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  For internal use only - not shown to customers
+                </p>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
                   htmlFor="brand"
                 >
                   Brand <span className="text-red-500">*</span>
@@ -822,28 +869,6 @@ export default function AddProduct() {
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                   required
                 />
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="extra"
-                >
-                  Extra (Nickname)
-                </label>
-                <input
-                  type="text"
-                  id="extra"
-                  name="extra"
-                  value={formData.extra}
-                  onChange={handleChange}
-                  placeholder="e.g. Batgirl, Pepsi, Batman"
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  This will be displayed alongside the model name on product
-                  pages
-                </p>
               </div>
 
               <div>
@@ -892,8 +917,16 @@ export default function AddProduct() {
                       type="checkbox"
                       id="hasBox"
                       name="hasBox"
-                      checked={formData.condition.hasBox}
-                      onChange={handleChange}
+                      checked={formData.condition?.hasBox || false}
+                      onChange={(e) => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          condition: {
+                            ...prev.condition,
+                            hasBox: e.target.checked,
+                          },
+                        }));
+                      }}
                       className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
                     />
                     <label
@@ -908,8 +941,16 @@ export default function AddProduct() {
                       type="checkbox"
                       id="hasPapers"
                       name="hasPapers"
-                      checked={formData.condition.hasPapers}
-                      onChange={handleChange}
+                      checked={formData.condition?.hasPapers || false}
+                      onChange={(e) => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          condition: {
+                            ...prev.condition,
+                            hasPapers: e.target.checked,
+                          },
+                        }));
+                      }}
                       className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
                     />
                     <label
@@ -921,20 +962,62 @@ export default function AddProduct() {
                   </div>
                 </div>
               </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="notes"
+                >
+                  Notes (Private)
+                </label>
+                <textarea
+                  id="notes"
+                  name="notes"
+                  value={formData.notes || ""}
+                  onChange={handleChange}
+                  rows="3"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                  placeholder="Enter private notes (not visible to customers)"
+                ></textarea>
+                <p className="mt-1 text-xs text-gray-500">
+                  Internal notes for staff only - not shown to customers
+                </p>
+              </div>
             </div>
 
             {/* Pricing & Description */}
             <div className="space-y-4">
               <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
-                Pricing & Description
+                Pricing
               </h2>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="purchasePrice"
+                >
+                  Cost (Purchase Price)
+                </label>
+                <input
+                  type="text"
+                  id="purchasePrice"
+                  name="purchasePrice"
+                  value={formData.purchasePrice || ""}
+                  onChange={handleChange}
+                  placeholder="e.g. 10000"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Internal price - not shown to customers
+                </p>
+              </div>
 
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700 mb-1"
                   htmlFor="price"
                 >
-                  Price <span className="text-red-500">*</span>
+                  Price (Selling Price) <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -942,13 +1025,28 @@ export default function AddProduct() {
                   name="price"
                   value={formData.price}
                   onChange={handleChange}
-                  placeholder="e.g. 1,500"
+                  placeholder="e.g. 12500"
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                   required
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Regular selling price
-                </p>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="originalPrice"
+                >
+                  RRP (Recommended Retail Price)
+                </label>
+                <input
+                  type="text"
+                  id="originalPrice"
+                  name="originalPrice"
+                  value={formData.originalPrice}
+                  onChange={handleChange}
+                  placeholder="e.g. 13000"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                />
               </div>
 
               <div>
@@ -962,79 +1060,11 @@ export default function AddProduct() {
                   type="text"
                   id="discountedPrice"
                   name="discountedPrice"
-                  value={formData.discountedPrice}
+                  value={formData.discountedPrice || ""}
                   onChange={handleChange}
-                  placeholder="e.g. 1,200"
+                  placeholder="Auto-calculated from discount"
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Final selling price after discount (calculated automatically)
-                </p>
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="originalPrice"
-                >
-                  RRP
-                </label>
-                <input
-                  type="text"
-                  id="originalPrice"
-                  name="originalPrice"
-                  value={formData.originalPrice}
-                  onChange={handleChange}
-                  placeholder="e.g. 1,800"
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Recommended Retail Price (independent of discount
-                  calculations)
-                </p>
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="purchasePrice"
-                >
-                  Purchase Price (Private)
-                </label>
-                <input
-                  type="text"
-                  id="purchasePrice"
-                  name="purchasePrice"
-                  value={formData.purchasePrice}
-                  onChange={handleChange}
-                  placeholder="e.g. 1,250"
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  This is for internal CRM use only and won't be shown to
-                  customers
-                </p>
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="serialNumber"
-                >
-                  Serial Number (Private)
-                </label>
-                <input
-                  type="text"
-                  id="serialNumber"
-                  name="serialNumber"
-                  value={formData.serialNumber}
-                  onChange={handleChange}
-                  placeholder="e.g. 123456789"
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  For internal tracking, not displayed to customers
-                </p>
               </div>
 
               <div>
@@ -1054,9 +1084,33 @@ export default function AddProduct() {
                   max="100"
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Percentage discount from the regular price (automatically
-                  calculates the discounted price)
+              </div>
+            </div>
+
+            {/* Content Section */}
+            <div className="space-y-4">
+              <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
+                Content
+              </h2>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="pageTitle"
+                >
+                  Page Title
+                </label>
+                <input
+                  type="text"
+                  id="pageTitle"
+                  name="pageTitle"
+                  value={formData.pageTitle || ""}
+                  onChange={handleChange}
+                  placeholder="e.g. Rolex Submariner 126610LN | Luxury Dive Watch"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Used for SEO and browser tab title
                 </p>
               </div>
 
@@ -1072,7 +1126,26 @@ export default function AddProduct() {
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
-                  rows="3"
+                  rows="4"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                  placeholder="Detailed product description shown on the product page"
+                ></textarea>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="subdescription"
+                >
+                  Subdescription
+                </label>
+                <textarea
+                  id="subdescription"
+                  name="subdescription"
+                  value={formData.subdescription || ""}
+                  onChange={handleChange}
+                  rows="2"
+                  placeholder="Optional shorter description for cards and previews"
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 ></textarea>
               </div>
@@ -1084,26 +1157,6 @@ export default function AddProduct() {
                 Specifications
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Item Code
-                  </label>
-                  <div className="mt-1 relative">
-                    <input
-                      type="text"
-                      name="itemCode"
-                      value={formData.itemCode}
-                      onChange={handleChange}
-                      disabled={true}
-                      placeholder="Auto-generated (e.g. AA001)"
-                      className="block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 cursor-not-allowed"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      This field is auto-generated when you save the product
-                    </p>
-                  </div>
-                </div>
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Case Size
@@ -1214,17 +1267,65 @@ export default function AddProduct() {
                       formData.bracelet?.length > 0 ? formData.bracelet[0] : ""
                     }
                     onChange={handleChange}
-                    className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="">Select bracelet</option>
-                    <option value="Steel">Steel</option>
-                    <option value="Titanium">Titanium</option>
-                    <option value="Ceramic">Ceramic</option>
-                    <option value="Two-Tone">Two-Tone</option>
-                    <option value="Gold">Gold</option>
+                    <option value="Stainless Steel">Stainless Steel</option>
                     <option value="Leather">Leather</option>
                     <option value="Rubber">Rubber</option>
                     <option value="NATO">NATO</option>
+                    <option value="Oyster (Rolex)">Oyster (Rolex)</option>
+                    <option value="Jubilee (Rolex)">Jubilee (Rolex)</option>
+                    <option value="President (Rolex)">President (Rolex)</option>
+                    <option value="Pearlmaster (Rolex)">
+                      Pearlmaster (Rolex)
+                    </option>
+                    <option value="Santos (Cartier)">Santos (Cartier)</option>
+                    <option value="Ballon Bleu (Cartier)">
+                      Ballon Bleu (Cartier)
+                    </option>
+                    <option value="Speedmaster (Omega)">
+                      Speedmaster (Omega)
+                    </option>
+                    <option value="Seamaster (Omega)">Seamaster (Omega)</option>
+                    <option value="Flat Link (Omega)">Flat Link (Omega)</option>
+                    <option value="Professional (Breitling)">
+                      Professional (Breitling)
+                    </option>
+                    <option value="Pilot (Breitling)">Pilot (Breitling)</option>
+                    <option value="Navitimer (Breitling)">
+                      Navitimer (Breitling)
+                    </option>
+                    <option value="Big Bang Integrated (Hublot)">
+                      Big Bang Integrated (Hublot)
+                    </option>
+                    <option value="Royal Oak (Audemars Piguet)">
+                      Royal Oak (Audemars Piguet)
+                    </option>
+                    <option value="Royal Oak Offshore (Audemars Piguet)">
+                      Royal Oak Offshore (Audemars Piguet)
+                    </option>
+                    <option value="Nautilus (Patek Philippe)">
+                      Nautilus (Patek Philippe)
+                    </option>
+                    <option value="Aquanaut (Patek Philippe)">
+                      Aquanaut (Patek Philippe)
+                    </option>
+                    <option value="Overseas (Vacheron Constantin)">
+                      Overseas (Vacheron Constantin)
+                    </option>
+                    <option value="Polaris (Jaeger-LeCoultre)">
+                      Polaris (Jaeger-LeCoultre)
+                    </option>
+                    <option value="Reverso (Jaeger-LeCoultre)">
+                      Reverso (Jaeger-LeCoultre)
+                    </option>
+                    <option value="Milanese">Milanese</option>
+                    <option value="Fabric">Fabric</option>
+                    <option value="Gold">Gold</option>
+                    <option value="Titanium">Titanium</option>
+                    <option value="Ceramic">Ceramic</option>
+                    <option value="Two-Tone">Two-Tone</option>
                   </select>
                 </div>
 
@@ -1270,27 +1371,27 @@ export default function AddProduct() {
                     Water Resistance
                   </label>
                   <div className="relative mt-1 border border-gray-300 rounded-md py-2 px-3 h-10 flex items-center">
-                    <input
-                      type="checkbox"
+                      <input
+                        type="checkbox"
                       id="waterResistance"
-                      name="waterResistance"
-                      checked={formData.waterResistance}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          waterResistance: e.target.checked,
-                        }))
-                      }
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
+                        name="waterResistance"
+                        checked={formData.waterResistance}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            waterResistance: e.target.checked,
+                          }))
+                        }
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
                     <label
                       htmlFor="waterResistance"
                       className="ml-2 text-gray-700"
                     >
-                      Water Resistant
+                        Water Resistant
                     </label>
-                  </div>
-                </div>
+              </div>
+            </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1313,7 +1414,7 @@ export default function AddProduct() {
                     </select>
 
                     {formData.depth === "Other" && (
-                      <input
+                    <input
                         type="text"
                         name="depthCustom"
                         value={formData.depthCustom || ""}
@@ -1340,7 +1441,7 @@ export default function AddProduct() {
               </div>
               <div className="p-4">
                 <div className="mb-4 flex items-center">
-                  <label
+                    <label
                     htmlFor="image-upload"
                     className={`cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 ${
                       isUploading
@@ -1353,7 +1454,7 @@ export default function AddProduct() {
                         <svg
                           className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-600"
                           xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
+                        fill="none"
                           viewBox="0 0 24 24"
                         >
                           <circle
@@ -1361,7 +1462,7 @@ export default function AddProduct() {
                             cx="12"
                             cy="12"
                             r="10"
-                            stroke="currentColor"
+                        stroke="currentColor"
                             strokeWidth="4"
                           ></circle>
                           <path
@@ -1377,20 +1478,20 @@ export default function AddProduct() {
                         <svg
                           className="-ml-1 mr-2 h-5 w-5 text-gray-400"
                           fill="none"
-                          viewBox="0 0 24 24"
+                        viewBox="0 0 24 24"
                           stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                             strokeWidth={2}
                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                          />
-                        </svg>
+                        />
+                      </svg>
                         Upload Images
                       </>
                     )}
-                  </label>
+                    </label>
                   <input
                     id="image-upload"
                     name="image"
@@ -1426,15 +1527,18 @@ export default function AddProduct() {
                     >
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {allImages.map((img, index) => (
-                          <div
-                            key={index}
+                      <div
+                        key={index}
                             className="relative border border-gray-300 rounded-lg overflow-hidden bg-white"
-                          >
+                      >
                             <div className="relative h-40 bg-gray-100">
-                              <img
+                        <Image
                                 src={img}
                                 alt={`Product ${index + 1}`}
                                 className="h-full w-full object-contain"
+                                width={500}
+                                height={320}
+                                unoptimized={true}
                               />
                               {/* Indicator icons for main/backside images */}
                               {img === formData.imageUrl && (
@@ -1453,8 +1557,8 @@ export default function AddProduct() {
                               <div className="flex justify-between items-center">
                                 {/* Set as main/backside */}
                                 <div className="flex space-x-1">
-                                  <button
-                                    type="button"
+                          <button
+                            type="button"
                                     onClick={(e) => {
                                       e.preventDefault(); // Prevent scrolling
                                       setAsMainImage(img);
@@ -1467,9 +1571,9 @@ export default function AddProduct() {
                                     title="Set as main image"
                                   >
                                     Front
-                                  </button>
-                                  <button
-                                    type="button"
+                          </button>
+                          <button
+                            type="button"
                                     onClick={(e) => {
                                       e.preventDefault(); // Prevent scrolling
                                       setAsBacksideImage(img);
@@ -1482,12 +1586,12 @@ export default function AddProduct() {
                                     title="Set as backside image"
                                   >
                                     Back
-                                  </button>
+                          </button>
                                 </div>
 
                                 {/* Delete button */}
-                                <button
-                                  type="button"
+                          <button
+                            type="button"
                                   onClick={(e) => {
                                     e.preventDefault(); // Prevent scrolling
                                     removeImage(img);
@@ -1544,13 +1648,13 @@ export default function AddProduct() {
                                     e.preventDefault();
                                     removeImage(img);
                                   }}
-                                >
-                                  Remove
-                                </button>
+                          >
+                            Remove
+                          </button>
                               </div>
-                            </div>
-                          </div>
-                        ))}
+                        </div>
+                      </div>
+                    ))}
                       </div>
                     </div>
                   </div>
@@ -1601,6 +1705,7 @@ export default function AddProduct() {
                     <option value="draft">Draft</option>
                     <option value="live">Live</option>
                     <option value="archive">Archive</option>
+                    <option value="sold_out">Sold Out</option>
                   </select>
                   <p className="mt-1 text-xs text-gray-500">
                     Only &apos;Live&apos; products will be displayed on the
@@ -1611,20 +1716,20 @@ export default function AddProduct() {
                 <div>
                   <div className="flex flex-col space-y-2">
                     <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="featured"
-                        name="featured"
-                        checked={formData.featured}
-                        onChange={handleChange}
-                        className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                      />
-                      <label
-                        htmlFor="featured"
-                        className="ml-2 block text-sm font-medium text-gray-700"
-                      >
-                        Featured Product
-                      </label>
+                    <input
+                      type="checkbox"
+                      id="featured"
+                      name="featured"
+                      checked={formData.featured}
+                      onChange={handleChange}
+                      className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                    />
+                    <label
+                      htmlFor="featured"
+                      className="ml-2 block text-sm font-medium text-gray-700"
+                    >
+                      Featured Product
+                    </label>
                     </div>
 
                     <div className="flex items-center">
