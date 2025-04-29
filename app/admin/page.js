@@ -35,6 +35,7 @@ export default function AdminDashboard() {
     liveProducts: 0,
     archivedProducts: 0,
     draftProducts: 0,
+    soldOutProducts: 0,
   });
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -73,11 +74,19 @@ export default function AdminDashboard() {
           },
         });
 
+        // Fetch sold out products
+        const soldOutResponse = await fetch("/api/products?status=sold_out", {
+          headers: {
+            "x-is-admin": "true",
+          },
+        });
+
         if (
           !productsResponse.ok ||
           !liveResponse.ok ||
           !archivedResponse.ok ||
-          !draftResponse.ok
+          !draftResponse.ok ||
+          !soldOutResponse.ok
         ) {
           throw new Error("Failed to fetch product statistics");
         }
@@ -86,12 +95,14 @@ export default function AdminDashboard() {
         const liveData = await liveResponse.json();
         const archivedData = await archivedResponse.json();
         const draftData = await draftResponse.json();
+        const soldOutData = await soldOutResponse.json();
 
         setStats({
           totalProducts: productsData.count || 0,
           liveProducts: liveData.count || 0,
           archivedProducts: archivedData.count || 0,
           draftProducts: draftData.count || 0,
+          soldOutProducts: soldOutData.count || 0,
         });
 
         setProducts(productsData.products || []);
@@ -108,20 +119,27 @@ export default function AdminDashboard() {
 
   // Prepare chart data
   const statusChartData = {
-    labels: ["Live", "Archived", "Draft"],
+    labels: ["Live", "Archived", "Draft", "Sold Out"],
     datasets: [
       {
         label: "Products by Status",
-        data: [stats.liveProducts, stats.archivedProducts, stats.draftProducts],
+        data: [
+          stats.liveProducts,
+          stats.archivedProducts,
+          stats.draftProducts,
+          stats.soldOutProducts,
+        ],
         backgroundColor: [
           "rgba(75, 192, 192, 0.6)",
           "rgba(201, 203, 207, 0.6)",
           "rgba(255, 205, 86, 0.6)",
+          "rgba(255, 99, 132, 0.6)",
         ],
         borderColor: [
           "rgb(75, 192, 192)",
           "rgb(201, 203, 207)",
           "rgb(255, 205, 86)",
+          "rgb(255, 99, 132)",
         ],
         borderWidth: 1,
       },
@@ -246,6 +264,13 @@ export default function AdminDashboard() {
                 Draft Products
               </div>
               <div className="text-3xl font-bold">{stats.draftProducts}</div>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="text-red-500 text-lg font-semibold mb-2">
+                Sold Out Products
+              </div>
+              <div className="text-3xl font-bold">{stats.soldOutProducts}</div>
             </div>
           </div>
 

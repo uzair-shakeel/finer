@@ -19,7 +19,7 @@ const NewArrivals = () => {
         setLoading(true);
 
         // Fetch only live and featured products
-        const response = await fetch("/api/products?status=live&featured=true");
+        const response = await fetch("/api/products?featured=true");
 
         if (!response.ok) {
           throw new Error("Failed to fetch products");
@@ -132,8 +132,16 @@ const NewArrivals = () => {
                     sizes="(max-width: 640px) 100vw, 204px"
                   />
 
+                  {product.status === "sold_out" && (
+                    <div className="bg-[#FF0000] rounded-lg sm:rounded-[13px] p-2 sm:py-[10px] px-[9px] absolute w-fit top-0 left-0">
+                      <h2 className="text-white text-xs sm:text-[14px] leading-[17px] font-normal">
+                        {t("shop.soldOut", "Sold Out")}
+                      </h2>
+                    </div>
+                  )}
+
                   {product.discount > 0 && (
-                    <div className="bg-[#60FF7D] rounded-lg sm:rounded-[13px] p-2 sm:py-[10px] px-[9px] absolute w-fit top-0 left-0">
+                    <div className="bg-[#60FF7D] rounded-lg sm:rounded-[13px] p-2 sm:py-[10px] px-[9px] absolute w-fit top-0 right-0">
                       <h2 className="text-black text-xs sm:text-[14px] leading-[17px] font-normal">
                         -{product.discount}%
                       </h2>
@@ -184,17 +192,25 @@ const NewArrivals = () => {
                 </div>
 
                 <div className="mb-[11px] mt-[8px] sm:my-[12px] flex items-center justify-start gap-2 sm:gap-[18px]">
-                  <h3
-                    className={`text-[16px] sm:text-[24px] sm:!leading-[29px] !leading-[19px] font-semibold ${
-                      product.discount > 0 ? "text-[#017EFE]" : "text-black"
-                    }`}
-                  >
-                    £{product.price}
-                  </h3>
-                  {product.discount > 0 && (
-                    <del className="text-[#828282] text-xs sm:text-[16px] sm:!leading-[19px] leading-none font-normal">
-                      £{product.originalPrice}
-                    </del>
+                  {product.status === "sold_out" ? (
+                    <h3 className="text-[#FF0000] text-[16px] sm:text-[24px] sm:!leading-[29px] !leading-[19px] font-semibold">
+                      {t("shop.soldOut", "Sold Out")}
+                    </h3>
+                  ) : (
+                    <>
+                      <h3
+                        className={`text-[16px] sm:text-[24px] sm:!leading-[29px] !leading-[19px] font-semibold ${
+                          product.discount > 0 ? "text-[#017EFE]" : "text-black"
+                        }`}
+                      >
+                        £{product.price}
+                      </h3>
+                      {product.discount > 0 && (
+                        <del className="text-[#828282] text-xs sm:text-[16px] sm:!leading-[19px] leading-none font-normal">
+                          £{product.originalPrice}
+                        </del>
+                      )}
+                    </>
                   )}
                 </div>
                 {/* <div className="flex items-center justify-start">

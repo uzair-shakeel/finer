@@ -296,6 +296,7 @@ export default function ProductsManagement() {
                 <option value="live">Live</option>
                 <option value="archive">Archived</option>
                 <option value="draft">Draft</option>
+                <option value="sold_out">Sold Out</option>
               </select>
             </div>
 
@@ -363,6 +364,18 @@ export default function ProductsManagement() {
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                    onClick={() => handleSort("itemCode")}
+                  >
+                    Item Code
+                    {sortConfig.key === "itemCode" && (
+                      <span className="ml-1">
+                        {sortConfig.direction === "asc" ? "↑" : "↓"}
+                      </span>
+                    )}
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                     onClick={() => handleSort("imageUrl")}
                   >
                     Image
@@ -379,6 +392,7 @@ export default function ProductsManagement() {
                       </span>
                     )}
                   </th>
+
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
@@ -457,6 +471,11 @@ export default function ProductsManagement() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">
+                          {product.itemCode || "-"}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <div className="relative h-16 w-16">
                           <Image
                             src={product.imageUrl || "/placeholder.svg"}
@@ -472,6 +491,7 @@ export default function ProductsManagement() {
                           {product.brand}
                         </div>
                       </td>
+
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
                           {product.model}
@@ -506,12 +526,15 @@ export default function ProductsManagement() {
                               ? "bg-green-100 text-green-800"
                               : product.status === "archive"
                               ? "bg-gray-100 text-gray-800"
+                              : product.status === "sold_out"
+                              ? "bg-red-100 text-red-800"
                               : "bg-yellow-100 text-yellow-800"
                           }`}
                         >
                           <option value="live">Live</option>
                           <option value="archive">Archive</option>
                           <option value="draft">Draft</option>
+                          <option value="sold_out">Sold Out</option>
                         </select>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -563,7 +586,7 @@ export default function ProductsManagement() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="8" className="px-6 py-4 text-center">
+                    <td colSpan="9" className="px-6 py-4 text-center">
                       <div className="text-gray-500">No products found</div>
                     </td>
                   </tr>
