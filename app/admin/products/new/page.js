@@ -1011,7 +1011,7 @@ export default function AddProduct() {
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  This is for internal CRM use only and won't be shown to
+                  This is for internal CRM use only and will not be shown to
                   customers
                 </p>
               </div>
@@ -1573,7 +1573,7 @@ export default function AddProduct() {
                       />
                     </svg>
                     <p className="mt-1 text-sm text-gray-500">
-                      No product images yet. Click the "Upload Images" button
+                      No product images yet. Click the Upload Images button
                       above to add images.
                     </p>
                   </div>
