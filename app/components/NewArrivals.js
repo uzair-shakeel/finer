@@ -118,7 +118,7 @@ const NewArrivals = () => {
               className="block"
             >
               <div className="bg-white rounded-[24px] sm:rounded-[30px] p-[12px] sm:p-[18px] w-full hover:shadow-lg transition-shadow duration-300">
-                <div className="w-full h-[168px] sm:h-[248px] relative flex items-center justify-center group">
+                <div className="w-full h-[168px] sm:h-[248px] overflow-hidden rounded-[20px] relative flex items-center justify-center group">
                   <Image
                     src={product.imageUrl || "/placeholder.svg"}
                     alt={`${product.brand} ${product.model}`}
@@ -128,25 +128,7 @@ const NewArrivals = () => {
                     height={248}
                     draggable="false"
                     loading="lazy"
-                    className="w-full h-full !object-cover rounded-[20px] !aspect-square opacity-100 group-hover:opacity-0 absolute top-0 left-0"
-                    sizes="(max-width: 640px) 100vw, 204px"
-                  />
-
-                  {/* Backside image (shown on hover) */}
-                  <Image
-                    src={
-                      product.backsideImageUrl ||
-                      product.imageUrl ||
-                      "/placeholder.svg"
-                    }
-                    alt={`${product.brand} ${product.model} - Back View`}
-                    placeholder="blur"
-                    blurDataURL="data:image/svg+xml;base64,..."
-                    draggable="false"
-                    width={204}
-                    height={248}
-                    loading="lazy"
-                    className="w-full sm:w-[204px] h-[168px] sm:h-[248px] rounded-[20px] !object-cover opacity-0 group-hover:opacity-100 absolute top-0 left-0"
+                    className="w-full h-full !object-cover rounded-[20px] !aspect-square opacity-100 group-hover:scale-105 duration-300 absolute top-0 left-0"
                     sizes="(max-width: 640px) 100vw, 204px"
                   />
 

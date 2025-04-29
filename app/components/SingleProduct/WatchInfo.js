@@ -187,7 +187,10 @@ const WatchInfo = ({ product }) => {
           {product?.brand}
         </h3>
         <h1 className="text-black text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[29px]">
-          {product?.model}
+          {product?.model}{" "}
+          {product?.extra && (
+            <span className=" text-[#017EFE]">{product.extra}</span>
+          )}
         </h1>
         <h3 className="text-black pt-1 text-[16px] sm:text-[18px] font-normal leading-[12px] sm:leading-[13px]">
           {product?.reference}
@@ -201,10 +204,11 @@ const WatchInfo = ({ product }) => {
           </h3>
           <div className="flex items-center gap-3">
             <h3 className="flex items-center gap-2 text-black text-[14px] sm:text-[16px] leading-[10px] sm:leading-[12px] font-normal">
-              Box <Right />
+              Box {product.condition.hasBox === true ? <Right /> : <Cross />}
             </h3>
             <h3 className="flex items-center gap-2 text-black text-[14px] sm:text-[16px] leading-[10px] sm:leading-[12px] font-normal">
-              Papers <Right />
+              Papers{" "}
+              {product.condition.hasPapers === true ? <Right /> : <Cross />}
             </h3>
           </div>
         </div>
@@ -213,7 +217,7 @@ const WatchInfo = ({ product }) => {
             Condition:
           </h3>
           <h3 className="text-black text-[16px] leading-[19px] font-normal">
-            Good
+            {product?.condition?.status || "Good"}
           </h3>
           <div>
             <div className="text-gray-400 cursor-pointer" onClick={openModal}>

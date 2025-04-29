@@ -164,6 +164,8 @@ export default function EditProduct({ params }) {
 
         const data = await response.json();
 
+        console.log("object", data);
+
         // Handle the condition field appropriately
         const product = data.product;
         if (typeof product.condition === "string") {
@@ -208,12 +210,15 @@ export default function EditProduct({ params }) {
 
         setFormData(product);
 
-        // Initialize allImages with all product images
         const imagesList = [
           ...(product.imageUrl ? [product.imageUrl] : []),
           ...(product.backsideImageUrl ? [product.backsideImageUrl] : []),
-          ...(product.additionalImages || []),
+          ...(product.additionalImages
+            ? product.additionalImages.map((img) => img.url)
+            : []),
         ];
+
+        console.log("all list here", imagesList);
         setAllImages(imagesList);
       } catch (error) {
         console.error("Fetch product error:", error);
@@ -222,6 +227,7 @@ export default function EditProduct({ params }) {
         setLoading(false);
       }
     };
+    console.log("all images here", allImages);
 
     fetchProduct();
   }, [id]);
@@ -366,6 +372,51 @@ export default function EditProduct({ params }) {
     setFormData((prev) => ({
       ...prev,
       backsideImageUrl: imageUrl,
+    }));
+  };
+
+  // Move image up or down in order
+  const moveImageUp = (index) => {
+    if (index === 0) return; // Can't move the first image up
+
+    setAllImages((prevImages) => {
+      const newImages = [...prevImages];
+      // Swap current image with the one above it
+      [newImages[index - 1], newImages[index]] = [
+        newImages[index],
+        newImages[index - 1],
+      ];
+      return newImages;
+    });
+  };
+
+  const moveImageDown = (index) => {
+    setAllImages((prevImages) => {
+      if (index === prevImages.length - 1) return prevImages; // Can't move the last image down
+
+      const newImages = [...prevImages];
+      // Swap current image with the one below it
+      [newImages[index], newImages[index + 1]] = [
+        newImages[index + 1],
+        newImages[index],
+      ];
+      return newImages;
+    });
+  };
+
+  // Update additionalImages with the new order
+  const updateAdditionalImagesOrder = (images) => {
+    const mainImage = formData.imageUrl;
+    const backsideImage = formData.backsideImageUrl;
+
+    // Filter out main and backside images
+    const additionalImagesWithOrder = images
+      .filter((img) => img !== mainImage && img !== backsideImage)
+      .map((img, index) => ({ url: img, order: index }));
+
+    setFormData((prev) => ({
+      ...prev,
+      additionalImages: additionalImagesWithOrder,
     }));
   };
 
@@ -1154,7 +1205,7 @@ export default function EditProduct({ params }) {
                           className="w-full h-32 object-contain mb-2"
                         />
 
-                        <div className="flex flex-col space-y-1">
+                        <div className="flex flex-col space-y-1 mt-2">
                           <button
                             type="button"
                             onClick={() => setAsMainImage(imageUrl)}
@@ -1169,7 +1220,7 @@ export default function EditProduct({ params }) {
                               : "Set as Front"}
                           </button>
 
-                          <button
+                          {/* <button
                             type="button"
                             onClick={() => setAsBacksideImage(imageUrl)}
                             className={`text-xs py-1 px-2 rounded-md ${
@@ -1181,7 +1232,35 @@ export default function EditProduct({ params }) {
                             {formData.backsideImageUrl === imageUrl
                               ? "Back Image ✓"
                               : "Set as Back"}
-                          </button>
+                          </button> */}
+
+                          <div className="flex space-x-1 mt-1">
+                            <button
+                              type="button"
+                              onClick={() => moveImageUp(index)}
+                              disabled={index === 0}
+                              className={`flex-1 text-xs py-1 px-2 rounded-md ${
+                                index === 0
+                                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                  : "bg-blue-100 text-blue-600 hover:bg-blue-200"
+                              }`}
+                            >
+                              ↑ Up
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => moveImageDown(index)}
+                              disabled={index === allImages.length - 1}
+                              className={`flex-1 text-xs py-1 px-2 rounded-md ${
+                                index === allImages.length - 1
+                                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                  : "bg-blue-100 text-blue-600 hover:bg-blue-200"
+                              }`}
+                            >
+                              ↓ Down
+                            </button>
+                          </div>
 
                           <button
                             type="button"

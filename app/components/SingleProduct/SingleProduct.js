@@ -11,14 +11,52 @@ import RecentlyViewed from "./RecentlyViewed";
 
 const SingleProduct = ({ product }) => {
   const coverImage = product?.imageUrl || "/placeholder.svg";
+
+  // Process additional images properly
+  let additionalImageUrls = [];
+  if (product?.additionalImages && Array.isArray(product.additionalImages)) {
+    // Clone the array to avoid mutating the original
+    additionalImageUrls = [...product.additionalImages]
+      // Ensure each item has an order property, default to 0 if missing
+      .map((img) => ({
+        ...img,
+        order: img.order !== undefined ? img.order : 0,
+      }))
+      // Sort by order
+      .sort((a, b) => a.order - b.order)
+      // Extract the URLs
+      .map((img) => img.url);
+  }
+
+  // Combine all images in the right order
   const productImages = [
     product?.imageUrl || "/placeholder.svg",
-    product?.backsideImageUrl || product?.imageUrl || "/placeholder.svg",
-    ...(product?.additionalImages || []).map(
-      (img) => img.url || "/placeholder.svg"
-    ),
-  ];
-  console.log(productImages);
+    ...(product?.backsideImageUrl ? [product.backsideImageUrl] : []),
+    ...additionalImageUrls,
+  ].filter(Boolean); // Filter out any undefined or null values
+
+  // Function to format water resistance information
+  const formatWaterResistance = () => {
+    if (!product?.waterResistance) return "No";
+
+    let result = "Yes";
+
+    // Add depth information if available
+    if (product.depth) {
+      // If depth is "Other" and we have a custom depth, use that
+      if (product.depth === "Other" && product.depthCustom) {
+        result += ` (${product.depthCustom})`;
+      }
+      // Otherwise show the depth value
+      else if (product.depth !== "Not specified") {
+        result += ` (${product.depth})`;
+      }
+    }
+
+    return result;
+  };
+
+  console.log("Product data:", product);
 
   return (
     <div className="px-5 pt-[85px] sm:pt-[110px]">
@@ -93,11 +131,6 @@ const SingleProduct = ({ product }) => {
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Model:</span>{" "}
                     {product?.model}
-                    {product?.extra && (
-                      <span className="ml-2 text-[#017EFE]">
-                        "{product.extra}"
-                      </span>
-                    )}
                   </h2>
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Reference:</span>{" "}
@@ -116,7 +149,7 @@ const SingleProduct = ({ product }) => {
                   </h2>
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Condition:</span>{" "}
-                    {product?.condition?.overall || "N/A"}
+                    {product?.condition?.status || "N/A"}
                   </h2>
                 </div>
                 <div className="space-y-2 sm:space-y-3">
@@ -149,7 +182,11 @@ const SingleProduct = ({ product }) => {
                   </h2>
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Water Resistance:</span>{" "}
-                    {product?.waterResistance ? "Yes" : "No"}
+                    {formatWaterResistance()}
+                  </h2>
+                  <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
+                    <span className="font-semibold">Extra:</span>{" "}
+                    {product?.extra || "N/A"}
                   </h2>
                 </div>
               </div>

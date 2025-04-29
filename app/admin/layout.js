@@ -75,7 +75,7 @@ export default function AdminLayout({ children }) {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-blue-100">
       {/* Sidebar */}
       <div className="w-64 bg-white shadow-md">
         <div className="p-6">

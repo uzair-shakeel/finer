@@ -56,22 +56,55 @@ export default function AddProduct() {
 
   // Autofill function for testing
   const autoFillTestData = () => {
-    // Sample image URL for testing
-    const sampleImageUrl =
+    // Sample image URLs for testing
+    const mainImageUrl =
       "https://res.cloudinary.com/dfudkmrpe/image/upload/v1713982613/finerlux-products/tkrfpqwdanvcxgjnpww2.jpg";
+    const backsideImageUrl =
+      "https://res.cloudinary.com/dfudkmrpe/image/upload/v1713982614/finerlux-products/vcrg41afnhmjqzqd6ozz.jpg";
+    const additionalImageUrl1 =
+      "https://res.cloudinary.com/dfudkmrpe/image/upload/v1713982614/finerlux-products/vwwuvkdw1k7dw2lrwgls.jpg";
+    const additionalImageUrl2 =
+      "https://res.cloudinary.com/dfudkmrpe/image/upload/v1713982614/finerlux-products/p7hzsv8qv5x6qoqn0pyk.jpg";
+    const additionalImageUrl3 =
+      "https://res.cloudinary.com/dfudkmrpe/image/upload/v1714084051/finerlux-products/ro4i7zrvtqunbq7vdxl0.jpg";
 
-    // First update allImages state to include the sample image
+    // First update allImages state to include all sample images
     setAllImages((prev) => {
-      // Check if image already exists
-      if (!prev.includes(sampleImageUrl)) {
-        console.log("Adding sample image to allImages");
-        return [...prev, sampleImageUrl];
+      const imagesToAdd = [
+        mainImageUrl,
+        backsideImageUrl,
+        additionalImageUrl1,
+        additionalImageUrl2,
+        additionalImageUrl3,
+      ];
+      const newImages = [...prev];
+      let imagesAdded = false;
+
+      // Add any images that don't already exist in the array
+      imagesToAdd.forEach((img) => {
+        if (!newImages.includes(img)) {
+          newImages.push(img);
+          imagesAdded = true;
+          console.log("Added image to allImages:", img);
+        }
+      });
+
+      if (imagesAdded) {
+        console.log("Updated allImages with sample images");
+        return newImages;
       }
       return prev;
     });
 
     // Then update form data with all test values
     setTimeout(() => {
+      // Prepare additional images with order information
+      const additionalImages = [
+        { url: additionalImageUrl1, order: 0 },
+        { url: additionalImageUrl2, order: 1 },
+        { url: additionalImageUrl3, order: 2 },
+      ];
+
       setFormData({
         brand: "Rolex",
         model: "Submariner",
@@ -91,8 +124,9 @@ export default function AddProduct() {
         description:
           "The Rolex Submariner Date in Oystersteel with a unidirectional rotatable bezel and black dial with large luminescent hour markers.",
         subdescription: "Waterproof and robust diving watch",
-        imageUrl: sampleImageUrl,
-        additionalImages: [],
+        imageUrl: mainImageUrl,
+        backsideImageUrl: backsideImageUrl,
+        additionalImages: additionalImages,
         status: "draft",
         featured: false,
         itemCode: "",
@@ -109,8 +143,17 @@ export default function AddProduct() {
         purchasePrice: "10000",
         serialNumber: "RX123456789",
       });
-      console.log("Auto-fill complete with main image:", sampleImageUrl);
-    }, 100);
+
+      console.log("Auto-fill complete with:", {
+        mainImage: mainImageUrl,
+        backsideImage: backsideImageUrl,
+        additionalImages: additionalImages,
+        totalImages: additionalImages.length + 2, // Adding main and backside images
+        waterResistance: true,
+        depth: "300m",
+        extra: "No-Date",
+      });
+    }, 300); // Increased timeout to ensure allImages are updated first
   };
 
   // Handle form field changes
@@ -324,6 +367,10 @@ export default function AddProduct() {
         newImages[index],
         newImages[index - 1],
       ];
+
+      // Call updateAdditionalImagesOrder with the new image order
+      setTimeout(() => updateAdditionalImagesOrder(newImages), 0);
+
       return newImages;
     });
   };
@@ -338,6 +385,10 @@ export default function AddProduct() {
         newImages[index + 1],
         newImages[index],
       ];
+
+      // Call updateAdditionalImagesOrder with the new image order
+      setTimeout(() => updateAdditionalImagesOrder(newImages), 0);
+
       return newImages;
     });
   };
@@ -347,10 +398,15 @@ export default function AddProduct() {
     const mainImage = formData.imageUrl;
     const backsideImage = formData.backsideImageUrl;
 
-    // Filter out main and backside images
+    // Filter out main and backside images, preserve the exact order from allImages
     const additionalImagesWithOrder = images
       .filter((img) => img !== mainImage && img !== backsideImage)
-      .map((img, index) => ({ url: img, order: index }));
+      .map((img, index) => ({
+        url: img,
+        order: index,
+      }));
+
+    console.log("Updating additional images order:", additionalImagesWithOrder);
 
     setFormData((prev) => ({
       ...prev,
@@ -544,12 +600,25 @@ export default function AddProduct() {
       }
     });
 
-    // Process additionalImages based on allImages, filtering out the main and backside images
-    submissionData.additionalImages = allImages
-      .filter(
-        (url) => url !== formData.imageUrl && url !== formData.backsideImageUrl
-      )
-      .map((url, index) => ({ url, order: index }));
+    // Process additionalImages based on allImages order, filtering out the main and backside images
+    const mainImage = submissionData.imageUrl;
+    const backsideImage = submissionData.backsideImageUrl;
+
+    // Get all images except main and backside, preserving the order from allImages
+    const additionalImagesInOrder = allImages
+      .filter((url) => url !== mainImage && url !== backsideImage)
+      .map((url, idx) => ({
+        url,
+        order: idx,
+      }));
+
+    // Update the submission data with properly ordered additional images
+    submissionData.additionalImages = additionalImagesInOrder;
+
+    console.log(
+      "Submitting with additionalImages:",
+      submissionData.additionalImages
+    );
 
     // Ensure all required fields are present and valid
     if (!submissionData.brand || submissionData.brand.trim() === "") {
