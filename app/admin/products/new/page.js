@@ -343,8 +343,8 @@ export default function AddProduct() {
     setFormData((prev) => {
       console.log("Setting main image to:", imageUrl);
       return {
-      ...prev,
-      imageUrl: imageUrl,
+        ...prev,
+        imageUrl: imageUrl,
       };
     });
 
@@ -537,10 +537,10 @@ export default function AddProduct() {
         }));
 
         toast.success("Additional image uploaded successfully");
-    } catch (error) {
+      } catch (error) {
         console.error("Error uploading additional image:", error);
         toast.error("Error uploading additional image");
-    } finally {
+      } finally {
         setIsUploading(false);
       }
     }
@@ -786,6 +786,78 @@ export default function AddProduct() {
             </button>
           </div>
 
+          {/* Private CRM Information */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
+              Private CRM Information
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="purchasePrice"
+                >
+                  Purchase Price
+                </label>
+                <input
+                  type="text"
+                  id="purchasePrice"
+                  name="purchasePrice"
+                  value={formData.purchasePrice || ""}
+                  onChange={handleChange}
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                  placeholder="Enter purchase price"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Internal information - not shown to customers
+                </p>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="serialNumber"
+                >
+                  Serial Number
+                </label>
+                <input
+                  type="text"
+                  id="serialNumber"
+                  name="serialNumber"
+                  value={formData.serialNumber || ""}
+                  onChange={handleChange}
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                  placeholder="Enter watch serial number"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  For internal use only - not shown to customers
+                </p>
+              </div>
+
+              <div className="md:col-span-2">
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="notes"
+                >
+                  Notes (Private)
+                </label>
+                <textarea
+                  id="notes"
+                  name="notes"
+                  value={formData.notes || ""}
+                  onChange={handleChange}
+                  rows="3"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                  placeholder="Enter private notes (not visible to customers)"
+                ></textarea>
+                <p className="mt-1 text-xs text-gray-500">
+                  Internal notes for staff only - not shown to customers
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Basic Information */}
             <div className="space-y-4">
@@ -811,27 +883,6 @@ export default function AddProduct() {
                 />
                 <p className="mt-1 text-xs text-gray-500">
                   Starting with AA001, auto-generated if left blank
-                </p>
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="serialNumber"
-                >
-                  Serial Number
-                </label>
-                <input
-                  type="text"
-                  id="serialNumber"
-                  name="serialNumber"
-                  value={formData.serialNumber}
-                  onChange={handleChange}
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                  placeholder="Enter watch serial number"
-                />
-                <p className="mt-1 text-xs text-gray-500">
-                  For internal use only - not shown to customers
                 </p>
               </div>
 
@@ -962,27 +1013,6 @@ export default function AddProduct() {
                   </div>
                 </div>
               </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="notes"
-                >
-                  Notes (Private)
-                </label>
-                <textarea
-                  id="notes"
-                  name="notes"
-                  value={formData.notes || ""}
-                  onChange={handleChange}
-                  rows="3"
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                  placeholder="Enter private notes (not visible to customers)"
-                ></textarea>
-                <p className="mt-1 text-xs text-gray-500">
-                  Internal notes for staff only - not shown to customers
-                </p>
-              </div>
             </div>
 
             {/* Pricing & Description */}
@@ -990,27 +1020,6 @@ export default function AddProduct() {
               <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
                 Pricing
               </h2>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="purchasePrice"
-                >
-                  Cost (Purchase Price)
-                </label>
-                <input
-                  type="text"
-                  id="purchasePrice"
-                  name="purchasePrice"
-                  value={formData.purchasePrice || ""}
-                  onChange={handleChange}
-                  placeholder="e.g. 10000"
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                />
-                <p className="mt-1 text-xs text-gray-500">
-                  Internal price - not shown to customers
-                </p>
-              </div>
 
               <div>
                 <label
@@ -1088,7 +1097,7 @@ export default function AddProduct() {
             </div>
 
             {/* Content Section */}
-            <div className="space-y-4">
+            <div className="space-y-4 md:col-span-2">
               <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
                 Content
               </h2>
@@ -1371,27 +1380,27 @@ export default function AddProduct() {
                     Water Resistance
                   </label>
                   <div className="relative mt-1 border border-gray-300 rounded-md py-2 px-3 h-10 flex items-center">
-                      <input
-                        type="checkbox"
+                    <input
+                      type="checkbox"
                       id="waterResistance"
-                        name="waterResistance"
-                        checked={formData.waterResistance}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            waterResistance: e.target.checked,
-                          }))
-                        }
-                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                      />
+                      name="waterResistance"
+                      checked={formData.waterResistance}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          waterResistance: e.target.checked,
+                        }))
+                      }
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
                     <label
                       htmlFor="waterResistance"
                       className="ml-2 text-gray-700"
                     >
-                        Water Resistant
+                      Water Resistant
                     </label>
-              </div>
-            </div>
+                  </div>
+                </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1414,7 +1423,7 @@ export default function AddProduct() {
                     </select>
 
                     {formData.depth === "Other" && (
-                    <input
+                      <input
                         type="text"
                         name="depthCustom"
                         value={formData.depthCustom || ""}
@@ -1441,7 +1450,7 @@ export default function AddProduct() {
               </div>
               <div className="p-4">
                 <div className="mb-4 flex items-center">
-                    <label
+                  <label
                     htmlFor="image-upload"
                     className={`cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 ${
                       isUploading
@@ -1454,7 +1463,7 @@ export default function AddProduct() {
                         <svg
                           className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-600"
                           xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
+                          fill="none"
                           viewBox="0 0 24 24"
                         >
                           <circle
@@ -1462,7 +1471,7 @@ export default function AddProduct() {
                             cx="12"
                             cy="12"
                             r="10"
-                        stroke="currentColor"
+                            stroke="currentColor"
                             strokeWidth="4"
                           ></circle>
                           <path
@@ -1478,20 +1487,20 @@ export default function AddProduct() {
                         <svg
                           className="-ml-1 mr-2 h-5 w-5 text-gray-400"
                           fill="none"
-                        viewBox="0 0 24 24"
+                          viewBox="0 0 24 24"
                           stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             strokeWidth={2}
                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                        />
-                      </svg>
+                          />
+                        </svg>
                         Upload Images
                       </>
                     )}
-                    </label>
+                  </label>
                   <input
                     id="image-upload"
                     name="image"
@@ -1527,12 +1536,12 @@ export default function AddProduct() {
                     >
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {allImages.map((img, index) => (
-                      <div
-                        key={index}
+                          <div
+                            key={index}
                             className="relative border border-gray-300 rounded-lg overflow-hidden bg-white"
-                      >
+                          >
                             <div className="relative h-40 bg-gray-100">
-                        <Image
+                              <Image
                                 src={img}
                                 alt={`Product ${index + 1}`}
                                 className="h-full w-full object-contain"
@@ -1557,8 +1566,8 @@ export default function AddProduct() {
                               <div className="flex justify-between items-center">
                                 {/* Set as main/backside */}
                                 <div className="flex space-x-1">
-                          <button
-                            type="button"
+                                  <button
+                                    type="button"
                                     onClick={(e) => {
                                       e.preventDefault(); // Prevent scrolling
                                       setAsMainImage(img);
@@ -1571,9 +1580,9 @@ export default function AddProduct() {
                                     title="Set as main image"
                                   >
                                     Front
-                          </button>
-                          <button
-                            type="button"
+                                  </button>
+                                  <button
+                                    type="button"
                                     onClick={(e) => {
                                       e.preventDefault(); // Prevent scrolling
                                       setAsBacksideImage(img);
@@ -1586,12 +1595,12 @@ export default function AddProduct() {
                                     title="Set as backside image"
                                   >
                                     Back
-                          </button>
+                                  </button>
                                 </div>
 
                                 {/* Delete button */}
-                          <button
-                            type="button"
+                                <button
+                                  type="button"
                                   onClick={(e) => {
                                     e.preventDefault(); // Prevent scrolling
                                     removeImage(img);
@@ -1648,13 +1657,13 @@ export default function AddProduct() {
                                     e.preventDefault();
                                     removeImage(img);
                                   }}
-                          >
-                            Remove
-                          </button>
+                                >
+                                  Remove
+                                </button>
                               </div>
-                        </div>
-                      </div>
-                    ))}
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -1704,32 +1713,34 @@ export default function AddProduct() {
                   >
                     <option value="draft">Draft</option>
                     <option value="live">Live</option>
+                    <option value="in_stock">In Stock</option>
+                    <option value="reserved">Reserved</option>
                     <option value="archive">Archive</option>
                     <option value="sold_out">Sold Out</option>
                   </select>
                   <p className="mt-1 text-xs text-gray-500">
-                    Only &apos;Live&apos; products will be displayed on the
-                    front-end
+                    Only &apos;Live&apos; and &apos;In Stock&apos; products will
+                    be displayed on the front-end
                   </p>
                 </div>
 
                 <div>
                   <div className="flex flex-col space-y-2">
                     <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id="featured"
-                      name="featured"
-                      checked={formData.featured}
-                      onChange={handleChange}
-                      className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                    />
-                    <label
-                      htmlFor="featured"
-                      className="ml-2 block text-sm font-medium text-gray-700"
-                    >
-                      Featured Product
-                    </label>
+                      <input
+                        type="checkbox"
+                        id="featured"
+                        name="featured"
+                        checked={formData.featured}
+                        onChange={handleChange}
+                        className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                      />
+                      <label
+                        htmlFor="featured"
+                        className="ml-2 block text-sm font-medium text-gray-700"
+                      >
+                        Featured Product
+                      </label>
                     </div>
 
                     <div className="flex items-center">

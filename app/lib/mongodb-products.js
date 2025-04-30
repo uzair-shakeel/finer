@@ -229,9 +229,14 @@ export const createProduct = async (productData) => {
       discount:
         typeof productData.discount === "number" ? productData.discount : 0,
       rrpStatus: productData.rrpStatus || "Regular",
-      status: ["live", "archive", "draft", "sold_out"].includes(
-        productData.status
-      )
+      status: [
+        "live",
+        "archive",
+        "draft",
+        "sold_out",
+        "reserved",
+        "in_stock",
+      ].includes(productData.status)
         ? productData.status
         : "draft",
       featured: productData.featured === true,

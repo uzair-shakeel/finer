@@ -114,7 +114,7 @@ const ProductSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["live", "archive", "draft", "sold_out"],
+      enum: ["live", "archive", "draft", "sold_out", "reserved", "in_stock"],
       default: "draft",
     },
     featured: {

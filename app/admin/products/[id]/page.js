@@ -718,6 +718,27 @@ export default function EditProduct({ params }) {
                     Internal information - not shown to customers
                   </p>
                 </div>
+
+                <div className="md:col-span-2">
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                    htmlFor="notes"
+                  >
+                    Notes (Private)
+                  </label>
+                  <textarea
+                    id="notes"
+                    name="notes"
+                    value={formData.notes || ""}
+                    onChange={handleChange}
+                    rows="3"
+                    className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                    placeholder="Enter private notes (not visible to customers)"
+                  ></textarea>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Internal notes for staff only - not shown to customers
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -783,27 +804,6 @@ export default function EditProduct({ params }) {
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 ></textarea>
               </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="notes"
-                >
-                  Notes (Private)
-                </label>
-                <textarea
-                  id="notes"
-                  name="notes"
-                  value={formData.notes || ""}
-                  onChange={handleChange}
-                  rows="3"
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                  placeholder="Enter private notes (not visible to customers)"
-                ></textarea>
-                <p className="mt-1 text-xs text-gray-500">
-                  Internal notes for staff only - not shown to customers
-                </p>
-              </div>
             </div>
 
             {/* Basic Information */}
@@ -829,27 +829,6 @@ export default function EditProduct({ params }) {
                 />
                 <p className="mt-1 text-xs text-gray-500">
                   Unique identifier for this product
-                </p>
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="serialNumber"
-                >
-                  Serial Number
-                </label>
-                <input
-                  type="text"
-                  id="serialNumber"
-                  name="serialNumber"
-                  value={formData.serialNumber}
-                  onChange={handleChange}
-                  placeholder="Watch serial number"
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                />
-                <p className="mt-1 text-xs text-gray-500">
-                  For internal use only - not shown to customers
                 </p>
               </div>
 
@@ -1521,12 +1500,14 @@ export default function EditProduct({ params }) {
                   >
                     <option value="draft">Draft</option>
                     <option value="live">Live</option>
+                    <option value="in_stock">In Stock</option>
+                    <option value="reserved">Reserved</option>
                     <option value="archive">Archive</option>
                     <option value="sold_out">Sold Out</option>
                   </select>
                   <p className="mt-1 text-xs text-gray-500">
-                    Only &apos;Live&apos; products will be displayed on the
-                    front-end
+                    Only &apos;Live&apos; and &apos;In Stock&apos; products will
+                    be displayed on the front-end
                   </p>
                 </div>
 

@@ -22,10 +22,9 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-  input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
-
 
 .scrollbar-hide {
   overflow: auto;
@@ -134,4 +133,33 @@ input::-webkit-inner-spin-button {
   .tag {
     display: none;
   }
+}
+
+/* Add status indicators animation */
+@keyframes statusPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.03);
+  }
+}
+
+.status-in-stock {
+  animation: statusPulse 1.5s infinite;
+  background-color: rgba(34, 197, 94, 0.25);
+  color: rgb(22, 101, 52);
+  font-weight: 600;
+  box-shadow: 0 0 5px rgba(34, 197, 94, 0.3);
+}
+
+.status-reserved {
+  animation: statusPulse 1.5s infinite;
+  background-color: rgba(249, 115, 22, 0.25);
+  color: rgb(154, 52, 18);
+  font-weight: 600;
+  box-shadow: 0 0 5px rgba(249, 115, 22, 0.3);
 }

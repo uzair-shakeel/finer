@@ -22,8 +22,10 @@ const WatchInfo = ({ product }) => {
     callToConfirm: false,
   });
 
-  // Check if product is sold out
+  // Check product status
   const isSoldOut = product?.status === "sold_out";
+  const isReserved = product?.status === "reserved";
+  const isInStock = product?.status === "in_stock";
 
   const openSendOfferModal = () => setIsSendOfferModalOpen(true);
   const closeSendOfferModal = () => setIsSendOfferModalOpen(false);
@@ -257,6 +259,24 @@ const WatchInfo = ({ product }) => {
           <h3 className="text-[#FF0000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
             Sold Out
           </h3>
+        ) : isReserved ? (
+          <div className="flex items-center">
+            <h3 className="text-[#000000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
+              {formatPrice(product.price)}
+            </h3>
+            <span className="ml-3 inline-block px-3 py-1 rounded-full text-sm font-medium status-reserved">
+              Reserved
+            </span>
+          </div>
+        ) : isInStock ? (
+          <div className="flex items-center">
+            <h3 className="text-[#000000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
+              {formatPrice(product.price)}
+            </h3>
+            <span className="ml-3 inline-block px-3 py-1 rounded-full text-sm font-medium status-in-stock">
+              In Stock
+            </span>
+          </div>
         ) : (
           <h3 className="text-[#000000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
             {formatPrice(product.price)}
@@ -264,12 +284,7 @@ const WatchInfo = ({ product }) => {
         )}
         <div className="mt-2 sm:mt-3 text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
           {hasRRP ? (
-            <div>
-              RRP:
-              <del className="text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
-                {formatPrice(product.originalPrice)}
-              </del>
-            </div>
+            <div>RRP: {formatPrice(product.originalPrice)}</div>
           ) : (
             <h2 className="text-[#828282] text-[16px] font-normal leading-[12px]">
               Not available
@@ -316,6 +331,13 @@ const WatchInfo = ({ product }) => {
         >
           Source
         </button>
+      ) : isReserved ? (
+        <button
+          onClick={handleBuyClick}
+          className="mt-3 bg-[#FF9800] w-full px-8 md:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#E65100]"
+        >
+          Inquire
+        </button>
       ) : (
         <button
           onClick={handleBuyClick}
@@ -325,7 +347,7 @@ const WatchInfo = ({ product }) => {
         </button>
       )}
 
-      {!isSoldOut && (
+      {!isSoldOut && !isReserved && (
         <button
           onClick={openSendOfferModal}
           className="mt-3 flex items-center justify-center !leading-[19px] w-full px-8 md:px-10 rounded-[60px] text-[#017EFE] text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:text-white hover:bg-[#017EFE] border-2 border-[#017EFE]"

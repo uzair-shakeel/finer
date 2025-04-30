@@ -294,6 +294,8 @@ export default function ProductsManagement() {
               >
                 <option value="">All Statuses</option>
                 <option value="live">Live</option>
+                <option value="in_stock">In Stock</option>
+                <option value="reserved">Reserved</option>
                 <option value="archive">Archived</option>
                 <option value="draft">Draft</option>
                 <option value="sold_out">Sold Out</option>
@@ -528,10 +530,16 @@ export default function ProductsManagement() {
                               ? "bg-gray-100 text-gray-800"
                               : product.status === "sold_out"
                               ? "bg-red-100 text-red-800"
+                              : product.status === "reserved"
+                              ? "bg-orange-100 text-orange-800"
+                              : product.status === "in_stock"
+                              ? "bg-green-100 text-green-800"
                               : "bg-yellow-100 text-yellow-800"
                           }`}
                         >
                           <option value="live">Live</option>
+                          <option value="in_stock">In Stock</option>
+                          <option value="reserved">Reserved</option>
                           <option value="archive">Archive</option>
                           <option value="draft">Draft</option>
                           <option value="sold_out">Sold Out</option>

@@ -29,13 +29,24 @@ export async function GET(request) {
       // For public access, only show live products unless admin
       const isAdmin = request.headers.get("x-is-admin") === "true";
       if (!isAdmin) {
-        // Get both live and sold_out products
+        // Get both live, in_stock, sold_out, and reserved products
         const liveProducts = await getFilteredProducts({ status: "live" });
         const soldOutProducts = await getFilteredProducts({
           status: "sold_out",
         });
-        // Combine both arrays
-        products = [...liveProducts, ...soldOutProducts];
+        const inStockProducts = await getFilteredProducts({
+          status: "in_stock",
+        });
+        const reservedProducts = await getFilteredProducts({
+          status: "reserved",
+        });
+        // Combine all arrays
+        products = [
+          ...liveProducts,
+          ...soldOutProducts,
+          ...inStockProducts,
+          ...reservedProducts,
+        ];
       } else {
         products = await getProducts();
       }

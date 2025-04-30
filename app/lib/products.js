@@ -176,7 +176,16 @@ export const createProduct = (productData) => {
       additionalImages: Array.isArray(productData.additionalImages)
         ? productData.additionalImages
         : [],
-      status: productData.status || "draft",
+      status: [
+        "live",
+        "archive",
+        "draft",
+        "sold_out",
+        "reserved",
+        "in_stock",
+      ].includes(productData.status)
+        ? productData.status
+        : "draft",
       featured: productData.featured || false,
     };
 

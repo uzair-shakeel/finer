@@ -140,6 +140,22 @@ const NewArrivals = () => {
                     </div>
                   )}
 
+                  {product.status === "reserved" && (
+                    <div className="status-reserved rounded-lg sm:rounded-[13px] p-2 sm:py-[10px] px-[9px] absolute w-fit top-0 left-0">
+                      <h2 className="text-xs sm:text-[14px] leading-[17px] font-normal">
+                        Reserved
+                      </h2>
+                    </div>
+                  )}
+
+                  {product.status === "in_stock" && (
+                    <div className="status-in-stock rounded-lg sm:rounded-[13px] p-2 sm:py-[10px] px-[9px] absolute w-fit top-0 left-0">
+                      <h2 className="text-xs sm:text-[14px] leading-[17px] font-normal">
+                        In Stock
+                      </h2>
+                    </div>
+                  )}
+
                   {product.discount > 0 && (
                     <div className="bg-[#60FF7D] rounded-lg sm:rounded-[13px] p-2 sm:py-[10px] px-[9px] absolute w-fit top-0 right-0">
                       <h2 className="text-black text-xs sm:text-[14px] leading-[17px] font-normal">
@@ -196,6 +212,24 @@ const NewArrivals = () => {
                     <h3 className="text-[#FF0000] text-[16px] sm:text-[24px] sm:!leading-[29px] !leading-[19px] font-semibold">
                       {t("shop.soldOut", "Sold Out")}
                     </h3>
+                  ) : product.status === "reserved" ? (
+                    <div className="flex items-center">
+                      <h3 className="text-[16px] sm:text-[24px] sm:!leading-[29px] !leading-[19px] font-semibold text-black">
+                        £{product.price}
+                      </h3>
+                      <span className="ml-2 status-reserved px-2 py-0.5 rounded-full text-xs">
+                        Reserved
+                      </span>
+                    </div>
+                  ) : product.status === "in_stock" ? (
+                    <div className="flex items-center">
+                      <h3 className="text-[16px] sm:text-[24px] sm:!leading-[29px] !leading-[19px] font-semibold text-black">
+                        £{product.price}
+                      </h3>
+                      <span className="ml-2 status-in-stock px-2 py-0.5 rounded-full text-xs">
+                        In Stock
+                      </span>
+                    </div>
                   ) : (
                     <>
                       <h3

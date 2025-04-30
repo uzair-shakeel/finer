@@ -32,7 +32,9 @@ export async function GET(request, { params }) {
     if (
       !isAdmin &&
       product.status !== "live" &&
-      product.status !== "sold_out"
+      product.status !== "sold_out" &&
+      product.status !== "in_stock" &&
+      product.status !== "reserved"
     ) {
       return NextResponse.json(
         { success: false, message: "Product not found" },
