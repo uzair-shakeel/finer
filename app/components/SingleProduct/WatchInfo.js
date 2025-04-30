@@ -255,33 +255,10 @@ const WatchInfo = ({ product }) => {
       </div>
 
       <div className="mt-6 md:mt-8">
-        {isSoldOut ? (
-          <h3 className="text-[#FF0000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
-            Sold Out
-          </h3>
-        ) : isReserved ? (
-          <div className="flex items-center">
-            <h3 className="text-[#000000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
-              {formatPrice(product.price)}
-            </h3>
-            <span className="ml-3 inline-block px-3 py-1 rounded-full text-sm font-medium status-reserved">
-              Reserved
-            </span>
-          </div>
-        ) : isInStock ? (
-          <div className="flex items-center">
-            <h3 className="text-[#000000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
-              {formatPrice(product.price)}
-            </h3>
-            <span className="ml-3 inline-block px-3 py-1 rounded-full text-sm font-medium status-in-stock">
-              In Stock
-            </span>
-          </div>
-        ) : (
-          <h3 className="text-[#000000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
-            {formatPrice(product.price)}
-          </h3>
-        )}
+        <h3 className="text-[#000000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
+          {formatPrice(product.price)}
+        </h3>
+
         <div className="mt-2 sm:mt-3 text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
           {hasRRP ? (
             <div>RRP: {formatPrice(product.originalPrice)}</div>
@@ -291,6 +268,27 @@ const WatchInfo = ({ product }) => {
             </h2>
           )}
         </div>
+        {isSoldOut ? (
+          <h3 className="text-[#FF0000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
+            Sold Out
+          </h3>
+        ) : isReserved ? (
+          <div className="flex items-center">
+            <span className="ml-3 mt-5 flex items-center gap-2  bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium ">
+              Reserved
+              <div className=" status-in-stock  bg-[#FF9D00] "></div>
+            </span>
+          </div>
+        ) : isInStock ? (
+          <div className="flex items-center">
+            <span className="ml-3 mt-5 flex items-center gap-2  bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium ">
+              In Stock
+              <div className=" status-in-stock  bg-[#60FF7D] "></div>
+            </span>
+          </div>
+        ) : (
+          <h3 className="text-[#000000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]"></h3>
+        )}
       </div>
 
       <div className="mt-6 md:mt-8 flex items-center gap-2">
@@ -347,14 +345,12 @@ const WatchInfo = ({ product }) => {
         </button>
       )}
 
-      {!isSoldOut && !isReserved && (
-        <button
-          onClick={openSendOfferModal}
-          className="mt-3 flex items-center justify-center !leading-[19px] w-full px-8 md:px-10 rounded-[60px] text-[#017EFE] text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:text-white hover:bg-[#017EFE] border-2 border-[#017EFE]"
-        >
-          Send an offer
-        </button>
-      )}
+      <button
+        onClick={openSendOfferModal}
+        className="mt-3 flex items-center justify-center !leading-[19px] w-full px-8 md:px-10 rounded-[60px] text-[#017EFE] text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:text-white hover:bg-[#017EFE] border-2 border-[#017EFE]"
+      >
+        Part Exchange
+      </button>
 
       {/* Modal */}
       {isSendOfferModalOpen && (

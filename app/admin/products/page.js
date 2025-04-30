@@ -293,11 +293,11 @@ export default function ProductsManagement() {
                 className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
               >
                 <option value="">All Statuses</option>
-                <option value="live">Live</option>
+                {/* <option value="live">Live</option> */}
                 <option value="in_stock">In Stock</option>
                 <option value="reserved">Reserved</option>
                 <option value="archive">Archived</option>
-                <option value="draft">Draft</option>
+                {/* <option value="draft">Draft</option> */}
                 <option value="sold_out">Sold Out</option>
               </select>
             </div>

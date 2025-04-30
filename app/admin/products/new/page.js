@@ -1711,8 +1711,8 @@ export default function AddProduct() {
                     onChange={handleChange}
                     className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                   >
-                    <option value="draft">Draft</option>
-                    <option value="live">Live</option>
+                    {/* <option value="draft">Draft</option>
+                    <option value="live">Live</option> */}
                     <option value="in_stock">In Stock</option>
                     <option value="reserved">Reserved</option>
                     <option value="archive">Archive</option>
