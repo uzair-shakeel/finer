@@ -163,7 +163,7 @@ export default function ImageSlider({ images, coverImage }) {
           {images.map((image, index) => (
             <div
               key={index}
-              className={`relative bg-white rounded-[10px] flex-shrink-0 w-full max-w-[74px] h-[74px] md:max-w-[86px] md:h-[86px] cursor-pointer transition-all ${
+              className={`relative bg-white rounded-[10px] overflow-hidden flex-shrink-0 w-full max-w-[74px] h-[74px] md:max-w-[86px] md:h-[86px] cursor-pointer transition-all ${
                 index === selectedThumbnail
                   ? "border-2 border-[#017EFE]"
                   : "border border-[#E3E8ED]"
@@ -176,7 +176,7 @@ export default function ImageSlider({ images, coverImage }) {
                 fill
                 draggable="false"
                 style={{ objectFit: "cover" }}
-                className="rounded-[10px]"
+                className=""
               />
               <div className="absolute bottom-0 right-0 bg-black bg-opacity-50 text-white text-[8px] px-1 rounded-tl">
                 {index + 1}
