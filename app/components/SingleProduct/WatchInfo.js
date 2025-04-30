@@ -259,7 +259,7 @@ const WatchInfo = ({ product }) => {
           {formatPrice(product.price)}
         </h3>
 
-        <div className="my-3 sm:mt-3 text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
+        <div className="my-2 sm:mt-3 text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
           {hasRRP ? (
             <div>RRP: {formatPrice(product.originalPrice)}</div>
           ) : (
@@ -269,7 +269,7 @@ const WatchInfo = ({ product }) => {
           )}
         </div>
         {isSoldOut ? (
-          <h3 className="text-[#FF0000] text-[24px] sm:text-[32px] font-semibold leading-[27px] sm:leading-[23px]">
+          <h3 className="text-[#FF0000] mt-5 text-[24px] sm:text-[32px] font-semibold leading-[27px] sm:leading-[23px]">
             Sold Out
           </h3>
         ) : isReserved ? (
