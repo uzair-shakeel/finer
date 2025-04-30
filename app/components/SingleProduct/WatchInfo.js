@@ -190,13 +190,10 @@ const WatchInfo = ({ product }) => {
           {product?.brand}
         </h3>
         <h1 className="text-black text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[29px]">
-          {product?.model}{" "}
-          {product?.extra && (
-            <span className=" text-[#017EFE]">{product.extra}</span>
-          )}
+          {product?.pageTitle}{" "}
         </h1>
         <h3 className="text-black pt-1 text-[16px] sm:text-[18px] font-normal leading-[12px] sm:leading-[13px]">
-          {product?.reference}
+          {product?.subdescription}
         </h3>
       </div>
 

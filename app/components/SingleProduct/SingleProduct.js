@@ -190,7 +190,7 @@ const SingleProduct = ({ product }) => {
                     <span className="font-semibold">Bracelet:</span>{" "}
                     {formatBraceletName(product?.bracelet) || "N/A"}
                     {product?.braceletLength && (
-                      <span> ({product.braceletLength})</span>
+                      <span> (length {product.braceletLength})</span>
                     )}
                   </h2>
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
@@ -200,10 +200,6 @@ const SingleProduct = ({ product }) => {
                   <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
                     <span className="font-semibold">Water Resistance:</span>{" "}
                     {formatWaterResistance()}
-                  </h2>
-                  <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
-                    <span className="font-semibold">Extra:</span>{" "}
-                    {product?.extra || "N/A"}
                   </h2>
                 </div>
               </div>
