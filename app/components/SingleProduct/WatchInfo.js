@@ -115,7 +115,7 @@ const WatchInfo = ({ product }) => {
     price > product?.discountedPrice && product?.discountedPrice > 0;
 
   // Calculate savings amount
-  const savings = hasDiscount ? price - discountedPrice : 0;
+  const savings = hasDiscount ? price - product?.discountedPrice : 0;
 
   // Check if the product has RRP info
   const hasRRP = product.rrp && product.rrp > 0;
