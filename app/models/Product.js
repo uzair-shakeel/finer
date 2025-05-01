@@ -77,12 +77,14 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a price"],
     },
+    discountedPrice: {
+      type: String,
+    },
     originalPrice: {
       type: String,
     },
     discount: {
-      type: Number,
-      default: 0,
+      type: String,
     },
     rrpStatus: {
       type: String,

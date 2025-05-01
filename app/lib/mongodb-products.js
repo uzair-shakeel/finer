@@ -283,6 +283,21 @@ export const updateProduct = async (id, productData) => {
           : productData.originalPrice.toString();
     }
 
+    // Format discountedPrice and discount if provided
+    if (productData.discountedPrice !== undefined) {
+      productData.discountedPrice =
+        typeof productData.discountedPrice === "string"
+          ? productData.discountedPrice.replace(/,/g, "")
+          : productData.discountedPrice.toString();
+    }
+
+    if (productData.discount !== undefined) {
+      productData.discount =
+        typeof productData.discount === "string"
+          ? productData.discount.replace(/,/g, "")
+          : productData.discount.toString();
+    }
+
     // Process specification fields
     const specFields = [
       "caseSize",

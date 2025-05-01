@@ -121,7 +121,7 @@ export default function AddProduct() {
         },
         price: "12500",
         discountedPrice: "11500",
-        originalPrice: "13000", // RRP
+        originalPrice: "13000",
         discount: 8,
         rrpStatus: "Discounted",
         description:

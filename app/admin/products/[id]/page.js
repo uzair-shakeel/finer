@@ -334,46 +334,65 @@ export default function EditProduct({ params }) {
       [name]: type === "checkbox" ? checked : value,
     }));
 
-    // Auto-calculate discount if price and originalPrice are provided
-    if (
-      (name === "price" || name === "originalPrice") &&
-      formData.price &&
-      formData.originalPrice
-    ) {
-      const price =
-        name === "price" ? parseFloat(value) : parseFloat(formData.price);
-      const originalPrice =
-        name === "originalPrice"
-          ? parseFloat(value)
-          : parseFloat(formData.originalPrice);
+    // Price relationship logic
+    if (name === "price" || name === "discountedPrice" || name === "discount") {
+      const updatedForm = {
+        ...formData,
+        [name]: value,
+      };
 
-      if (price && originalPrice && originalPrice > price) {
-        const discount = Math.round(
-          ((originalPrice - price) / originalPrice) * 100
-        );
-        setFormData((prev) => ({ ...prev, discount }));
-      }
-    }
+      // Get numeric values
+      const price = parseFloat(name === "price" ? value : formData.price) || 0;
+      const discountedPrice =
+        parseFloat(
+          name === "discountedPrice" ? value : formData.discountedPrice
+        ) || 0;
+      const discountPercentage =
+        parseFloat(name === "discount" ? value : formData.discount) || 0;
 
-    // If user entered a discount percentage, calculate discounted price
-    if (name === "discount" && formData.price) {
-      const priceNum = parseFloat(formData.price);
-      const discount = parseFloat(value);
-
-      if (
-        !isNaN(discount) &&
-        discount > 0 &&
-        !isNaN(priceNum) &&
-        priceNum > 0
-      ) {
-        // Calculate discounted price based on price and discount
-        const newDiscountedPrice = Math.round(priceNum * (1 - discount / 100));
-        if (newDiscountedPrice >= 0) {
+      // Case 1: User entered price and discount percentage - calculate discounted price
+      if (name === "price" || name === "discount") {
+        if (price > 0 && discountPercentage > 0) {
+          const calculatedDiscountedPrice = Math.round(
+            price * (1 - discountPercentage / 100)
+          );
           setFormData((prev) => ({
             ...prev,
-            discountedPrice: newDiscountedPrice.toString(),
+            [name]: value,
+            discountedPrice: calculatedDiscountedPrice.toString(),
+            // Don't change originalPrice
           }));
+          return;
         }
+      }
+
+      // Case 2: User entered price and discounted price - calculate discount percentage
+      if (
+        (name === "price" || name === "discountedPrice") &&
+        price > 0 &&
+        discountedPrice > 0 &&
+        price > discountedPrice
+      ) {
+        const calculatedDiscount = Math.round(
+          ((price - discountedPrice) / price) * 100
+        );
+        setFormData((prev) => ({
+          ...prev,
+          [name]: value,
+          discount: calculatedDiscount.toString(),
+          // Don't change originalPrice
+        }));
+        return;
+      }
+
+      // If just changing the price and no discount applied yet
+      if (name === "price" && (!discountedPrice || discountedPrice <= 0)) {
+        setFormData((prev) => ({
+          ...prev,
+          price: value,
+          // Don't automatically update originalPrice when price changes
+        }));
+        return;
       }
     }
   };
@@ -560,6 +579,52 @@ export default function EditProduct({ params }) {
 
     // Ensure waterResistance is a boolean
     submissionData.waterResistance = !!submissionData.waterResistance;
+
+    // Process price fields to ensure consistency
+    const price = parseFloat(submissionData.price) || 0;
+    const discountedPrice = parseFloat(submissionData.discountedPrice) || 0;
+    const discount = parseFloat(submissionData.discount) || 0;
+
+    // Make sure price is always set
+    submissionData.price = price.toString();
+
+    // Handle discounted price logic
+    if (discountedPrice > 0 && discountedPrice < price) {
+      // If discounted price is set and valid, use it
+      submissionData.discountedPrice = discountedPrice.toString();
+
+      // Calculate the discount percentage if it's not already set
+      if (!discount) {
+        submissionData.discount = Math.round(
+          ((price - discountedPrice) / price) * 100
+        ).toString();
+      } else {
+        submissionData.discount = discount.toString();
+      }
+    } else if (discount > 0 && discount <= 100) {
+      // If discount percentage is set, calculate the discounted price
+      submissionData.discountedPrice = Math.round(
+        price * (1 - discount / 100)
+      ).toString();
+      submissionData.discount = discount.toString();
+    } else {
+      // If no valid discount or discounted price, clear these fields
+      submissionData.discountedPrice = "0";
+      submissionData.discount = "0";
+    }
+
+    // Ensure originalPrice is always set (used for RRP display)
+    if (
+      !submissionData.originalPrice ||
+      parseFloat(submissionData.originalPrice) <= 0
+    ) {
+      submissionData.originalPrice = price.toString();
+    } else {
+      // Make sure originalPrice is also a string
+      submissionData.originalPrice = parseFloat(
+        submissionData.originalPrice
+      ).toString();
+    }
 
     // Convert specification fields to strings for MongoDB
     const specFields = [
@@ -977,7 +1042,7 @@ export default function EditProduct({ params }) {
                   className="block text-sm font-medium text-gray-700 mb-1"
                   htmlFor="price"
                 >
-                  Price (Selling Price) <span className="text-red-500">*</span>
+                  Price (£)
                 </label>
                 <input
                   type="text"
@@ -989,6 +1054,7 @@ export default function EditProduct({ params }) {
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                   required
                 />
+                <p className="text-sm text-gray-500 mt-1">Main selling price</p>
               </div>
 
               <div>
@@ -1007,6 +1073,9 @@ export default function EditProduct({ params }) {
                   placeholder="e.g. 13000"
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 />
+                <p className="text-sm text-gray-500 mt-1">
+                  Manufacturer recommended price (shown as RRP)
+                </p>
               </div>
 
               <div>
@@ -1014,7 +1083,7 @@ export default function EditProduct({ params }) {
                   className="block text-sm font-medium text-gray-700 mb-1"
                   htmlFor="discountedPrice"
                 >
-                  Discounted Price
+                  Discounted Price (£)
                 </label>
                 <input
                   type="text"
@@ -1022,9 +1091,18 @@ export default function EditProduct({ params }) {
                   name="discountedPrice"
                   value={formData.discountedPrice || ""}
                   onChange={handleChange}
-                  placeholder="Auto-calculated from discount"
+                  placeholder="e.g. 11500"
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 />
+                <p className="text-sm text-gray-500 mt-1">
+                  {formData.discountedPrice && formData.price
+                    ? `Savings: £${Math.max(
+                        0,
+                        parseFloat(formData.price) -
+                          parseFloat(formData.discountedPrice)
+                      ).toFixed(0)}`
+                    : "Enter a value or it will be auto-calculated from discount %"}
+                </p>
               </div>
 
               <div>
@@ -1042,8 +1120,14 @@ export default function EditProduct({ params }) {
                   onChange={handleChange}
                   min="0"
                   max="100"
+                  placeholder="e.g. 15"
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 />
+                <p className="text-sm text-gray-500 mt-1">
+                  {formData.discount > 0
+                    ? `Will show strikethrough price with ${formData.discount}% off`
+                    : "Enter a percentage discount to automatically calculate discounted price"}
+                </p>
               </div>
             </div>
 

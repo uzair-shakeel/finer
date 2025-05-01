@@ -106,6 +106,23 @@ const WatchInfo = ({ product }) => {
     }).format(price);
   };
 
+  // Simple price logic
+  const price = product.price || 0;
+  const originalPrice = product.originalPrice || 0;
+
+  // Check if there is a discount
+  const hasDiscount =
+    price > product?.discountedPrice && product?.discountedPrice > 0;
+
+  // Calculate savings amount
+  const savings = hasDiscount ? price - discountedPrice : 0;
+
+  // Check if the product has RRP info
+  const hasRRP = product.rrp && product.rrp > 0;
+
+  // Check if promo code should be shown (no discount and not sold out)
+  const shouldShowPromoCode = !hasDiscount && !isSoldOut;
+
   const handleBuyClick = () => {
     if (typeof window !== "undefined") {
       sessionStorage.removeItem("buyFormProduct");
@@ -117,7 +134,7 @@ const WatchInfo = ({ product }) => {
     }\nModel: ${product.model}\nReference: ${product.reference}\nYear: ${
       product.year
     }\nCondition: ${product.condition?.overall}\nPrice: ${
-      isSoldOut ? "Sold Out" : formatPrice(product.price)
+      isSoldOut ? "Sold Out" : formatPrice(price)
     }`;
 
     if (typeof window !== "undefined") {
@@ -129,55 +146,14 @@ const WatchInfo = ({ product }) => {
     scrollToHomeFormSection(isSoldOut ? "source" : "buy");
   };
 
-  const hasRRP =
-    product.originalPrice && product.originalPrice !== product.price;
-
   return (
     <div className="bg-white rounded-[20px] w-full p-6">
       {/* Header */}
-      <div className="flex items-start justify-end gap-3">
-        {/* <h3 className="text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
-          213 views in 48 hours
-        </h3> */}
-        <div className="flex items-center gap-2 sm:gap-[18px]">
-          {/* <div
-            className="w-8 h-8 sm:w-[36px] sm:h-[36px] rounded-full bg-[#ECF0F3] flex items-center justify-center cursor-pointer"
-            onClick={toggleFavorite}
-          >
-            {!isFavorited ? (
-              <svg
-                className="sm:w-[20px] sm:h-[20px] w-4 h-4"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M10.0003 6.14985C8.14847 1.98292 1.66699 2.42673 1.66699 7.75255C1.66699 13.0784 10.0003 17.5167 10.0003 17.5167C10.0003 17.5167 18.3337 13.0784 18.3337 7.75255C18.3337 2.42673 11.8522 1.98292 10.0003 6.14985Z"
-                  stroke="#828282"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            ) : (
-              <svg
-                className="sm:w-[20px] sm:h-[20px] w-4 h-4"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M10.0003 6.14985C8.14847 1.98292 1.66699 2.42673 1.66699 7.75255C1.66699 13.0784 10.0003 17.5167 10.0003 17.5167C10.0003 17.5167 18.3337 13.0784 18.3337 7.75255C18.3337 2.42673 11.8522 1.98292 10.0003 6.14985Z"
-                  fill="#FF0000"
-                  stroke="#FF0000"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
-          </div> */}
-
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
+          999 views in 48 hours
+        </h3>
+        <div className="">
           <button
             className="w-8 h-8 sm:w-[36px] sm:h-[36px] rounded-full bg-[#ECF0F3] flex items-center justify-center"
             onClick={handleShare}
@@ -255,40 +231,113 @@ const WatchInfo = ({ product }) => {
       </div>
 
       <div className="mt-6 md:mt-8">
-        <h3 className="text-[#000000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
-          {formatPrice(product.price)}
-        </h3>
-
-        <div className="my-2 sm:mt-3 text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
-          {hasRRP ? (
-            <div>RRP: {formatPrice(product.originalPrice)}</div>
-          ) : (
-            <h2 className="text-[#828282] text-[16px] font-normal leading-[12px]">
-              Not available
-            </h2>
-          )}
-        </div>
         {isSoldOut ? (
-          <h3 className="text-[#FF0000] mt-5 text-[24px] sm:text-[32px] font-semibold leading-[27px] sm:leading-[23px]">
+          <h3 className="text-[#FF0000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]">
             Sold Out
           </h3>
-        ) : isReserved ? (
-          <div className="flex items-center">
-            <span className=" mt-5 flex items-center gap-2  bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium ">
-              Reserved
-              <div className=" status-in-stock  bg-[#FF9D00] "></div>
-            </span>
-          </div>
-        ) : isInStock ? (
-          <div className="flex items-center">
-            <span className=" mt-5 flex items-center gap-2  bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium ">
-              In Stock
-              <div className=" status-in-stock  bg-[#60FF7D] "></div>
-            </span>
-          </div>
         ) : (
-          <h3 className="text-[#000000] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]"></h3>
+          <>
+            <div className="flex flex-col gap-1">
+              {/* Main price */}
+              <div className="flex items-end gap-3">
+                <h3
+                  className={`text-[#017EFE] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]`}
+                >
+                  {formatPrice(price)}
+                </h3>
+                <h3 className="text-[#828282] text-[18px] sm:text-[24px] font-normal leading-[17px] sm:leading-[23px] line-through">
+                  {formatPrice(product?.discountedPrice || 12000)}
+                </h3>
+                {/* {product?.discountedPrice && (
+                )} */}
+              </div>
+
+              {/* Savings amount */}
+              <h3 className="text-[#017EFE] text-[14px] sm:text-[16px] font-medium">
+                Save{" "}
+                {formatPrice(product?.price - product?.discountedPrice || 1000)}
+              </h3>
+              {/* {product?.discountedPrice && (
+              )} */}
+            </div>
+
+            <div className="my-2 sm:mt-3 text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
+              <div>RRP: {formatPrice(product.originalPrice)}</div>
+            </div>
+          </>
         )}
+
+        <div className="flex items-center gap-2 mt-2">
+          {isSoldOut ? (
+            <div></div>
+          ) : isReserved ? (
+            <div className="flex items-center">
+              <span className="mt-5 flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium">
+                Reserved
+                <div className="status-in-stock bg-[#FF9D00]"></div>
+              </span>
+            </div>
+          ) : isInStock ? (
+            <div className="flex items-center">
+              <span className="mt-5 flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium">
+                In Stock
+                <div className="status-in-stock bg-[#60FF7D]"></div>
+              </span>
+            </div>
+          ) : (
+            <div></div>
+          )}
+
+          {/* Promo Code Banner - Only shown for products without discount and not sold out */}
+          {shouldShowPromoCode && (
+            <div className="mt-5 flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium">
+              <div className="flex items-center gap-2">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5.83268 4.16667H14.166C14.6223 4.16667 14.9993 4.54364 14.9993 5V15C14.9993 15.4564 14.6223 15.8333 14.166 15.8333H5.83268C5.37644 15.8333 4.99935 15.4564 4.99935 15V5C4.99935 4.54364 5.37644 4.16667 5.83268 4.16667Z"
+                    stroke="#1F1F1F"
+                    strokeWidth="1.66667"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M13.3327 2.5V5.83333"
+                    stroke="#1F1F1F"
+                    strokeWidth="1.66667"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M6.66602 2.5V5.83333"
+                    stroke="#1F1F1F"
+                    strokeWidth="1.66667"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M4.99935 9.16667H14.9993"
+                    stroke="#1F1F1F"
+                    strokeWidth="1.66667"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span className="text-black font-medium">
+                  100£ OFF! With Code:{" "}
+                  <span className="bg-white ml-1 px-1.5 py-[0.8px] rounded-full font-semibold">
+                    RABBIT
+                  </span>
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="mt-6 md:mt-8 flex items-center gap-2">
@@ -332,9 +381,10 @@ const WatchInfo = ({ product }) => {
       ) : isReserved ? (
         <button
           onClick={handleBuyClick}
+          disabled
           className="mt-3 bg-[#FF9800] w-full px-8 md:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#E65100]"
         >
-          Inquire
+          Reserved
         </button>
       ) : (
         <button
