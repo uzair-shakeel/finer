@@ -260,12 +260,11 @@ const WatchInfo = ({ product }) => {
               {/* {product?.discountedPrice && (
               )} */}
             </div>
-
-            <div className="my-2 sm:mt-3 text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
-              <div>RRP: {formatPrice(product.originalPrice)}</div>
-            </div>
           </>
         )}
+        <div className="my-2 sm:mt-3 text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
+          <div>RRP: {formatPrice(product.originalPrice)}</div>
+        </div>
 
         <div className="flex items-center gap-2 mt-2">
           {isSoldOut ? (
