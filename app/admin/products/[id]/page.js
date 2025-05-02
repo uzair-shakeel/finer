@@ -1529,7 +1529,7 @@ export default function EditProduct({ params }) {
                     </div>
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
-                    Select the watch's movement mechanism
+                    Select the watches movement mechanism
                   </p>
                 </div>
 
