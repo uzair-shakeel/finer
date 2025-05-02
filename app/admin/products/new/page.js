@@ -1126,24 +1126,6 @@ export default function AddProduct() {
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="description"
-                >
-                  Description
-                </label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  rows="4"
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                  placeholder="Detailed product description shown on the product page"
-                ></textarea>
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
                   htmlFor="subdescription"
                 >
                   Subdescription
@@ -1156,6 +1138,23 @@ export default function AddProduct() {
                   rows="2"
                   placeholder="Optional shorter description for cards and previews"
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                ></textarea>
+              </div>
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="description"
+                >
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows="4"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                  placeholder="Detailed product description shown on the product page"
                 ></textarea>
               </div>
             </div>
@@ -1432,6 +1431,28 @@ export default function AddProduct() {
                         className="mt-2 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       />
                     )}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Condition
+                  </label>
+                  <div className="mt-2">
+                    <select
+                      name="condition"
+                      value={formData.condition}
+                      onChange={handleChange}
+                      className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Not specified</option>
+                      <option value="new">New</option>
+                      <option value="unworn">Unworn</option>
+                      <option value="very good">Very Good</option>
+                      <option value="good">Good</option>
+                      <option value="fair">Fair</option>
+                      <option value="incomplete">Incomplete</option>
+                    </select>
                   </div>
                 </div>
               </div>

@@ -277,6 +277,18 @@ export default function EditProduct({ params }) {
       return;
     }
 
+    // Handle conditionDetails field
+    if (name === "conditionDetails") {
+      setFormData((prev) => ({
+        ...prev,
+        condition: {
+          ...prev.condition,
+          details: value,
+        },
+      }));
+      return;
+    }
+
     // Handle the depth field
     if (name === "depth") {
       if (value === "Other") {
@@ -580,6 +592,24 @@ export default function EditProduct({ params }) {
     // Ensure waterResistance is a boolean
     submissionData.waterResistance = !!submissionData.waterResistance;
 
+    // Ensure the condition object is properly structured
+    if (!submissionData.condition) {
+      submissionData.condition = {
+        hasBox: false,
+        hasPapers: false,
+        status: "Good",
+        details: "",
+      };
+    } else {
+      // Make sure all condition fields are present
+      submissionData.condition = {
+        hasBox: !!submissionData.condition.hasBox,
+        hasPapers: !!submissionData.condition.hasPapers,
+        status: submissionData.condition.status || "Good",
+        details: submissionData.condition.details || "",
+      };
+    }
+
     // Process price fields to ensure consistency
     const price = parseFloat(submissionData.price) || 0;
     const discountedPrice = parseFloat(submissionData.discountedPrice) || 0;
@@ -837,24 +867,6 @@ export default function EditProduct({ params }) {
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="description"
-                >
-                  Description
-                </label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  rows="4"
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                  placeholder="Detailed product description shown on the product page"
-                ></textarea>
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
                   htmlFor="subdescription"
                 >
                   Subdescription
@@ -867,6 +879,24 @@ export default function EditProduct({ params }) {
                   rows="2"
                   placeholder="Optional shorter description for cards and previews"
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                ></textarea>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor="description"
+                >
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows="4"
+                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                  placeholder="Detailed product description shown on the product page"
                 ></textarea>
               </div>
             </div>
@@ -973,38 +1003,95 @@ export default function EditProduct({ params }) {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Condition
                 </label>
-                <div className="flex space-x-4 items-center">
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id="hasBox"
-                      name="hasBox"
-                      checked={formData.condition?.hasBox || false}
-                      onChange={handleChange}
-                      className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                    />
-                    <label
-                      htmlFor="hasBox"
-                      className="ml-2 block text-sm font-medium text-gray-700"
-                    >
-                      Box
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Condition Status
                     </label>
+                    <select
+                      name="status"
+                      value={formData.condition?.status || "Good"}
+                      onChange={(e) => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          condition: {
+                            ...prev.condition,
+                            status: e.target.value,
+                          },
+                        }));
+                      }}
+                      className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                    >
+                      <option value="New">New</option>
+                      <option value="Unworn">Unworn</option>
+                      <option value="Very Good">Very Good</option>
+                      <option value="Good">Good</option>
+                      <option value="Fair">Fair</option>
+                      <option value="Incomplete">Incomplete</option>
+                    </select>
+                    <p className="mt-1 text-xs text-gray-500">
+                      {formData.condition?.status === "New" &&
+                        "The item is brand new, never used, and in perfect condition. It has no scratches, marks, or signs of wear. It comes with all original packaging and warranty, just like buying directly from a store."}
+                      {formData.condition?.status === "Unworn" &&
+                        "The item has never been worn, but it might not be straight from the store. It has no signs of use but could have tiny marks from handling or storage. Any original stickers or packaging might still be there."}
+                      {formData.condition?.status === "Very Good" &&
+                        "The item has been worn but taken care of really well. It may have small, barely noticeable scratches, but nothing major. It might have been cleaned or polished to look better. Any markings or engravings are still clear."}
+                      {formData.condition?.status === "Good" &&
+                        "The item has been used and shows clear signs of wear, like scratches or small dents. The bracelet or strap might be a bit stretched. Some markings or engravings may be faded, but they're still visible."}
+                      {formData.condition?.status === "Fair" &&
+                        "The item has been worn a lot and shows major signs of use, like deep scratches or dents. The bracelet or strap is visibly worn. It may have been polished, but you can still see the damage."}
+                      {formData.condition?.status === "Incomplete" &&
+                        "The item is not fully functional because it's missing parts or is broken. It is meant for repair or to be used for spare parts."}
+                    </p>
                   </div>
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id="hasPapers"
-                      name="hasPapers"
-                      checked={formData.condition?.hasPapers || false}
-                      onChange={handleChange}
-                      className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                    />
-                    <label
-                      htmlFor="hasPapers"
-                      className="ml-2 block text-sm font-medium text-gray-700"
-                    >
-                      Papers
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Condition Details
                     </label>
+                    <textarea
+                      name="conditionDetails"
+                      value={formData.condition?.details || ""}
+                      onChange={handleChange}
+                      rows="3"
+                      placeholder="Provide specific details about the item's condition"
+                      className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
+                    ></textarea>
+                  </div>
+
+                  <div className="flex space-x-4 items-center">
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="hasBox"
+                        name="hasBox"
+                        checked={formData.condition?.hasBox || false}
+                        onChange={handleChange}
+                        className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                      />
+                      <label
+                        htmlFor="hasBox"
+                        className="ml-2 block text-sm font-medium text-gray-700"
+                      >
+                        Box
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="hasPapers"
+                        name="hasPapers"
+                        checked={formData.condition?.hasPapers || false}
+                        onChange={handleChange}
+                        className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                      />
+                      <label
+                        htmlFor="hasPapers"
+                        className="ml-2 block text-sm font-medium text-gray-700"
+                      >
+                        Papers
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1015,27 +1102,6 @@ export default function EditProduct({ params }) {
               <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
                 Pricing
               </h2>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="purchasePrice"
-                >
-                  Cost (Purchase Price)
-                </label>
-                <input
-                  type="text"
-                  id="purchasePrice"
-                  name="purchasePrice"
-                  value={formData.purchasePrice || ""}
-                  onChange={handleChange}
-                  placeholder="e.g. 10000"
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                />
-                <p className="mt-1 text-xs text-gray-500">
-                  Internal price - not shown to customers
-                </p>
-              </div>
 
               <div>
                 <label
@@ -1141,197 +1207,330 @@ export default function EditProduct({ params }) {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Case Size
                   </label>
-                  <select
-                    name="caseSize"
-                    value={
-                      formData.caseSize?.length > 0 ? formData.caseSize[0] : ""
-                    }
-                    onChange={handleChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="">Select case size</option>
-                    <option value="20mm">20mm</option>
-                    <option value="22mm">22mm</option>
-                    <option value="24mm">24mm</option>
-                    <option value="26mm">26mm</option>
-                    <option value="28mm">28mm</option>
-                    <option value="30mm">30mm</option>
-                    <option value="32mm">32mm</option>
-                    <option value="34mm">34mm</option>
-                    <option value="36mm">36mm</option>
-                    <option value="38mm">38mm</option>
-                    <option value="40mm">40mm</option>
-                    <option value="41mm">41mm</option>
-                    <option value="42mm">42mm</option>
-                    <option value="43mm">43mm</option>
-                    <option value="44mm">44mm</option>
-                    <option value="45mm">45mm</option>
-                    <option value="46mm">46mm</option>
-                    <option value="47mm">47mm</option>
-                    <option value="48mm">48mm</option>
-                    <option value="49mm">49mm</option>
-                    <option value="50mm">50mm</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      name="caseSize"
+                      value={
+                        formData.caseSize?.length > 0
+                          ? formData.caseSize[0]
+                          : ""
+                      }
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white appearance-none pr-8"
+                    >
+                      <option value="">Select case size</option>
+                      <optgroup label="Small Sizes (20-30mm)">
+                        <option value="20mm">20mm - Extra Small</option>
+                        <option value="22mm">22mm - Very Small</option>
+                        <option value="24mm">24mm - Very Small</option>
+                        <option value="26mm">26mm - Small</option>
+                        <option value="28mm">28mm - Small</option>
+                        <option value="30mm">30mm - Small</option>
+                      </optgroup>
+                      <optgroup label="Medium Sizes (32-38mm)">
+                        <option value="32mm">32mm - Medium Small</option>
+                        <option value="34mm">34mm - Medium Small</option>
+                        <option value="36mm">36mm - Medium</option>
+                        <option value="38mm">38mm - Medium</option>
+                      </optgroup>
+                      <optgroup label="Standard Sizes (40-42mm)">
+                        <option value="40mm">40mm - Standard</option>
+                        <option value="41mm">41mm - Standard</option>
+                        <option value="42mm">42mm - Standard</option>
+                      </optgroup>
+                      <optgroup label="Large Sizes (43-46mm)">
+                        <option value="43mm">43mm - Large</option>
+                        <option value="44mm">44mm - Large</option>
+                        <option value="45mm">45mm - Large</option>
+                        <option value="46mm">46mm - Large</option>
+                      </optgroup>
+                      <optgroup label="Extra Large Sizes (47-50mm+)">
+                        <option value="47mm">47mm - Extra Large</option>
+                        <option value="48mm">48mm - Extra Large</option>
+                        <option value="49mm">49mm - Extra Large</option>
+                        <option value="50mm">50mm - Extra Large</option>
+                      </optgroup>
+                      <optgroup label="Custom Size">
+                        <option value="custom">
+                          Custom Size (Specify in notes)
+                        </option>
+                      </optgroup>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg
+                        className="fill-current h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Select the watch case diameter
+                  </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Case Material
                   </label>
-                  <select
-                    name="caseMaterial"
-                    value={
-                      formData.caseMaterial?.length > 0
-                        ? formData.caseMaterial[0]
-                        : ""
-                    }
-                    onChange={handleChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="">Select case material</option>
-                    <option value="Stainless Steel">Stainless Steel</option>
-                    <option value="Yellow Gold">Yellow Gold</option>
-                    <option value="White Gold">White Gold</option>
-                    <option value="Rose Gold">Rose Gold</option>
-                    <option value="Platinum">Platinum</option>
-                    <option value="Titanium">Titanium</option>
-                    <option value="Ceramic">Ceramic</option>
-                    <option value="Carbon Fiber">Carbon Fiber</option>
-                    <option value="Bronze">Bronze</option>
-                    <option value="PVD">PVD</option>
-                    <option value="Two-Tone">Two-Tone</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      name="caseMaterial"
+                      value={
+                        formData.caseMaterial?.length > 0
+                          ? formData.caseMaterial[0]
+                          : ""
+                      }
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white appearance-none pr-8"
+                    >
+                      <option value="">Select case material</option>
+                      <optgroup label="Precious Metals">
+                        <option value="Yellow Gold">Yellow Gold</option>
+                        <option value="White Gold">White Gold</option>
+                        <option value="Rose Gold">Rose Gold</option>
+                        <option value="Platinum">Platinum</option>
+                        <option value="Two-Tone">
+                          Two-Tone (Steel & Gold)
+                        </option>
+                      </optgroup>
+                      <optgroup label="Standard Materials">
+                        <option value="Stainless Steel">Stainless Steel</option>
+                        <option value="Titanium">Titanium</option>
+                        <option value="Bronze">Bronze</option>
+                      </optgroup>
+                      <optgroup label="Modern Materials">
+                        <option value="Ceramic">Ceramic</option>
+                        <option value="Carbon Fiber">Carbon Fiber</option>
+                        <option value="PVD">PVD Coated</option>
+                      </optgroup>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg
+                        className="fill-current h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Select the primary material used for the watch case
+                  </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Dial Colour
                   </label>
-                  <select
-                    name="dialColour"
-                    value={
-                      formData.dialColour?.length > 0
-                        ? formData.dialColour[0]
-                        : ""
-                    }
-                    onChange={handleChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="">Select dial colour</option>
-                    <option value="Black">Black</option>
-                    <option value="White">White</option>
-                    <option value="Silver">Silver</option>
-                    <option value="Blue">Blue</option>
-                    <option value="Green">Green</option>
-                    <option value="Red">Red</option>
-                    <option value="Yellow">Yellow</option>
-                    <option value="Orange">Orange</option>
-                    <option value="Brown">Brown</option>
-                    <option value="Purple">Purple</option>
-                    <option value="Pink">Pink</option>
-                    <option value="Grey">Grey</option>
-                    <option value="Champagne">Champagne</option>
-                    <option value="Mother of Pearl">Mother of Pearl</option>
-                    <option value="Meteorite">Meteorite</option>
-                    <option value="Skeleton">Skeleton</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      name="dialColour"
+                      value={
+                        formData.dialColour?.length > 0
+                          ? formData.dialColour[0]
+                          : ""
+                      }
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white appearance-none pr-8"
+                    >
+                      <option value="">Select dial colour</option>
+                      <optgroup label="Neutral Tones">
+                        <option value="Black">Black</option>
+                        <option value="White">White</option>
+                        <option value="Silver">Silver</option>
+                        <option value="Grey">Grey</option>
+                        <option value="Champagne">Champagne</option>
+                      </optgroup>
+                      <optgroup label="Primary Colors">
+                        <option value="Blue">Blue</option>
+                        <option value="Green">Green</option>
+                        <option value="Red">Red</option>
+                        <option value="Yellow">Yellow</option>
+                      </optgroup>
+                      <optgroup label="Other Colors">
+                        <option value="Orange">Orange</option>
+                        <option value="Brown">Brown</option>
+                        <option value="Purple">Purple</option>
+                        <option value="Pink">Pink</option>
+                      </optgroup>
+                      <optgroup label="Special Dials">
+                        <option value="Mother of Pearl">Mother of Pearl</option>
+                        <option value="Meteorite">Meteorite</option>
+                        <option value="Skeleton">Skeleton</option>
+                        <option value="Textured">Textured</option>
+                        <option value="Sunburst">Sunburst</option>
+                      </optgroup>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg
+                        className="fill-current h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Select the primary color of the watch face
+                  </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Bracelet
                   </label>
-                  <select
-                    name="bracelet"
-                    value={
-                      formData.bracelet?.length > 0 ? formData.bracelet[0] : ""
-                    }
-                    onChange={handleChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="">Select bracelet</option>
-                    <option value="Stainless Steel">Stainless Steel</option>
-                    <option value="Leather">Leather</option>
-                    <option value="Rubber">Rubber</option>
-                    <option value="NATO">NATO</option>
-                    <option value="Oyster (Rolex)">Oyster (Rolex)</option>
-                    <option value="Jubilee (Rolex)">Jubilee (Rolex)</option>
-                    <option value="President (Rolex)">President (Rolex)</option>
-                    <option value="Pearlmaster (Rolex)">
-                      Pearlmaster (Rolex)
-                    </option>
-                    <option value="Santos (Cartier)">Santos (Cartier)</option>
-                    <option value="Ballon Bleu (Cartier)">
-                      Ballon Bleu (Cartier)
-                    </option>
-                    <option value="Speedmaster (Omega)">
-                      Speedmaster (Omega)
-                    </option>
-                    <option value="Seamaster (Omega)">Seamaster (Omega)</option>
-                    <option value="Flat Link (Omega)">Flat Link (Omega)</option>
-                    <option value="Professional (Breitling)">
-                      Professional (Breitling)
-                    </option>
-                    <option value="Pilot (Breitling)">Pilot (Breitling)</option>
-                    <option value="Navitimer (Breitling)">
-                      Navitimer (Breitling)
-                    </option>
-                    <option value="Big Bang Integrated (Hublot)">
-                      Big Bang Integrated (Hublot)
-                    </option>
-                    <option value="Royal Oak (Audemars Piguet)">
-                      Royal Oak (Audemars Piguet)
-                    </option>
-                    <option value="Royal Oak Offshore (Audemars Piguet)">
-                      Royal Oak Offshore (Audemars Piguet)
-                    </option>
-                    <option value="Nautilus (Patek Philippe)">
-                      Nautilus (Patek Philippe)
-                    </option>
-                    <option value="Aquanaut (Patek Philippe)">
-                      Aquanaut (Patek Philippe)
-                    </option>
-                    <option value="Overseas (Vacheron Constantin)">
-                      Overseas (Vacheron Constantin)
-                    </option>
-                    <option value="Polaris (Jaeger-LeCoultre)">
-                      Polaris (Jaeger-LeCoultre)
-                    </option>
-                    <option value="Reverso (Jaeger-LeCoultre)">
-                      Reverso (Jaeger-LeCoultre)
-                    </option>
-                    <option value="Milanese">Milanese</option>
-                    <option value="Fabric">Fabric</option>
-                    <option value="Gold">Gold</option>
-                    <option value="Titanium">Titanium</option>
-                    <option value="Ceramic">Ceramic</option>
-                    <option value="Two-Tone">Two-Tone</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      name="bracelet"
+                      value={
+                        formData.bracelet?.length > 0
+                          ? formData.bracelet[0]
+                          : ""
+                      }
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white appearance-none pr-8"
+                    >
+                      <option value="">Select bracelet type</option>
+                      <optgroup label="Standard Materials">
+                        <option value="Stainless Steel">Stainless Steel</option>
+                        <option value="Leather">Leather</option>
+                        <option value="Rubber">Rubber</option>
+                        <option value="NATO">NATO</option>
+                        <option value="Fabric">Fabric</option>
+                        <option value="Milanese">Milanese</option>
+                        <option value="Gold">Gold</option>
+                        <option value="Titanium">Titanium</option>
+                        <option value="Ceramic">Ceramic</option>
+                        <option value="Two-Tone">Two-Tone</option>
+                      </optgroup>
+                      <optgroup label="Rolex Bracelet Types">
+                        <option value="Oyster (Rolex)">Oyster</option>
+                        <option value="Jubilee (Rolex)">Jubilee</option>
+                        <option value="President (Rolex)">President</option>
+                        <option value="Pearlmaster (Rolex)">Pearlmaster</option>
+                        <option value="Oysterflex (Rolex)">Oysterflex</option>
+                      </optgroup>
+                      <optgroup label="Omega Bracelet Types">
+                        <option value="Speedmaster (Omega)">Speedmaster</option>
+                        <option value="Seamaster (Omega)">Seamaster</option>
+                        <option value="Flat Link (Omega)">Flat Link</option>
+                      </optgroup>
+                      <optgroup label="Other Brand Bracelet Types">
+                        <option value="Santos (Cartier)">
+                          Santos (Cartier)
+                        </option>
+                        <option value="Ballon Bleu (Cartier)">
+                          Ballon Bleu (Cartier)
+                        </option>
+                        <option value="Professional (Breitling)">
+                          Professional (Breitling)
+                        </option>
+                        <option value="Pilot (Breitling)">
+                          Pilot (Breitling)
+                        </option>
+                        <option value="Navitimer (Breitling)">
+                          Navitimer (Breitling)
+                        </option>
+                        <option value="Big Bang Integrated (Hublot)">
+                          Big Bang Integrated (Hublot)
+                        </option>
+                        <option value="Royal Oak (Audemars Piguet)">
+                          Royal Oak (AP)
+                        </option>
+                        <option value="Royal Oak Offshore (Audemars Piguet)">
+                          Royal Oak Offshore (AP)
+                        </option>
+                        <option value="Nautilus (Patek Philippe)">
+                          Nautilus (Patek)
+                        </option>
+                        <option value="Aquanaut (Patek Philippe)">
+                          Aquanaut (Patek)
+                        </option>
+                        <option value="Overseas (Vacheron Constantin)">
+                          Overseas (VC)
+                        </option>
+                        <option value="Polaris (Jaeger-LeCoultre)">
+                          Polaris (JLC)
+                        </option>
+                        <option value="Reverso (Jaeger-LeCoultre)">
+                          Reverso (JLC)
+                        </option>
+                      </optgroup>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg
+                        className="fill-current h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Select the bracelet or strap type
+                  </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Movement
                   </label>
-                  <select
-                    name="movement"
-                    value={
-                      formData.movement?.length > 0 ? formData.movement[0] : ""
-                    }
-                    onChange={handleChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="">Select movement</option>
-                    <option value="Automatic">Automatic</option>
-                    <option value="Manual">Manual</option>
-                    <option value="Quartz">Quartz</option>
-                    <option value="Solar">Solar</option>
-                    <option value="Kinetic">Kinetic</option>
-                    <option value="Spring Drive">Spring Drive</option>
-                    <option value="Co-Axial">Co-Axial</option>
-                    <option value="Mechanical">Mechanical</option>
-                    <option value="In-House">In-House</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      name="movement"
+                      value={
+                        formData.movement?.length > 0
+                          ? formData.movement[0]
+                          : ""
+                      }
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white appearance-none pr-8"
+                    >
+                      <option value="">Select movement type</option>
+                      <optgroup label="Mechanical Movements">
+                        <option value="Automatic">Automatic</option>
+                        <option value="Manual">Manual (Hand-wound)</option>
+                        <option value="Mechanical">Mechanical (General)</option>
+                        <option value="In-House">In-House Movement</option>
+                      </optgroup>
+                      <optgroup label="Quartz Movements">
+                        <option value="Quartz">Quartz (Battery)</option>
+                        <option value="Solar">Solar Powered</option>
+                        <option value="Kinetic">Kinetic (Self-charging)</option>
+                      </optgroup>
+                      <optgroup label="Specialty Movements">
+                        <option value="Spring Drive">
+                          Spring Drive (Seiko/Grand Seiko)
+                        </option>
+                        <option value="Co-Axial">Co-Axial (Omega)</option>
+                        <option value="Chronometer">
+                          COSC Certified Chronometer
+                        </option>
+                        <option value="Tourbillon">Tourbillon</option>
+                        <option value="Perpetual Calendar">
+                          Perpetual Calendar
+                        </option>
+                      </optgroup>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg
+                        className="fill-current h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Select the watch's movement mechanism
+                  </p>
                 </div>
 
                 <div>
@@ -1404,6 +1603,28 @@ export default function EditProduct({ params }) {
                     placeholder="e.g. 20cm"
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Condition
+                  </label>
+                  <div className="mt-2">
+                    <select
+                      name="condition"
+                      value={formData.condition}
+                      onChange={handleChange}
+                      className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Not specified</option>
+                      <option value="new">New</option>
+                      <option value="unworn">Unworn</option>
+                      <option value="very good">Very Good</option>
+                      <option value="good">Good</option>
+                      <option value="fair">Fair</option>
+                      <option value="incomplete">Incomplete</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>

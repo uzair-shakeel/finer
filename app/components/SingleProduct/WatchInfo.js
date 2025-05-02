@@ -246,7 +246,11 @@ const WatchInfo = ({ product }) => {
                   {formatPrice(price)}
                 </h3>
                 <h3 className="text-[#828282] text-[18px] sm:text-[24px] font-normal leading-[17px] sm:leading-[23px] line-through">
-                  {formatPrice(product?.discountedPrice || 12000)}
+                  {formatPrice(
+                    (product?.discountedPrice === 0 &&
+                      product?.discountedPrice) ||
+                      12000
+                  )}
                 </h3>
                 {/* {product?.discountedPrice && (
                 )} */}
