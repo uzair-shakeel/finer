@@ -214,14 +214,11 @@ const NewArrivals = () => {
                               : "text-black"
                           }`}
                         >
-                          {formatPrice(product.price)}
+                          {formatPrice(product.discountedPrice)}
                         </h3>
                         {product.discount > 0 && (
                           <del className="text-[#828282] text-xs sm:text-[16px] sm:!leading-[19px] leading-none font-normal">
-                            {formatPrice(
-                              product.originalPrice ||
-                                (product.price * 100) / (100 - product.discount)
-                            )}
+                            {formatPrice(product.price)}
                           </del>
                         )}
                       </>

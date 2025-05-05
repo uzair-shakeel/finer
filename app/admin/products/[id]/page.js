@@ -277,13 +277,13 @@ export default function EditProduct({ params }) {
       return;
     }
 
-    // Handle conditionDetails field
-    if (name === "conditionDetails") {
+    // Handle conditionStatus field
+    if (name === "conditionStatus") {
       setFormData((prev) => ({
         ...prev,
         condition: {
           ...prev.condition,
-          details: value,
+          status: value,
         },
       }));
       return;
@@ -606,7 +606,7 @@ export default function EditProduct({ params }) {
         hasBox: !!submissionData.condition.hasBox,
         hasPapers: !!submissionData.condition.hasPapers,
         status: submissionData.condition.status || "Good",
-        details: submissionData.condition.details || "",
+        details: "",
       };
     }
 
@@ -1001,96 +1001,82 @@ export default function EditProduct({ params }) {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Condition
+                  Condition Information
                 </label>
-                <div className="space-y-3">
+                <div className="border border-gray-300 rounded-md p-3 space-y-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">
                       Condition Status
                     </label>
-                    <select
-                      name="status"
-                      value={formData.condition?.status || "Good"}
-                      onChange={(e) => {
-                        setFormData((prev) => ({
-                          ...prev,
-                          condition: {
-                            ...prev.condition,
-                            status: e.target.value,
-                          },
-                        }));
-                      }}
-                      className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                    >
-                      <option value="New">New</option>
-                      <option value="Unworn">Unworn</option>
-                      <option value="Very Good">Very Good</option>
-                      <option value="Good">Good</option>
-                      <option value="Fair">Fair</option>
-                      <option value="Incomplete">Incomplete</option>
-                    </select>
+                    <div className="relative">
+                      <select
+                        name="conditionStatus"
+                        value={formData.condition?.status || "Good"}
+                        onChange={handleChange}
+                        className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2 appearance-none pr-10"
+                      >
+                        <option value="New">New</option>
+                        <option value="Excellent">Excellent</option>
+                        <option value="Very Good">Very Good</option>
+                        <option value="Good">Good</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Poor">Poor</option>
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg
+                          className="w-4 h-4 fill-current"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                            fillRule="evenodd"
+                          ></path>
+                        </svg>
+                      </div>
+                    </div>
                     <p className="mt-1 text-xs text-gray-500">
-                      {formData.condition?.status === "New" &&
-                        "The item is brand new, never used, and in perfect condition. It has no scratches, marks, or signs of wear. It comes with all original packaging and warranty, just like buying directly from a store."}
-                      {formData.condition?.status === "Unworn" &&
-                        "The item has never been worn, but it might not be straight from the store. It has no signs of use but could have tiny marks from handling or storage. Any original stickers or packaging might still be there."}
-                      {formData.condition?.status === "Very Good" &&
-                        "The item has been worn but taken care of really well. It may have small, barely noticeable scratches, but nothing major. It might have been cleaned or polished to look better. Any markings or engravings are still clear."}
-                      {formData.condition?.status === "Good" &&
-                        "The item has been used and shows clear signs of wear, like scratches or small dents. The bracelet or strap might be a bit stretched. Some markings or engravings may be faded, but they're still visible."}
-                      {formData.condition?.status === "Fair" &&
-                        "The item has been worn a lot and shows major signs of use, like deep scratches or dents. The bracelet or strap is visibly worn. It may have been polished, but you can still see the damage."}
-                      {formData.condition?.status === "Incomplete" &&
-                        "The item is not fully functional because it's missing parts or is broken. It is meant for repair or to be used for spare parts."}
+                      Select the overall condition of the watch
                     </p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Condition Details
+                    <label className="block text-sm font-medium text-gray-600 mb-1">
+                      Accessories
                     </label>
-                    <textarea
-                      name="conditionDetails"
-                      value={formData.condition?.details || ""}
-                      onChange={handleChange}
-                      rows="3"
-                      placeholder="Provide specific details about the item's condition"
-                      className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                    ></textarea>
-                  </div>
-
-                  <div className="flex space-x-4 items-center">
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="hasBox"
-                        name="hasBox"
-                        checked={formData.condition?.hasBox || false}
-                        onChange={handleChange}
-                        className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                      />
-                      <label
-                        htmlFor="hasBox"
-                        className="ml-2 block text-sm font-medium text-gray-700"
-                      >
-                        Box
-                      </label>
-                    </div>
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="hasPapers"
-                        name="hasPapers"
-                        checked={formData.condition?.hasPapers || false}
-                        onChange={handleChange}
-                        className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                      />
-                      <label
-                        htmlFor="hasPapers"
-                        className="ml-2 block text-sm font-medium text-gray-700"
-                      >
-                        Papers
-                      </label>
+                    <div className="flex space-x-4 items-center">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="hasBox"
+                          name="hasBox"
+                          checked={formData.condition?.hasBox || false}
+                          onChange={handleChange}
+                          className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                        />
+                        <label
+                          htmlFor="hasBox"
+                          className="ml-2 block text-sm font-medium text-gray-700"
+                        >
+                          Box
+                        </label>
+                      </div>
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="hasPapers"
+                          name="hasPapers"
+                          checked={formData.condition?.hasPapers || false}
+                          onChange={handleChange}
+                          className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                        />
+                        <label
+                          htmlFor="hasPapers"
+                          className="ml-2 block text-sm font-medium text-gray-700"
+                        >
+                          Papers
+                        </label>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1287,24 +1273,29 @@ export default function EditProduct({ params }) {
                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white appearance-none pr-8"
                     >
                       <option value="">Select case material</option>
-                      <optgroup label="Precious Metals">
-                        <option value="Yellow Gold">Yellow Gold</option>
-                        <option value="White Gold">White Gold</option>
-                        <option value="Rose Gold">Rose Gold</option>
-                        <option value="Platinum">Platinum</option>
-                        <option value="Two-Tone">
-                          Two-Tone (Steel & Gold)
-                        </option>
-                      </optgroup>
                       <optgroup label="Standard Materials">
                         <option value="Stainless Steel">Stainless Steel</option>
                         <option value="Titanium">Titanium</option>
-                        <option value="Bronze">Bronze</option>
-                      </optgroup>
-                      <optgroup label="Modern Materials">
                         <option value="Ceramic">Ceramic</option>
+                        <option value="Tantalum">Tantalum</option>
+                      </optgroup>
+                      <optgroup label="Precious Metals">
+                        <option value="Yellow Gold">Yellow Gold</option>
+                        <option value="Rose Gold">Rose Gold</option>
+                        <option value="Pink Gold">Pink Gold</option>
+                        <option value="White Gold">White Gold</option>
+                        <option value="Platinum">Platinum</option>
+                      </optgroup>
+                      <optgroup label="Advanced Materials">
                         <option value="Carbon Fiber">Carbon Fiber</option>
-                        <option value="PVD">PVD Coated</option>
+                        <option value="Sapphire Crystal">
+                          Sapphire Crystal
+                        </option>
+                        <option value="Cermet">Cermet</option>
+                        <option value="ADLC">
+                          ADLC (Amorphous Diamond-Like Carbon)
+                        </option>
+                        <option value="DLC">DLC (Diamond-Like Carbon)</option>
                       </optgroup>
                     </select>
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -1397,19 +1388,11 @@ export default function EditProduct({ params }) {
                     >
                       <option value="">Select bracelet type</option>
                       <optgroup label="Standard Materials">
-                        <option value="Stainless Steel">Stainless Steel</option>
                         <option value="Leather">Leather</option>
                         <option value="Rubber">Rubber</option>
-                        <option value="NATO">NATO</option>
                         <option value="Fabric">Fabric</option>
-                        <option value="Milanese">Milanese</option>
-                        <option value="Gold">Gold</option>
-                        <option value="Titanium">Titanium</option>
-                        <option value="Ceramic">Ceramic</option>
-                        <option value="Two-Tone">Two-Tone</option>
                       </optgroup>
                       <optgroup label="Rolex Bracelet Types">
-                        <option value="Oyster (Rolex)">Oyster</option>
                         <option value="Jubilee (Rolex)">Jubilee</option>
                         <option value="President (Rolex)">President</option>
                         <option value="Pearlmaster (Rolex)">Pearlmaster</option>
@@ -1603,28 +1586,6 @@ export default function EditProduct({ params }) {
                     placeholder="e.g. 20cm"
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Condition
-                  </label>
-                  <div className="mt-2">
-                    <select
-                      name="condition"
-                      value={formData.condition}
-                      onChange={handleChange}
-                      className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="">Not specified</option>
-                      <option value="new">New</option>
-                      <option value="unworn">Unworn</option>
-                      <option value="very good">Very Good</option>
-                      <option value="good">Good</option>
-                      <option value="fair">Fair</option>
-                      <option value="incomplete">Incomplete</option>
-                    </select>
-                  </div>
                 </div>
               </div>
             </div>

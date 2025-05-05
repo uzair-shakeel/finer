@@ -12,8 +12,6 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
- 
-
   useEffect(() => {
     const storedLang = localStorage.getItem("selectedLanguage");
     const langFromPath = window.location.pathname.split("/")[1];
@@ -40,8 +38,8 @@ const Navbar = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
-   // Skip rendering navbar on admin pages
-   if (pathname?.includes("/admin")) {
+  // Skip rendering navbar on admin pages
+  if (pathname?.includes("/admin")) {
     return null;
   }
 
@@ -51,12 +49,6 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center justify-between w-full">
           <div className="flex items-center gap-6">
-            <Link
-              href={currentLang === "en" ? "/" : `/${currentLang}`}
-              className="px-3 py-1.5 text-black text-base font-normal"
-            >
-              {t("navbar.main")}
-            </Link>
             <Link
               href={
                 currentLang === "en"

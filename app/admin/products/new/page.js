@@ -176,12 +176,23 @@ export default function AddProduct() {
       return;
     }
 
-    if (name === "conditionStatus" || name === "conditionDetails") {
+    if (name === "conditionStatus") {
       setFormData((prev) => ({
         ...prev,
         condition: {
           ...prev.condition,
-          [name === "conditionStatus" ? "status" : "details"]: value,
+          status: value,
+        },
+      }));
+      return;
+    }
+
+    if (name === "conditionDetails") {
+      setFormData((prev) => ({
+        ...prev,
+        condition: {
+          ...prev.condition,
+          details: value,
         },
       }));
       return;
@@ -569,10 +580,10 @@ export default function AddProduct() {
 
     // For condition, we have to ensure we're sending the right format
     submissionData.condition = {
-      hasBox: formData.condition.hasBox,
-      hasPapers: formData.condition.hasPapers,
-      status: formData.condition.status || "Good",
-      details: formData.condition.details || "",
+      hasBox: formData.condition?.hasBox || false,
+      hasPapers: formData.condition?.hasPapers || false,
+      status: formData.condition?.status || "Good",
+      details: "",
     };
 
     // Process depth field - if "Other" is selected, use the custom depth value
@@ -582,6 +593,53 @@ export default function AddProduct() {
 
     // Ensure waterResistance is a boolean
     submissionData.waterResistance = !!submissionData.waterResistance;
+
+    // Process price fields to ensure consistency
+    const price = parseFloat(submissionData.price?.replace(/,/g, "") || 0) || 0;
+    const discountedPrice =
+      parseFloat(submissionData.discountedPrice?.replace(/,/g, "") || 0) || 0;
+    const discount = parseFloat(submissionData.discount || 0) || 0;
+
+    // Make sure price is always set as a string
+    submissionData.price = price.toString();
+
+    // Handle discounted price logic
+    if (discountedPrice > 0 && discountedPrice < price) {
+      // If discounted price is set and valid, use it
+      submissionData.discountedPrice = discountedPrice.toString();
+
+      // Calculate the discount percentage if it's not already set
+      if (!discount) {
+        submissionData.discount = Math.round(
+          ((price - discountedPrice) / price) * 100
+        ).toString();
+      } else {
+        submissionData.discount = discount.toString();
+      }
+    } else if (discount > 0 && discount <= 100) {
+      // If discount percentage is set, calculate the discounted price
+      submissionData.discountedPrice = Math.round(
+        price * (1 - discount / 100)
+      ).toString();
+      submissionData.discount = discount.toString();
+    } else {
+      // If no valid discount or discounted price, clear these fields
+      submissionData.discountedPrice = "0";
+      submissionData.discount = "0";
+    }
+
+    // Ensure originalPrice is always set (used for RRP display)
+    if (
+      !submissionData.originalPrice ||
+      parseFloat(submissionData.originalPrice?.replace(/,/g, "") || 0) <= 0
+    ) {
+      submissionData.originalPrice = price.toString();
+    } else {
+      // Make sure originalPrice is also a string
+      submissionData.originalPrice = parseFloat(
+        submissionData.originalPrice?.replace(/,/g, "") || 0
+      ).toString();
+    }
 
     // Convert specification fields to arrays if they're not already
     const specFields = [
@@ -960,56 +1018,63 @@ export default function AddProduct() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Condition
+                  Condition Information
                 </label>
-                <div className="flex space-x-4 items-center">
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id="hasBox"
-                      name="hasBox"
-                      checked={formData.condition?.hasBox || false}
-                      onChange={(e) => {
-                        setFormData((prev) => ({
-                          ...prev,
-                          condition: {
-                            ...prev.condition,
-                            hasBox: e.target.checked,
-                          },
-                        }));
-                      }}
-                      className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                    />
-                    <label
-                      htmlFor="hasBox"
-                      className="ml-2 block text-sm font-medium text-gray-700"
-                    >
-                      Box
+                <div className="border border-gray-300 rounded-md p-3">
+                  <div className="mb-3">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">
+                      Accessories
                     </label>
-                  </div>
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id="hasPapers"
-                      name="hasPapers"
-                      checked={formData.condition?.hasPapers || false}
-                      onChange={(e) => {
-                        setFormData((prev) => ({
-                          ...prev,
-                          condition: {
-                            ...prev.condition,
-                            hasPapers: e.target.checked,
-                          },
-                        }));
-                      }}
-                      className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                    />
-                    <label
-                      htmlFor="hasPapers"
-                      className="ml-2 block text-sm font-medium text-gray-700"
-                    >
-                      Papers
-                    </label>
+                    <div className="flex space-x-4 items-center">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="hasBox"
+                          name="hasBox"
+                          checked={formData.condition?.hasBox || false}
+                          onChange={(e) => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              condition: {
+                                ...prev.condition,
+                                hasBox: e.target.checked,
+                              },
+                            }));
+                          }}
+                          className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                        />
+                        <label
+                          htmlFor="hasBox"
+                          className="ml-2 block text-sm font-medium text-gray-700"
+                        >
+                          Box
+                        </label>
+                      </div>
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="hasPapers"
+                          name="hasPapers"
+                          checked={formData.condition?.hasPapers || false}
+                          onChange={(e) => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              condition: {
+                                ...prev.condition,
+                                hasPapers: e.target.checked,
+                              },
+                            }));
+                          }}
+                          className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                        />
+                        <label
+                          htmlFor="hasPapers"
+                          className="ml-2 block text-sm font-medium text-gray-700"
+                        >
+                          Papers
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1206,29 +1271,49 @@ export default function AddProduct() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Case Material
                   </label>
-                  <select
-                    name="caseMaterial"
-                    value={
-                      formData.caseMaterial?.length > 0
-                        ? formData.caseMaterial[0]
-                        : ""
-                    }
-                    onChange={handleChange}
-                    className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="">Select case material</option>
-                    <option value="Stainless Steel">Stainless Steel</option>
-                    <option value="Yellow Gold">Yellow Gold</option>
-                    <option value="White Gold">White Gold</option>
-                    <option value="Rose Gold">Rose Gold</option>
-                    <option value="Platinum">Platinum</option>
-                    <option value="Titanium">Titanium</option>
-                    <option value="Ceramic">Ceramic</option>
-                    <option value="Carbon Fiber">Carbon Fiber</option>
-                    <option value="Bronze">Bronze</option>
-                    <option value="PVD">PVD</option>
-                    <option value="Two-Tone">Two-Tone</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      name="caseMaterial"
+                      value={
+                        formData.caseMaterial?.length > 0
+                          ? formData.caseMaterial[0]
+                          : ""
+                      }
+                      onChange={handleChange}
+                      className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 appearance-none pr-10"
+                    >
+                      <option value="">Select case material</option>
+                      <optgroup label="Standard Materials">
+                        <option value="Stainless Steel">Stainless Steel</option>
+                        <option value="Titanium">Titanium</option>
+                        <option value="Ceramic">Ceramic</option>
+                        <option value="Tantalum">Tantalum</option>
+                      </optgroup>
+                      <optgroup label="Precious Metals">
+                        <option value="Yellow Gold">Yellow Gold</option>
+                        <option value="Rose Gold">Rose Gold</option>
+                        <option value="Pink Gold">Pink Gold</option>
+                        <option value="White Gold">White Gold</option>
+                        <option value="Platinum">Platinum</option>
+                      </optgroup>
+                      <optgroup label="Advanced Materials">
+                        <option value="Carbon Fiber">Carbon Fiber</option>
+                        <option value="Sapphire Crystal">
+                          Sapphire Crystal
+                        </option>
+                        <option value="Cermet">Cermet</option>
+                        <option value="ADLC">
+                          ADLC (Amorphous Diamond-Like Carbon)
+                        </option>
+                        <option value="DLC">DLC (Diamond-Like Carbon)</option>
+                      </optgroup>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
                 <div>
@@ -1278,10 +1363,9 @@ export default function AddProduct() {
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="">Select bracelet</option>
-                    <option value="Stainless Steel">Stainless Steel</option>
                     <option value="Leather">Leather</option>
+                    <option value="Fabric">Fabric</option>
                     <option value="Rubber">Rubber</option>
-                    <option value="NATO">NATO</option>
                     <option value="Oyster (Rolex)">Oyster (Rolex)</option>
                     <option value="Jubilee (Rolex)">Jubilee (Rolex)</option>
                     <option value="President (Rolex)">President (Rolex)</option>
@@ -1328,12 +1412,6 @@ export default function AddProduct() {
                     <option value="Reverso (Jaeger-LeCoultre)">
                       Reverso (Jaeger-LeCoultre)
                     </option>
-                    <option value="Milanese">Milanese</option>
-                    <option value="Fabric">Fabric</option>
-                    <option value="Gold">Gold</option>
-                    <option value="Titanium">Titanium</option>
-                    <option value="Ceramic">Ceramic</option>
-                    <option value="Two-Tone">Two-Tone</option>
                   </select>
                 </div>
 
@@ -1436,23 +1514,39 @@ export default function AddProduct() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Condition
+                    Condition Status
                   </label>
-                  <div className="mt-2">
-                    <select
-                      name="condition"
-                      value={formData.condition}
-                      onChange={handleChange}
-                      className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="">Not specified</option>
-                      <option value="new">New</option>
-                      <option value="unworn">Unworn</option>
-                      <option value="very good">Very Good</option>
-                      <option value="good">Good</option>
-                      <option value="fair">Fair</option>
-                      <option value="incomplete">Incomplete</option>
-                    </select>
+                  <div className="mt-2 relative">
+                    <div className="relative">
+                      <select
+                        name="conditionStatus"
+                        value={formData.condition?.status || "Good"}
+                        onChange={handleChange}
+                        className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 pr-10"
+                      >
+                        <option value="New">New</option>
+                        <option value="Excellent">Excellent</option>
+                        <option value="Very Good">Very Good</option>
+                        <option value="Good">Good</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Poor">Poor</option>
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg
+                          className="w-4 h-4 fill-current"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                            fillRule="evenodd"
+                          ></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <p className="mt-1 text-xs text-gray-500">
+                      Select the overall condition of the watch
+                    </p>
                   </div>
                 </div>
               </div>
@@ -1576,48 +1670,26 @@ export default function AddProduct() {
                                   Main
                                 </div>
                               )}
-                              {img === formData.backsideImageUrl && (
-                                <div className="absolute top-0 right-0 bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-bl">
-                                  Back
-                                </div>
-                              )}
                             </div>
 
                             <div className="p-2 bg-gray-50 border-t border-gray-200">
                               <div className="flex justify-between items-center">
                                 {/* Set as main/backside */}
-                                <div className="flex space-x-1">
-                                  <button
-                                    type="button"
-                                    onClick={(e) => {
-                                      e.preventDefault(); // Prevent scrolling
-                                      setAsMainImage(img);
-                                    }}
-                                    className={`px-2 py-1 text-xs font-medium rounded ${
-                                      img === formData.imageUrl
-                                        ? "bg-blue-100 text-blue-600"
-                                        : "bg-gray-200 text-gray-700 hover:bg-blue-100 hover:text-blue-600"
-                                    }`}
-                                    title="Set as main image"
-                                  >
-                                    Front
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={(e) => {
-                                      e.preventDefault(); // Prevent scrolling
-                                      setAsBacksideImage(img);
-                                    }}
-                                    className={`px-2 py-1 text-xs font-medium rounded ${
-                                      img === formData.backsideImageUrl
-                                        ? "bg-green-100 text-green-600"
-                                        : "bg-gray-200 text-gray-700 hover:bg-green-100 hover:text-green-600"
-                                    }`}
-                                    title="Set as backside image"
-                                  >
-                                    Back
-                                  </button>
-                                </div>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.preventDefault(); // Prevent scrolling
+                                    setAsMainImage(img);
+                                  }}
+                                  className={`px-2 py-1 text-xs font-medium rounded ${
+                                    img === formData.imageUrl
+                                      ? "bg-blue-100 text-blue-600"
+                                      : "bg-gray-200 text-gray-700 hover:bg-blue-100 hover:text-blue-600"
+                                  }`}
+                                  title="Set as main image"
+                                >
+                                  Front
+                                </button>
 
                                 {/* Delete button */}
                                 <button

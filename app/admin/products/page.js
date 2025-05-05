@@ -506,12 +506,12 @@ export default function ProductsManagement() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          £{product.price}
+                          £{product.discountedPrice}
                         </div>
                         {product.discount > 0 && (
                           <div className="text-xs text-gray-500">
                             <span className="line-through">
-                              £{product.originalPrice}
+                              £{product.price}
                             </span>{" "}
                             ({product.discount}% off)
                           </div>

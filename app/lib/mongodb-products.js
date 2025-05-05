@@ -134,6 +134,17 @@ export const createProduct = async (productData) => {
         ? productData.originalPrice.replace(/,/g, "")
         : productData.originalPrice?.toString() || formattedPrice;
 
+    // Format discountedPrice and discount values
+    const formattedDiscountedPrice =
+      typeof productData.discountedPrice === "string"
+        ? productData.discountedPrice.replace(/,/g, "")
+        : productData.discountedPrice?.toString() || "";
+
+    const formattedDiscount =
+      typeof productData.discount === "string"
+        ? productData.discount.replace(/,/g, "")
+        : productData.discount?.toString() || "0";
+
     // Generate item code if not provided
     let itemCode = productData.itemCode;
     if (!itemCode || itemCode.trim() === "") {
@@ -206,6 +217,7 @@ export const createProduct = async (productData) => {
         details: productData.condition?.details || "",
       },
       price: formattedPrice,
+      discountedPrice: formattedDiscountedPrice,
       originalPrice: formattedOriginalPrice || formattedPrice,
       priceHistory,
       itemCode,
@@ -226,8 +238,7 @@ export const createProduct = async (productData) => {
       description: productData.description || "",
       subdescription: productData.subdescription || "",
       pageTitle: productData.pageTitle || "",
-      discount:
-        typeof productData.discount === "number" ? productData.discount : 0,
+      discount: formattedDiscount,
       rrpStatus: productData.rrpStatus || "Regular",
       status: [
         "live",
