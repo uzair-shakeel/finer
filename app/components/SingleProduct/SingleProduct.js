@@ -74,7 +74,6 @@ const SingleProduct = ({ product }) => {
     return result;
   };
 
-  console.log("Product data:", product);
 
   return (
     <div className="px-5 pt-[85px] sm:pt-[110px]">

@@ -178,9 +178,6 @@ export default function ImageSlider({ images, coverImage }) {
                 style={{ objectFit: "cover" }}
                 className=""
               />
-              <div className="absolute bottom-0 right-0 bg-black bg-opacity-50 text-white text-[8px] px-1 rounded-tl">
-                {index + 1}
-              </div>
             </div>
           ))}
         </div>
