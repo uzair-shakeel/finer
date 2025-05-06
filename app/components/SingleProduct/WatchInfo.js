@@ -243,22 +243,23 @@ const WatchInfo = ({ product }) => {
                 <h3
                   className={`text-[#017EFE] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]`}
                 >
-                  {formatPrice(product?.discountedPrice)}
+                  {product?.discountedPrice > 0
+                    ? formatPrice(product?.discountedPrice)
+                    : formatPrice(product?.price)}
                 </h3>
-                <h3 className="text-[#828282] text-[18px] sm:text-[24px] font-normal leading-[17px] sm:leading-[23px] line-through">
-                  {formatPrice(product?.price)}
-                </h3>
-                {/* {product?.discountedPrice && (
-                )} */}
+                {product?.discountedPrice > 0 && (
+                  <h3 className="text-[#828282] text-[18px] sm:text-[24px] font-normal leading-[17px] sm:leading-[23px] line-through">
+                    {formatPrice(product?.price)}
+                  </h3>
+                )}
               </div>
 
               {/* Savings amount */}
-              <h3 className="text-[#017EFE] text-[14px] sm:text-[16px] font-medium">
-                Save{" "}
-                {formatPrice(product?.price - product?.discountedPrice || 1000)}
-              </h3>
-              {/* {product?.discountedPrice && (
-              )} */}
+              {product?.discountedPrice > 0 && (
+                <h3 className="text-[#017EFE] text-[14px] sm:text-[16px] font-medium">
+                  Save {formatPrice(product?.price - product?.discountedPrice)}
+                </h3>
+              )}
             </div>
           </>
         )}
@@ -327,9 +328,9 @@ const WatchInfo = ({ product }) => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <span className="text-black font-medium">
+                <span className="text-black font-semibold">
                   100£ OFF! With Code:{" "}
-                  <span className="bg-white ml-1 px-1.5 py-[0.8px] rounded-full font-semibold">
+                  <span className="bg-white ml-1 px-1.5 py-[0.8px] rounded-full ">
                     RABBIT
                   </span>
                 </span>

@@ -1397,6 +1397,7 @@ export default function EditProduct({ params }) {
                         <option value="President (Rolex)">President</option>
                         <option value="Pearlmaster (Rolex)">Pearlmaster</option>
                         <option value="Oysterflex (Rolex)">Oysterflex</option>
+                        <option value="Oyster (Rolex)">Oyster</option>
                       </optgroup>
                       <optgroup label="Omega Bracelet Types">
                         <option value="Speedmaster (Omega)">Speedmaster</option>

@@ -506,9 +506,12 @@ export default function ProductsManagement() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          £{product.discountedPrice}
+                          £
+                          {product.discountedPrice > 0
+                            ? product.discountedPrice
+                            : product.price}
                         </div>
-                        {product.discount > 0 && (
+                        {product.discountedPrice > 0 && (
                           <div className="text-xs text-gray-500">
                             <span className="line-through">
                               £{product.price}
