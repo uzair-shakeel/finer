@@ -209,12 +209,16 @@ const NewArrivals = () => {
                       <>
                         <h3
                           className={`text-[16px] sm:text-[24px] sm:!leading-[29px] !leading-[19px] font-semibold ${
-                            product.discount > 0
+                            product.discountedPrice > 0
                               ? "text-[#017EFE]"
                               : "text-black"
                           }`}
                         >
-                          {formatPrice(product.discountedPrice)}
+                          {formatPrice(
+                            product.discountedPrice > 0
+                              ? product.discountedPrice
+                              : product.price
+                          )}
                         </h3>
                         {product.discount > 0 && (
                           <del className="text-[#828282] text-xs sm:text-[16px] sm:!leading-[19px] leading-none font-normal">
