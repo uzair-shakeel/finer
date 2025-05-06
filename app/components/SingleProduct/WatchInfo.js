@@ -237,11 +237,15 @@ const WatchInfo = ({ product }) => {
           </h3>
         ) : (
           <>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-[12px]">
               {/* Main price */}
-              <div className="flex items-end gap-3">
+              <div className="flex items-end gap-[12px]">
                 <h3
-                  className={`text-[#017EFE] text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]`}
+                  className={`${
+                    product?.discountedPrice > 0
+                      ? "text-[#017EFE]"
+                      : "text-black"
+                  } text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[23px]`}
                 >
                   {product?.discountedPrice > 0
                     ? formatPrice(product?.discountedPrice)
@@ -263,16 +267,16 @@ const WatchInfo = ({ product }) => {
             </div>
           </>
         )}
-        <div className="my-2 sm:mt-3 text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
+        <div className="my-[12px] sm:mt-[12px] text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
           <div>RRP: {formatPrice(product.originalPrice)}</div>
         </div>
 
-        <div className="flex items-center gap-2 mt-2">
+        <div className="flex items-center gap-2 ">
           {isSoldOut ? (
             <div></div>
           ) : isReserved ? (
             <div className="flex items-center">
-              <span className="mt-5 flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium">
+              <span className="flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm ">
                 Reserved
                 <div className="status-in-stock bg-[#FF9D00]"></div>
               </span>
