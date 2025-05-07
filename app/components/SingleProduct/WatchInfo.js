@@ -9,6 +9,7 @@ import ModalClose from "@/app/SvgIcons/ModalClose";
 import Checkbox from "../Checkbox";
 import { useTranslation } from "react-i18next";
 import { scrollToHomeFormSection } from "@/app/utils/navigation";
+import Eye from "@/app/SvgIcons/Eye";
 
 const WatchInfo = ({ product }) => {
   const { t } = useTranslation();
@@ -150,9 +151,13 @@ const WatchInfo = ({ product }) => {
     <div className="bg-white rounded-[20px] w-full p-6">
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
-        <h3 className="text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
-          999 views in 48 hours
-        </h3>
+        <div className="flex items-center gap-2">
+          <Eye />
+
+          <h3 className="text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
+            999 views in 48 hours
+          </h3>
+        </div>
         <div className="">
           <button
             className="w-8 h-8 sm:w-[36px] sm:h-[36px] rounded-full bg-[#ECF0F3] flex items-center justify-center"
@@ -239,7 +244,7 @@ const WatchInfo = ({ product }) => {
           <>
             <div className="flex flex-col gap-[12px]">
               {/* Main price */}
-              <div className="flex items-end gap-[12px]">
+              <div className="flex items-end  gap-[12px]">
                 <h3
                   className={`${
                     product?.discountedPrice > 0
@@ -283,7 +288,7 @@ const WatchInfo = ({ product }) => {
             </div>
           ) : isInStock ? (
             <div className="flex items-center">
-              <span className="mt-5 flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium">
+              <span className=" flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium">
                 In Stock
                 <div className="status-in-stock bg-[#60FF7D]"></div>
               </span>
@@ -294,7 +299,7 @@ const WatchInfo = ({ product }) => {
 
           {/* Promo Code Banner - Only shown for products without discount and not sold out */}
           {shouldShowPromoCode && (
-            <div className="mt-5 flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium">
+            <div className=" flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium">
               <div className="flex items-center gap-2">
                 <svg
                   width="20"
@@ -333,9 +338,13 @@ const WatchInfo = ({ product }) => {
                   />
                 </svg>
                 <span className="text-black font-semibold">
-                  100£ OFF! With Code:{" "}
-                  <span className="bg-white ml-1 px-1.5 py-[0.8px] rounded-full ">
-                    RABBIT
+                  100£ OFF!
+                  <span className="text-black font-normal">
+                    {" "}
+                    With Code:
+                    <span className="bg-white ml-1 px-1.5 py-[0.8px] rounded-full ">
+                      RABBIT
+                    </span>
                   </span>
                 </span>
               </div>

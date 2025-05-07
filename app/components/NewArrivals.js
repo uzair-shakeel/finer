@@ -162,7 +162,7 @@ const NewArrivals = () => {
                     <h3 className="text-black font-normal !leading-[9px] sm:!leading-[12px] text-xs sm:text-[16px]">
                       {product.brand}
                     </h3>
-                    <h2 className="text-black font-semibold !leading-[10px] sm:!leading-[15px] text-[14px] sm:text-[20px]">
+                    <h2 className="text-black font-semibold !leading-[10px] sm:!leading-[20px] text-[14px] sm:text-[20px]">
                       {product.model}
                     </h2>
                     <p className="text-black text-xs !leading-[9px] sm:!leading-[12px] font-normal sm:text-[16px]">

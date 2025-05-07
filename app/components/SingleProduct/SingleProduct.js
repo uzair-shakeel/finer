@@ -74,7 +74,6 @@ const SingleProduct = ({ product }) => {
     return result;
   };
 
-
   return (
     <div className="px-5 pt-[85px] sm:pt-[110px]">
       <div className="max-w-[1296px] w-full mx-auto">
@@ -153,7 +152,7 @@ const SingleProduct = ({ product }) => {
                     <span className="font-semibold">Brand:</span>{" "}
                     {product?.brand}
                   </h2>
-                  <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] sm:leading-[19px]">
+                  <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] max-w-[250px] sm:leading-[19px]">
                     <span className="font-semibold">Model:</span>{" "}
                     {product?.model}
                   </h2>
