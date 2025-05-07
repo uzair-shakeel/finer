@@ -244,7 +244,7 @@ const WatchInfo = ({ product }) => {
           <>
             <div className="flex flex-col gap-[12px]">
               {/* Main price */}
-              <div className="flex items-end  gap-[12px]">
+              <div className="flex items-end gap-[12px]">
                 <h3
                   className={`${
                     product?.discountedPrice > 0
@@ -257,7 +257,7 @@ const WatchInfo = ({ product }) => {
                     : formatPrice(product?.price)}
                 </h3>
                 {product?.discountedPrice > 0 && (
-                  <h3 className="text-[#828282] text-[18px] sm:text-[24px] font-normal leading-[17px] sm:leading-[23px] line-through">
+                  <h3 className="text-[#828282] text-[18px] sm:text-[24px] font-normal leading-[17px] sm:leading-[17px] line-through">
                     {formatPrice(product?.price)}
                   </h3>
                 )}
@@ -265,7 +265,7 @@ const WatchInfo = ({ product }) => {
 
               {/* Savings amount */}
               {product?.discountedPrice > 0 && (
-                <h3 className="text-[#017EFE] text-[14px] sm:text-[16px] font-medium">
+                <h3 className="text-[#017EFE] text-[14px] sm:text-[16px] leading-[12px] font-normal">
                   Save {formatPrice(product?.price - product?.discountedPrice)}
                 </h3>
               )}
@@ -276,7 +276,7 @@ const WatchInfo = ({ product }) => {
           <div>RRP: {formatPrice(product.originalPrice)}</div>
         </div>
 
-        <div className="flex items-center gap-2 ">
+        <div className="flex items-center gap-2">
           {isSoldOut ? (
             <div></div>
           ) : isReserved ? (
@@ -288,7 +288,7 @@ const WatchInfo = ({ product }) => {
             </div>
           ) : isInStock ? (
             <div className="flex items-center">
-              <span className=" flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium">
+              <span className=" flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-normal">
                 In Stock
                 <div className="status-in-stock bg-[#60FF7D]"></div>
               </span>
