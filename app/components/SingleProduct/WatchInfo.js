@@ -10,6 +10,7 @@ import Checkbox from "../Checkbox";
 import { useTranslation } from "react-i18next";
 import { scrollToHomeFormSection } from "@/app/utils/navigation";
 import Eye from "@/app/SvgIcons/Eye";
+import Tag from "@/app/SvgIcons/Tag";
 
 const WatchInfo = ({ product }) => {
   const { t } = useTranslation();
@@ -172,7 +173,7 @@ const WatchInfo = ({ product }) => {
         <h3 className="text-black text-[16px] sm:text-[18px] font-normal leading-[12px] sm:leading-[13px]">
           {product?.brand}
         </h3>
-        <h1 className="text-black text-[24px] sm:text-[32px] font-semibold leading-[17px] sm:leading-[29px]">
+        <h1 className="text-black text-[24px] sm:text-[32px] font-semibold leading-[25px] sm:leading-[29px]">
           {product?.pageTitle}{" "}
         </h1>
         <h3 className="text-black pt-1 text-[16px] sm:text-[18px] font-normal leading-[12px] sm:leading-[13px]">
@@ -276,7 +277,7 @@ const WatchInfo = ({ product }) => {
           <div>RRP: {formatPrice(product.originalPrice)}</div>
         </div>
 
-        <div className="flex items-center gap-2 ">
+        <div className="flex flex-col md:flex-row items-start md:items-center  gap-2 ">
           {isSoldOut ? (
             <div></div>
           ) : isReserved ? (
@@ -301,42 +302,7 @@ const WatchInfo = ({ product }) => {
           {shouldShowPromoCode && (
             <div className=" flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium">
               <div className="flex items-center gap-2">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M5.83268 4.16667H14.166C14.6223 4.16667 14.9993 4.54364 14.9993 5V15C14.9993 15.4564 14.6223 15.8333 14.166 15.8333H5.83268C5.37644 15.8333 4.99935 15.4564 4.99935 15V5C4.99935 4.54364 5.37644 4.16667 5.83268 4.16667Z"
-                    stroke="#1F1F1F"
-                    strokeWidth="1.66667"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M13.3327 2.5V5.83333"
-                    stroke="#1F1F1F"
-                    strokeWidth="1.66667"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M6.66602 2.5V5.83333"
-                    stroke="#1F1F1F"
-                    strokeWidth="1.66667"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M4.99935 9.16667H14.9993"
-                    stroke="#1F1F1F"
-                    strokeWidth="1.66667"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <Tag />
                 <span className="text-black font-semibold">
                   100£ OFF!
                   <span className="text-black font-normal">

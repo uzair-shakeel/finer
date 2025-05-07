@@ -152,7 +152,7 @@ const SingleProduct = ({ product }) => {
                     <span className="font-semibold">Brand:</span>{" "}
                     {product?.brand}
                   </h2>
-                  <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] max-w-[250px] sm:leading-[19px]">
+                  <h2 className="text-[14px] sm:text-[16px] font-normal text-black leading-[17px] max-w-[220px] sm:leading-[19px]">
                     <span className="font-semibold">Model:</span>{" "}
                     {product?.model}
                   </h2>

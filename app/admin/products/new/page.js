@@ -1203,6 +1203,28 @@ export default function AddProduct() {
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 />
               </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="showRRP"
+                  name="rrpStatus"
+                  checked={formData.rrpStatus !== "Hidden"}
+                  onChange={(e) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      rrpStatus: e.target.checked ? "Regular" : "Hidden",
+                    }));
+                  }}
+                  className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                />
+                <label
+                  htmlFor="showRRP"
+                  className="ml-2 block text-sm font-medium text-gray-700"
+                >
+                  Display RRP on product page
+                </label>
+              </div>
             </div>
 
             {/* Content Section */}
@@ -1839,28 +1861,6 @@ export default function AddProduct() {
                         className="ml-2 block text-sm font-medium text-gray-700"
                       >
                         Featured Product
-                      </label>
-                    </div>
-
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="showRRP"
-                        name="rrpStatus"
-                        checked={formData.rrpStatus !== "Hidden"}
-                        onChange={(e) => {
-                          setFormData((prev) => ({
-                            ...prev,
-                            rrpStatus: e.target.checked ? "Regular" : "Hidden",
-                          }));
-                        }}
-                        className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                      />
-                      <label
-                        htmlFor="showRRP"
-                        className="ml-2 block text-sm font-medium text-gray-700"
-                      >
-                        Display RRP on product page
                       </label>
                     </div>
                   </div>
