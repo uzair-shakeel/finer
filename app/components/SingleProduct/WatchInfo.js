@@ -245,7 +245,7 @@ const WatchInfo = ({ product }) => {
           <>
             <div className="flex flex-col gap-[12px]">
               {/* Main price */}
-              <div className="flex items-end  gap-[12px]">
+              <div className="flex items-end gap-[12px]">
                 <h3
                   className={`${
                     product?.discountedPrice > 0
@@ -258,7 +258,7 @@ const WatchInfo = ({ product }) => {
                     : formatPrice(product?.price)}
                 </h3>
                 {product?.discountedPrice > 0 && (
-                  <h3 className="text-[#828282] text-[18px] sm:text-[24px] font-normal leading-[17px] sm:leading-[23px] line-through">
+                  <h3 className="text-[#828282] text-[18px] sm:text-[24px] font-normal leading-[17px] sm:leading-[17px] line-through">
                     {formatPrice(product?.price)}
                   </h3>
                 )}
@@ -266,7 +266,7 @@ const WatchInfo = ({ product }) => {
 
               {/* Savings amount */}
               {product?.discountedPrice > 0 && (
-                <h3 className="text-[#017EFE] text-[14px] sm:text-[16px] font-medium">
+                <h3 className="text-[#017EFE] text-[14px] sm:text-[16px] leading-[12px] font-normal">
                   Save {formatPrice(product?.price - product?.discountedPrice)}
                 </h3>
               )}
@@ -278,280 +278,282 @@ const WatchInfo = ({ product }) => {
         </div>
 
         <div className="flex flex-col md:flex-row items-start md:items-center  gap-2 ">
-          {isSoldOut ? (
-            <div></div>
-          ) : isReserved ? (
-            <div className="flex items-center">
-              <span className="flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm ">
-                Reserved
-                <div className="status-in-stock bg-[#FF9D00]"></div>
-              </span>
-            </div>
-          ) : isInStock ? (
-            <div className="flex items-center">
-              <span className=" flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium">
-                In Stock
-                <div className="status-in-stock bg-[#60FF7D]"></div>
-              </span>
-            </div>
-          ) : (
-            <div></div>
-          )}
-
-          {/* Promo Code Banner - Only shown for products without discount and not sold out */}
-          {shouldShowPromoCode && (
-            <div className=" flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium">
-              <div className="flex items-center gap-2">
-                <Tag />
-                <span className="text-black font-semibold">
-                  100£ OFF!
-                  <span className="text-black font-normal">
-                    {" "}
-                    With Code:
-                    <span className="bg-white ml-1 px-1.5 py-[0.8px] rounded-full ">
-                      RABBIT
-                    </span>
-                  </span>
+          <div className="flex items-center gap-2">
+            {isSoldOut ? (
+              <div></div>
+            ) : isReserved ? (
+              <div className="flex items-center">
+                <span className="flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm ">
+                  Reserved
+                  <div className="status-in-stock bg-[#FF9D00]"></div>
                 </span>
               </div>
-            </div>
-          )}
-        </div>
-      </div>
+            ) : isInStock ? (
+              <div className="flex items-center">
+                <span className=" flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-normal">
+                  In Stock
+                  <div className="status-in-stock bg-[#60FF7D]"></div>
+                </span>
+              </div>
+            ) : (
+              <div></div>
+            )}
 
-      <div className="mt-6 md:mt-8 flex items-center gap-2">
-        <Image
-          src="/assets/visa-card.svg"
-          alt="visa-card"
-          width={50}
-          height={50}
-          priority
-        />
-        <Image
-          src="/assets/master-card.svg"
-          alt="master-card"
-          width={50}
-          height={50}
-          priority
-        />
-        <Image
-          src="/assets/amex-card.svg"
-          alt="amex-card"
-          width={50}
-          height={50}
-          priority
-        />
-        <Image
-          src="/assets/bitcoin-card.svg"
-          alt="bitcoin-card"
-          width={50}
-          height={50}
-          priority
-        />
-      </div>
-
-      {isSoldOut ? (
-        <button
-          onClick={handleBuyClick}
-          className="mt-3 bg-[#017EFE] w-full px-8 md:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#003D7B]"
-        >
-          Source
-        </button>
-      ) : isReserved ? (
-        <button
-          onClick={handleBuyClick}
-          disabled
-          className="mt-3 bg-[#FF9800] w-full px-8 md:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#E65100]"
-        >
-          Reserved
-        </button>
-      ) : (
-        <button
-          onClick={handleBuyClick}
-          className="mt-3 bg-[#017EFE] w-full px-8 md:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#003D7B]"
-        >
-          Buy
-        </button>
-      )}
-
-      <button
-        onClick={openSendOfferModal}
-        className="mt-3 flex items-center justify-center !leading-[19px] w-full px-8 md:px-10 rounded-[60px] text-[#017EFE] text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:text-white hover:bg-[#017EFE] border-2 border-[#017EFE]"
-      >
-        Part Exchange
-      </button>
-
-      {/* Modal */}
-      {isSendOfferModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-5">
-          {/* Modal Content */}
-          <div className="bg-white rounded-[20px] max-w-[703px] mx-auto w-full p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-[24px] font-semibold leading-[23px] text-black">
-                Send and offer
-              </h2>
-              <button
-                onClick={closeSendOfferModal}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit}>
-              {/* Selected Item */}
-              <div className="mb-6">
-                <div className="flex justify-between items-center mb-2 sm:mb-3">
-                  <span className="text-black text-[16px] font-normal leading-[19px]">
-                    Selected Item
+            {/* Promo Code Banner - Only shown for products without discount and not sold out */}
+            {shouldShowPromoCode && (
+              <div className=" flex items-center gap-2 bg-[#ECF0F3] px-3 py-1 rounded-full text-sm font-medium">
+                <div className="flex items-center gap-2">
+                  <Tag />
+                  <span className="text-black font-semibold">
+                    100£ OFF!
+                    <span className="text-black font-normal">
+                      {" "}
+                      With Code:
+                      <span className="bg-white ml-1 px-1.5 py-[0.8px] rounded-full ">
+                        RABBIT
+                      </span>
+                    </span>
                   </span>
-                  <button
-                    type="button"
-                    className="md:block hidden text-[#828282] text-[16px] font-normal leading-[12px]"
-                  >
-                    Change Item
-                  </button>
-                </div>
-                <div className="flex items-start gap-[15px] bg-white rounded-[15px] sm:rounded-[20px] border border-[#E3E8ED] pl-2 py-2 pr-4">
-                  <div className="w-[70px] h-[70px] relative flex-shrink-0">
-                    <div className="bg-white">
-                      <Image
-                        src="/assets/rolex-daytona-116500ln-panda-cover.webp"
-                        alt="Rolex GMT-Master II"
-                        width={70}
-                        height={70}
-                        className="object-cover"
-                      />
-                    </div>
-                  </div>
-                  <div className="pt-2 flex items-start sm:items-center sm:flex-row flex-col justify-between gap-3 w-full">
-                    <div className="flex-grow">
-                      <div className="text-black text-[14px] sm:text-[20px] font-semibold leading-[10px] sm:leading-[15px] mb-2 sm:mb-3">
-                        GMT-Master II
-                      </div>
-                      <div className="text-[16px] font-normal text-black leading-[12px]">
-                        Rolex<span className="pl-2 sm:pl-3">126720VTNR</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 sm:gap-[18px]">
-                      <div className="text-[#017EFE] font-semibold text-[18px] sm:text-[24px] leading-[22px] sm:leading-[29px]">
-                        €12,700
-                      </div>
-                      <div className="text-[#828282] text-[14px] sm:text-[16px] leading-[17px] sm:leading-[19px] font-normal">
-                        <del>€19,335</del>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
-
-              {/* Contact Info */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-6">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-[14px] md:text-[16px] sm:leading-[19px] leading-[17px] font-normal text-black mb-2 md:mb-3"
-                  >
-                    Full name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Jay"
-                    className="w-full px-4 border-transparent focus:border-[#017EFE] text-base min-h-[33px] md:min-h-[42px] bg-[#E3E8ED] rounded-[30px] placeholder:text-[#828282] text-black outline-none border transition-colors duration-300"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-[14px] md:text-[16px] sm:leading-[19px] leading-[17px] font-normal text-black mb-2 md:mb-3"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="example@mail.com"
-                    className="w-full px-4 text-base border-transparent focus:border-[#017EFE] min-h-[33px] md:h-[42px] bg-[#E3E8ED] rounded-[30px] placeholder:text-[#828282] text-black outline-none border transition-colors duration-300"
-                  />
-                </div>
-
-                {/* Phone Number */}
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="block text-[14px] md:text-[16px] sm:leading-[19px] leading-[17px] font-normal text-black mb-2 md:mb-3"
-                  >
-                    Phone Number
-                  </label>
-                  <input
-                    type="text"
-                    id="phone"
-                    name="phone"
-                    placeholder="(+44) 123 456 7890"
-                    className="w-full px-4 text-base border-transparent focus:border-[#017EFE] min-h-[33px] md:h-[42px] bg-[#E3E8ED] rounded-[30px] placeholder:text-[#828282] text-black outline-none border transition-colors duration-300"
-                  />
-                </div>
-              </div>
-
-              <div className="mt-6 md:mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label
-                    htmlFor="price"
-                    className="block text-[14px] md:text-[16px] sm:leading-[19px] leading-[17px] font-normal text-black mb-2 md:mb-3"
-                  >
-                    Offer your price
-                  </label>
-                  <div className="relative">
-                    <div className="group">
-                      <div className="absolute top-[6px] md:top-[9px] left-0 pl-4 flex items-center pointer-events-none">
-                        <span className="text-[#828282] text-[18px] !leading-[22px] group-hover:text-black mt-0.5">
-                          £
-                        </span>
-                      </div>
-                      <input
-                        type="text"
-                        id="price"
-                        name="price"
-                        className="w-full px-4 pl-7 text-base border-transparent focus:border-[#017EFE] min-h-[36px] md:h-[42px] bg-[#E3E8ED] rounded-[30px] placeholder:text-[#828282] text-black outline-none border transition-colors duration-300 "
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                className="mt-6 md:mt-12 text-base font-medium w-full bg-[#017EFE] hover:bg-[#003D7B] transition-all duration-300 text-white h-[35px] md:h-[40px] px-4 rounded-[60px]"
-              >
-                Submit
-              </button>
-
-              {/* Checkboxes */}
-              <div className="mt-6 max-w-[486px] space-y-2 sm:space-y-3">
-                <Checkbox title="I have read and agree to the rules of Delivery and Payment, Returns and Exchanges" />
-                <Checkbox title="Call me to confirm an order" />
-              </div>
-            </form>
+            )}
           </div>
         </div>
-      )}
+
+        <div className="mt-6 md:mt-8 flex items-center gap-2">
+          <Image
+            src="/assets/visa-card.svg"
+            alt="visa-card"
+            width={50}
+            height={50}
+            priority
+          />
+          <Image
+            src="/assets/master-card.svg"
+            alt="master-card"
+            width={50}
+            height={50}
+            priority
+          />
+          <Image
+            src="/assets/amex-card.svg"
+            alt="amex-card"
+            width={50}
+            height={50}
+            priority
+          />
+          <Image
+            src="/assets/bitcoin-card.svg"
+            alt="bitcoin-card"
+            width={50}
+            height={50}
+            priority
+          />
+        </div>
+
+        {isSoldOut ? (
+          <button
+            onClick={handleBuyClick}
+            className="mt-3 bg-[#017EFE] w-full px-8 md:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#003D7B]"
+          >
+            Source
+          </button>
+        ) : isReserved ? (
+          <button
+            onClick={handleBuyClick}
+            disabled
+            className="mt-3 bg-[#FF9800] w-full px-8 md:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#E65100]"
+          >
+            Reserved
+          </button>
+        ) : (
+          <button
+            onClick={handleBuyClick}
+            className="mt-3 bg-[#017EFE] w-full px-8 md:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#003D7B]"
+          >
+            Buy
+          </button>
+        )}
+
+        <button
+          onClick={openSendOfferModal}
+          className="mt-3 flex items-center justify-center !leading-[19px] w-full px-8 md:px-10 rounded-[60px] text-[#017EFE] text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:text-white hover:bg-[#017EFE] border-2 border-[#017EFE]"
+        >
+          Part Exchange
+        </button>
+
+        {/* Modal */}
+        {isSendOfferModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-5">
+            {/* Modal Content */}
+            <div className="bg-white rounded-[20px] max-w-[703px] mx-auto w-full p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-[24px] font-semibold leading-[23px] text-black">
+                  Send and offer
+                </h2>
+                <button
+                  onClick={closeSendOfferModal}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+
+              <form onSubmit={handleSubmit}>
+                {/* Selected Item */}
+                <div className="mb-6">
+                  <div className="flex justify-between items-center mb-2 sm:mb-3">
+                    <span className="text-black text-[16px] font-normal leading-[19px]">
+                      Selected Item
+                    </span>
+                    <button
+                      type="button"
+                      className="md:block hidden text-[#828282] text-[16px] font-normal leading-[12px]"
+                    >
+                      Change Item
+                    </button>
+                  </div>
+                  <div className="flex items-start gap-[15px] bg-white rounded-[15px] sm:rounded-[20px] border border-[#E3E8ED] pl-2 py-2 pr-4">
+                    <div className="w-[70px] h-[70px] relative flex-shrink-0">
+                      <div className="bg-white">
+                        <Image
+                          src="/assets/rolex-daytona-116500ln-panda-cover.webp"
+                          alt="Rolex GMT-Master II"
+                          width={70}
+                          height={70}
+                          className="object-cover"
+                        />
+                      </div>
+                    </div>
+                    <div className="pt-2 flex items-start sm:items-center sm:flex-row flex-col justify-between gap-3 w-full">
+                      <div className="flex-grow">
+                        <div className="text-black text-[14px] sm:text-[20px] font-semibold leading-[10px] sm:leading-[15px] mb-2 sm:mb-3">
+                          GMT-Master II
+                        </div>
+                        <div className="text-[16px] font-normal text-black leading-[12px]">
+                          Rolex<span className="pl-2 sm:pl-3">126720VTNR</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 sm:gap-[18px]">
+                        <div className="text-[#017EFE] font-semibold text-[18px] sm:text-[24px] leading-[22px] sm:leading-[29px]">
+                          €12,700
+                        </div>
+                        <div className="text-[#828282] text-[14px] sm:text-[16px] leading-[17px] sm:leading-[19px] font-normal">
+                          <del>€19,335</del>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Info */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-6">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block text-[14px] md:text-[16px] sm:leading-[19px] leading-[17px] font-normal text-black mb-2 md:mb-3"
+                    >
+                      Full name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      placeholder="Jay"
+                      className="w-full px-4 border-transparent focus:border-[#017EFE] text-base min-h-[33px] md:min-h-[42px] bg-[#E3E8ED] rounded-[30px] placeholder:text-[#828282] text-black outline-none border transition-colors duration-300"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-[14px] md:text-[16px] sm:leading-[19px] leading-[17px] font-normal text-black mb-2 md:mb-3"
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder="example@mail.com"
+                      className="w-full px-4 text-base border-transparent focus:border-[#017EFE] min-h-[33px] md:h-[42px] bg-[#E3E8ED] rounded-[30px] placeholder:text-[#828282] text-black outline-none border transition-colors duration-300"
+                    />
+                  </div>
+
+                  {/* Phone Number */}
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="block text-[14px] md:text-[16px] sm:leading-[19px] leading-[17px] font-normal text-black mb-2 md:mb-3"
+                    >
+                      Phone Number
+                    </label>
+                    <input
+                      type="text"
+                      id="phone"
+                      name="phone"
+                      placeholder="(+44) 123 456 7890"
+                      className="w-full px-4 text-base border-transparent focus:border-[#017EFE] min-h-[33px] md:h-[42px] bg-[#E3E8ED] rounded-[30px] placeholder:text-[#828282] text-black outline-none border transition-colors duration-300"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-6 md:mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      htmlFor="price"
+                      className="block text-[14px] md:text-[16px] sm:leading-[19px] leading-[17px] font-normal text-black mb-2 md:mb-3"
+                    >
+                      Offer your price
+                    </label>
+                    <div className="relative">
+                      <div className="group">
+                        <div className="absolute top-[6px] md:top-[9px] left-0 pl-4 flex items-center pointer-events-none">
+                          <span className="text-[#828282] text-[18px] !leading-[22px] group-hover:text-black mt-0.5">
+                            £
+                          </span>
+                        </div>
+                        <input
+                          type="text"
+                          id="price"
+                          name="price"
+                          className="w-full px-4 pl-7 text-base border-transparent focus:border-[#017EFE] min-h-[36px] md:h-[42px] bg-[#E3E8ED] rounded-[30px] placeholder:text-[#828282] text-black outline-none border transition-colors duration-300 "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  className="mt-6 md:mt-12 text-base font-medium w-full bg-[#017EFE] hover:bg-[#003D7B] transition-all duration-300 text-white h-[35px] md:h-[40px] px-4 rounded-[60px]"
+                >
+                  Submit
+                </button>
+
+                {/* Checkboxes */}
+                <div className="mt-6 max-w-[486px] space-y-2 sm:space-y-3">
+                  <Checkbox title="I have read and agree to the rules of Delivery and Payment, Returns and Exchanges" />
+                  <Checkbox title="Call me to confirm an order" />
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
