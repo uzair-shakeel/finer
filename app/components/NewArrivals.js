@@ -145,7 +145,7 @@ const NewArrivals = () => {
                       height={248}
                       draggable="false"
                       loading="lazy"
-                      className="w-full h-full !object-cover rounded-[20px] !aspect-square opacity-100 group-hover:scale-105 duration-300 absolute top-0 left-0"
+                      className="w-full h-full !object-cover rounded-[20px] !aspect-square opacity-100 group-hover:scale-110 scale-105 duration-300 absolute top-0 left-0"
                       sizes="(max-width: 640px) 100vw, 204px"
                     />
 
