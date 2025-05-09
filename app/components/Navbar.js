@@ -114,8 +114,8 @@ const Navbar = () => {
               href="https://wa.me/447394784277"
               className="flex items-center text-black text-base font-normal"
             >
-              <span className="mr-2">{t("navbar.needHelp")}</span>+44 739 478
-              4277
+              <span className="mr-2">{t("navbar.needHelp")}</span>+44 735 558
+              1510
             </Link>
           </div>
         </div>
@@ -223,8 +223,8 @@ const Navbar = () => {
                     onClick={toggleMenu}
                     className="text-base font-normal text-black flex flex-col"
                   >
-                    <span className="mr-2">{t("navbar.needHelp")}</span>+44 739
-                    478 4277
+                    <span className="mr-2">{t("navbar.needHelp")}</span>+44 735
+                    558 1510
                   </Link>
                 </div>
               </div>

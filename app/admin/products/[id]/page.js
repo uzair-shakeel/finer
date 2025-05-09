@@ -1393,6 +1393,9 @@ export default function EditProduct({ params }) {
                         <option value="Fabric">Fabric</option>
                       </optgroup>
                       <optgroup label="Rolex Bracelet Types">
+                        <option value="Flat Jubilee (Rolex)">
+                          Flat Jubilee
+                        </option>
                         <option value="Jubilee (Rolex)">Jubilee</option>
                         <option value="President (Rolex)">President</option>
                         <option value="Pearlmaster (Rolex)">Pearlmaster</option>

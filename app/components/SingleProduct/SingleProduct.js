@@ -111,28 +111,28 @@ const SingleProduct = ({ product }) => {
             {/* Rules */}
             <div className="mt-3 md:mt-6 bg-white rounded-[20px] p-6 space-y-2 sm:space-y-3">
               <div className="flex items-center gap-2">
-                <FastDelivery />
+                <FastDelivery className="w-[20px] h-auto " />
                 <h2 className="text-[14px] sm:text-[16px] font-normal leading-[17px] sm:leading-[19px] text-black">
                   <span className="font-semibold">Fast delivery</span> in{" "}
                   <span className="font-semibold">1-2</span> business days
                 </h2>
               </div>
               <div className="flex items-center gap-2">
-                <Returns />
+                <Returns className="w-[20px] h-auto " />
                 <h2 className="text-[14px] sm:text-[16px] font-normal leading-[17px] sm:leading-[19px] text-black">
                   <span className="font-semibold">14 day returns</span> for your
                   convenience
                 </h2>
               </div>
               <div className="flex items-center gap-2">
-                <AuthenticityGuarantee />
+                <AuthenticityGuarantee className="w-[24px] h-[24px]" />
                 <h2 className="text-[14px] sm:text-[16px] font-normal leading-[17px] sm:leading-[19px] text-black">
                   <span className="font-semibold">Authenticity guarantee</span>{" "}
                   for all items
                 </h2>
               </div>
               <div className="flex items-center gap-2">
-                <Coins />
+                <Coins className="w-[20px] h-auto " />
                 <h2 className="text-[14px] sm:text-[16px] font-normal leading-[17px] sm:leading-[19px] text-black">
                   <span className="font-semibold">A deposit for 2%</span> of the
                   watch price is required{" "}

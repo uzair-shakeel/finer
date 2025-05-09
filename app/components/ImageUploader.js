@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 const ImageUploader = ({ onImagesChange, disabled }) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const [images, setImages] = useState([]);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const fileInputRef = useRef(null);
@@ -74,7 +74,7 @@ const ImageUploader = ({ onImagesChange, disabled }) => {
 
   return (
     <div>
-      <label className="block text-base font-normal text-black mb-2 md:mb-3">
+      <label className="block text-[14px] font-normal text-black mb-2 md:mb-3">
         {t("form.uploadFileTitle")}
       </label>
       <div
@@ -95,9 +95,7 @@ const ImageUploader = ({ onImagesChange, disabled }) => {
         />
         {images.length === 0 ? (
           <div className="w-full h-full flex flex-col items-center justify-center">
-            <div
-              className="w-[100px] h-[100px] cursor-pointer "
-            >
+            <div className="w-[100px] h-[100px] cursor-pointer ">
               <Image
                 src="/assets/file-upload.svg"
                 alt="upload"
@@ -121,9 +119,9 @@ const ImageUploader = ({ onImagesChange, disabled }) => {
             </p>
           </div>
         ) : (
-          <div 
+          <div
             className="w-full h-full flex flex-wrap gap-2 md:gap-3 overflow-y-auto scrollbar-hide !overflow-visible"
-            onClick={(e) => e.stopPropagation()}  
+            onClick={(e) => e.stopPropagation()}
           >
             {images.map((image, index) => (
               <div

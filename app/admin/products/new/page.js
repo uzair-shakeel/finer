@@ -628,17 +628,12 @@ export default function AddProduct() {
       submissionData.discount = "0";
     }
 
-    // Ensure originalPrice is always set (used for RRP display)
+    // Handle originalPrice (RRP) - keep as string, don't convert to number
     if (
       !submissionData.originalPrice ||
-      parseFloat(submissionData.originalPrice?.replace(/,/g, "") || 0) <= 0
+      submissionData.originalPrice.trim() === ""
     ) {
       submissionData.originalPrice = price.toString();
-    } else {
-      // Make sure originalPrice is also a string
-      submissionData.originalPrice = parseFloat(
-        submissionData.originalPrice?.replace(/,/g, "") || 0
-      ).toString();
     }
 
     // Convert specification fields to arrays if they're not already
@@ -1162,9 +1157,12 @@ export default function AddProduct() {
                   name="originalPrice"
                   value={formData.originalPrice}
                   onChange={handleChange}
-                  placeholder="e.g. 13000"
+                  placeholder="e.g. 13000 or Discontinued"
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 />
+                <p className="text-sm text-gray-500 mt-1">
+                  Enter a price value or "Discontinued" if not available
+                </p>
               </div>
 
               <div>
@@ -1433,6 +1431,7 @@ export default function AddProduct() {
                     <option value="Fabric">Fabric</option>
                     <option value="Rubber">Rubber</option>
                     <option value="Oyster (Rolex)">Oyster (Rolex)</option>
+                    <option value="Flat Jubilee (Rolex)">Flat Jubilee</option>
                     <option value="Jubilee (Rolex)">Jubilee (Rolex)</option>
                     <option value="President (Rolex)">President (Rolex)</option>
                     <option value="Pearlmaster (Rolex)">

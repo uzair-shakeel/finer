@@ -274,11 +274,17 @@ const WatchInfo = ({ product }) => {
           </>
         )}
         <div className="my-[12px] sm:mt-[12px] text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
-          <div>RRP: {formatPrice(product.originalPrice)}</div>
+          <div>
+            RRP:{" "}
+            {product.originalPrice === "Discontinued" ||
+            product.originalPrice === "discontinued"
+              ? "Discontinued"
+              : formatPrice(product.originalPrice)}
+          </div>
         </div>
 
-        <div className="flex flex-col md:flex-row items-start md:items-center  gap-2 ">
-          <div className="flex items-center gap-2">
+        <div className="flex   gap-2 ">
+          <div className="flex flex-col md:flex-row  md:items-center items-start gap-2">
             {isSoldOut ? (
               <div></div>
             ) : isReserved ? (

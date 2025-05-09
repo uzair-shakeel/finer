@@ -88,7 +88,7 @@ const Footer = () => {
                   <a href="mailto:info@finerlux.com">info@finerlux.com</a>
                 </li>
                 <li className="text-black text-[14px] md:text-[18px] font-normal !leading-[22px]">
-                  <a href="tel:+441234567890">+44 123 456 7890</a>
+                  <a href="tel:++447355581510">+44 735 558 1510</a>
                 </li>
               </ul>
 
