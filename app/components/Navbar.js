@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { usePathname } from "next/navigation";
+import SearchHeader from "../SvgIcons/SearchHeader";
 
 const Navbar = () => {
   const { t } = useTranslation();
@@ -38,26 +39,27 @@ const Navbar = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
-  // Skip rendering navbar on admin pages
   if (pathname?.includes("/admin")) {
     return null;
   }
 
   return (
     <header className="fixed top-4 left-0 right-0 z-50 px-5">
-      <div className="max-w-[1296px] bg-white shadow-header mx-auto w-full rounded-[30px] min-h-[46px] md:pr-[26px] md:pl-[26px] lg:pl-[32px] flex items-center justify-between">
+      <div className="max-w-[1296px] bg-white shadow-header mx-auto w-full rounded-[30px] min-h-[46px] md:pr-[27px] md:pl-[24px] lg:pl-[32px] flex items-center justify-between">
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center justify-between w-full">
-          <div className="flex items-center gap-6">
-            <Link
-              href={
-                currentLang === "en"
-                  ? "#withusyoucan"
-                  : `${currentLang}#withusyoucan`
-              }
-              className="px-3 py-1.5 text-black text-base font-normal"
-            >
+        <div className="lg:flex hidden items-center justify-between w-full">
+          <div className="flex items-center gap-3">
+            <Link href={currentLang === "en" ? "/watches" : `${currentLang}/watches`} className="px-3 py-1.5 text-black text-base font-normal leading-[19px]">
+              Watches
+            </Link>
+            <Link href={currentLang === "en" ? "/jewellery" : `${currentLang}/jewellery`} className="px-3 py-1.5 text-black text-base font-normal leading-[19px]">
+              Jewellery
+            </Link>
+            <Link href={currentLang === "en" ? "/#withusyoucan" : `${currentLang}/#withusyoucan`} className="px-3 py-1.5 text-black text-base font-normal leading-[19px]">
               {t("navbar.ourServices")}
+            </Link>
+            <Link href={currentLang === "en" ? "/blog" : `${currentLang}/blog`} className="px-3 py-1.5 text-black text-base font-normal leading-[19px]">
+              Blog
             </Link>
           </div>
 
@@ -67,11 +69,10 @@ const Navbar = () => {
               className="relative w-24 h-10 flex items-center justify-center"
             >
               <div
-                className={`absolute transition-all duration-300 ${
-                  isScrolled
-                    ? "opacity-0 translate-y-3"
-                    : "opacity-100 translate-y-0"
-                }`}
+                className={`absolute transition-all duration-300 ${isScrolled
+                  ? "opacity-0 translate-y-3"
+                  : "opacity-100 translate-y-0"
+                  }`}
               >
                 <Image
                   src="/assets/logo.svg"
@@ -83,11 +84,10 @@ const Navbar = () => {
                 />
               </div>
               <div
-                className={`absolute transition-all duration-300 ${
-                  isScrolled
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 -translate-y-3"
-                }`}
+                className={`absolute transition-all duration-300 ${isScrolled
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 -translate-y-3"
+                  }`}
               >
                 <Image
                   src="/assets/scroll-logo.svg"
@@ -99,29 +99,24 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div className="flex items-center gap-6 lg:gap-[48px]">
-            <button className="text-black text-base font-normal">
-              <Link
-                target="_blank"
-                href="https://wa.me/447394784277"
-                className="flex items-center text-black text-base font-normal"
-              >
-                {t("navbar.chat")}
-              </Link>
-            </button>
+          <div className="lg:flex hidden items-center gap-4">
+            <div className="bg-[#E3E8ED] rounded-[30px] h-[30px] min-w-[180px] max-w-[180px] overflow-hidden px-3 relative">
+              <input type="text" placeholder="Search" className="h-full max-w-[120px] overflow-hidden bg-transparent outline-none" />
+              <SearchHeader />
+            </div>
             <Link
               target="_blank"
               href="https://wa.me/447394784277"
-              className="flex items-center text-black text-base font-normal"
+              className="flex items-center text-black text-base font-normal leading-[19px]"
             >
-              <span className="mr-2">{t("navbar.needHelp")}</span>+44 735 558
+              <span className="mr-3">{t("navbar.needHelp")}</span>+44 735 558
               1510
             </Link>
           </div>
         </div>
 
         {/* Mobile Navigation */}
-        <div className="md:hidden flex items-center justify-between w-full relative px-3.5 md:px-0">
+        <div className="lg:hidden flex items-center justify-between w-full relative px-3.5 md:px-0">
           <button
             onClick={toggleMenu}
             aria-expanded={isMenuOpen}
@@ -141,11 +136,10 @@ const Navbar = () => {
             className="relative w-24 h-8 flex items-center justify-center"
           >
             <div
-              className={`absolute transition-all duration-300 ${
-                isScrolled
-                  ? "opacity-0 translate-y-3"
-                  : "opacity-100 translate-y-0"
-              }`}
+              className={`absolute transition-all duration-300 ${isScrolled
+                ? "opacity-0 translate-y-3"
+                : "opacity-100 translate-y-0"
+                }`}
             >
               <Image
                 src="/assets/logo.svg"
@@ -155,11 +149,10 @@ const Navbar = () => {
               />
             </div>
             <div
-              className={`absolute transition-all duration-300 ${
-                isScrolled
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 -translate-y-3"
-              }`}
+              className={`absolute transition-all duration-300 ${isScrolled
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 -translate-y-3"
+                }`}
             >
               <Image
                 src="/assets/scroll-logo.svg"
@@ -183,11 +176,10 @@ const Navbar = () => {
 
           {/* Mobile Menu */}
           <div
-            className={`absolute top-[38px] z-50 left-0 right-0 w-full transition-transform duration-300 shadow-header rounded-[30px] ease-in-out ${
-              isMenuOpen
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 -translate-y-10 pointer-events-none"
-            }`}
+            className={`absolute top-[38px] z-50 left-0 right-0 w-full transition-transform duration-300 shadow-header rounded-[30px] ease-in-out ${isMenuOpen
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 -translate-y-10 pointer-events-none"
+              }`}
           >
             <div className="bg-white rounded-[30px] py-7 overflow-hidden flex flex-col items-center text-center gap-4">
               <ul className="space-y-4">
