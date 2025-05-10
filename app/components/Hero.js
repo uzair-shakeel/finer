@@ -1,33 +1,25 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, memo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { scrollToHomeFormSection } from "../utils/navigation";
 
-// Skeleton component for loading state
 const SkeletonHero = () => (
   <div className="max-w-[1360px] w-full mx-auto bg-white rounded-[20px] md:rounded-[45px] h-[207px] sm:h-[444px] overflow-hidden relative">
-    {/* Background skeleton pulse animation */}
     <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
 
-    {/* Content area skeleton */}
     <div className="w-full sm:w-[500px] absolute bottom-0 sm:bg-white pb-[9px] sm:py-8 sm:pl-7 z-10">
-      {/* Title skeleton */}
       <div className="ml-[19px] sm:ml-0 h-[15px] sm:h-[40px] w-[150px] sm:w-[350px] bg-gray-300 animate-pulse rounded mb-1.5 sm:mb-6"></div>
 
-      {/* Description skeleton - desktop */}
       <div className="sm:block hidden">
         <div className="h-[18px] w-full max-w-[400px] bg-gray-300 animate-pulse rounded mb-2"></div>
         <div className="h-[18px] w-full max-w-[380px] bg-gray-300 animate-pulse rounded mb-2"></div>
         <div className="h-[18px] w-full max-w-[250px] bg-gray-300 animate-pulse rounded"></div>
       </div>
 
-      {/* Description skeleton - mobile */}
       <div className="ml-[19px] sm:ml-0 block sm:hidden w-[182px] h-[14px] bg-gray-300 animate-pulse rounded mb-1"></div>
       <div className="ml-[19px] sm:ml-0 block sm:hidden w-[160px] h-[14px] bg-gray-300 animate-pulse rounded"></div>
 
-      {/* Buttons skeleton */}
       <div className="mt-3 md:mt-[32px] flex items-center flex-wrap md:flex-nowrap justify-center sm:justify-start gap-3 sm:gap-6">
         <div className="bg-gray-300 animate-pulse w-[100px] sm:w-[120px] rounded-[60px] h-[35px] md:h-[39px]"></div>
         <div className="bg-gray-300 animate-pulse w-[100px] sm:w-[120px] rounded-[60px] h-[35px] md:h-[39px]"></div>
@@ -153,15 +145,13 @@ const Hero = () => {
         <div className="max-w-[1360px] w-full mx-auto bg-white flex items-center justify-between rounded-[20px] md:rounded-[45px] h-[207px] sm:h-[444px] relative overflow-hidden">
           <Content />
           <picture>
-            {/* Desktop image */}
             <source media="(min-width: 640px)" srcSet="/assets/hero-image-updated.svg" />
-            {/* Mobile image */}
             <img
               src="/assets/mobile-hero-image.svg"
               alt="Rolex GMT-Master II"
               className="w-full h-full min-h-full absolute inset-0 top-0 bottom-0 left-0 right-0 object-cover"
               loading="eager"
-              fetchpriority="high"
+              fetchPriority="high"
             />
           </picture>
           <LiveChatButton />
