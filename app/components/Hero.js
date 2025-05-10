@@ -1,27 +1,64 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, memo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { scrollToHomeFormSection } from "../utils/navigation";
 
-export const LiveChatButton = () => {
+// Skeleton component for loading state
+const SkeletonHero = () => (
+  <div className="max-w-[1360px] w-full mx-auto bg-white rounded-[20px] md:rounded-[45px] h-[207px] sm:h-[444px] overflow-hidden relative">
+    {/* Background skeleton pulse animation */}
+    <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
+
+    {/* Content area skeleton */}
+    <div className="w-full sm:w-[500px] absolute bottom-0 sm:bg-white pb-[9px] sm:py-8 sm:pl-7 z-10">
+      {/* Title skeleton */}
+      <div className="ml-[19px] sm:ml-0 h-[15px] sm:h-[40px] w-[150px] sm:w-[350px] bg-gray-300 animate-pulse rounded mb-1.5 sm:mb-6"></div>
+
+      {/* Description skeleton - desktop */}
+      <div className="sm:block hidden">
+        <div className="h-[18px] w-full max-w-[400px] bg-gray-300 animate-pulse rounded mb-2"></div>
+        <div className="h-[18px] w-full max-w-[380px] bg-gray-300 animate-pulse rounded mb-2"></div>
+        <div className="h-[18px] w-full max-w-[250px] bg-gray-300 animate-pulse rounded"></div>
+      </div>
+
+      {/* Description skeleton - mobile */}
+      <div className="ml-[19px] sm:ml-0 block sm:hidden w-[182px] h-[14px] bg-gray-300 animate-pulse rounded mb-1"></div>
+      <div className="ml-[19px] sm:ml-0 block sm:hidden w-[160px] h-[14px] bg-gray-300 animate-pulse rounded"></div>
+
+      {/* Buttons skeleton */}
+      <div className="mt-3 md:mt-[32px] flex items-center flex-wrap md:flex-nowrap justify-center sm:justify-start gap-3 sm:gap-6">
+        <div className="bg-gray-300 animate-pulse w-[100px] sm:w-[120px] rounded-[60px] h-[35px] md:h-[39px]"></div>
+        <div className="bg-gray-300 animate-pulse w-[100px] sm:w-[120px] rounded-[60px] h-[35px] md:h-[39px]"></div>
+        <div className="bg-gray-300 animate-pulse w-[100px] sm:w-[120px] rounded-[60px] h-[35px] md:h-[39px]"></div>
+      </div>
+    </div>
+  </div>
+);
+
+const LiveChatButton = memo(() => {
   return (
-    <button className="fixed right-6 bottom-6 md:right-8 md:bottom-8 rounded-[30px] h-[41px] md:h-[47px] w-[95px] md:w-[118px]  text-sm md:text-base font-normal md:font-medium bg-[#60FF7D] text-black z-50 animate-subtleBounce hover:animate-none transition-transform">
-      <Link href="https://wa.me/447394784277" target="_blank" >Live Chat</Link>
-    </button>
+    <Link
+      href="https://wa.me/447394784277"
+      target="_blank"
+      className="fixed right-6 bottom-6 md:right-8 md:bottom-8 rounded-[30px] h-[41px] md:h-[47px] w-[95px] md:w-[118px] text-sm md:text-base font-normal md:font-medium bg-[#60FF7D] text-black z-50 animate-subtleBounce hover:animate-none transition-transform flex items-center justify-center"
+    >
+      Live Chat
+    </Link>
   );
-};
+});
+LiveChatButton.displayName = 'LiveChatButton';
 
-export const Content = () => {
+const Content = memo(() => {
   const { t } = useTranslation();
-  const [currentLang, setCurrentLang] = useState("en");
 
-  useEffect(() => {
-    const storedLang = localStorage.getItem("selectedLanguage");
-    const langFromPath = window.location.pathname.split("/")[1];
-    const finalLang = storedLang || (langFromPath === "ru" ? "ru" : "en");
-    setCurrentLang(finalLang);
+  const handleBuyClick = useCallback(() => {
+    scrollToHomeFormSection("buy");
+  }, []);
+
+  const handleSellClick = useCallback(() => {
+    scrollToHomeFormSection("sell");
   }, []);
 
   return (
@@ -37,13 +74,13 @@ export const Content = () => {
       </p>
       <div className="mt-3 md:mt-[32px] flex items-center flex-wrap md:flex-nowrap justify-center sm:justify-start gap-3 sm:gap-6">
         <button
-          onClick={() => scrollToHomeFormSection("buy")}
+          onClick={handleBuyClick}
           className="bg-[#017EFE] w-fit px-8 sm:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#003D7B]"
         >
           {t("hero.buyBtn")}
         </button>
         <button
-          onClick={() => scrollToHomeFormSection("sell")}
+          onClick={handleSellClick}
           className="bg-[#017EFE] w-fit px-8 sm:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#003D7B]"
         >
           {t("hero.sellBtn")}
@@ -57,32 +94,81 @@ export const Content = () => {
       </div>
     </div>
   );
-};
-
+});
+Content.displayName = 'Content';
 
 const Hero = () => {
-  const { t } = useTranslation();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const preloadDesktopImage = document.createElement('link');
+    preloadDesktopImage.rel = 'preload';
+    preloadDesktopImage.as = 'image';
+    preloadDesktopImage.href = '/assets/hero-image-updated.svg';
+    document.head.appendChild(preloadDesktopImage);
+
+    const preloadMobileImage = document.createElement('link');
+    preloadMobileImage.rel = 'preload';
+    preloadMobileImage.as = 'image';
+    preloadMobileImage.href = '/assets/mobile-hero-image.svg';
+    document.head.appendChild(preloadMobileImage);
+
+    const desktopImg = document.createElement('img');
+    const mobileImg = document.createElement('img');
+    let loadedCount = 0;
+
+    const checkAllLoaded = () => {
+      loadedCount++;
+      if (loadedCount >= 2) {
+        setLoading(false);
+      }
+    };
+
+    desktopImg.onload = checkAllLoaded;
+    mobileImg.onload = checkAllLoaded;
+
+    desktopImg.src = '/assets/hero-image-updated.svg';
+    mobileImg.src = '/assets/mobile-hero-image.svg';
+
+    const timeoutId = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (document.head.contains(preloadDesktopImage)) {
+        document.head.removeChild(preloadDesktopImage);
+      }
+      if (document.head.contains(preloadMobileImage)) {
+        document.head.removeChild(preloadMobileImage);
+      }
+    };
+  }, []);
 
   return (
     <div className="px-5 mt-[74px] sm:mt-[35px]">
-      <div className="max-w-[1360px] w-full mx-auto bg-white flex items-center justify-between rounded-[20px] md:rounded-[45px] h-[207px] sm:h-[444px] relative overflow-hidden">
-        <Content />
-
-        <img
-          src="/assets/hero-image-updated.svg"
-          alt="Rolex GMT-Master II"
-          className="w-full h-full min-h-full ml-5 absolute inset-0 top-0 bottom-0 left-0 right-0 object-cover sm:block hidden"
-        />
-        <img
-          src="/assets/mobile-hero-image.svg"
-          alt="Rolex GMT-Master II"
-          className="w-full h-full min-h-full absolute inset-0 top-0 bottom-0 left-0 right-0 object-cover block sm:hidden"
-        />
-
-        <LiveChatButton />
-      </div>
+      {loading ? (
+        <SkeletonHero />
+      ) : (
+        <div className="max-w-[1360px] w-full mx-auto bg-white flex items-center justify-between rounded-[20px] md:rounded-[45px] h-[207px] sm:h-[444px] relative overflow-hidden">
+          <Content />
+          <picture>
+            {/* Desktop image */}
+            <source media="(min-width: 640px)" srcSet="/assets/hero-image-updated.svg" />
+            {/* Mobile image */}
+            <img
+              src="/assets/mobile-hero-image.svg"
+              alt="Rolex GMT-Master II"
+              className="w-full h-full min-h-full absolute inset-0 top-0 bottom-0 left-0 right-0 object-cover"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </picture>
+          <LiveChatButton />
+        </div>
+      )}
     </div>
   );
 };
 
-export default Hero;
+export default memo(Hero);
