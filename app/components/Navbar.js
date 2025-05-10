@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { usePathname } from "next/navigation";
 import SearchHeader from "../SvgIcons/SearchHeader";
+import MobileHeaderSearch from "../SvgIcons/MobileHeaderSearch";
 
 const Navbar = () => {
   const { t } = useTranslation();
@@ -164,14 +165,7 @@ const Navbar = () => {
           </Link>
 
           <button>
-            <Link href="https://wa.me/447394784277" target="_blank">
-              <Image
-                src="/assets/chat-icon.svg"
-                alt="chat"
-                width={26}
-                height={26}
-              />
-            </Link>
+            <MobileHeaderSearch />
           </button>
 
           {/* Mobile Menu */}
