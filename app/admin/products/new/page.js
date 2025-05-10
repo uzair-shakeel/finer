@@ -1161,7 +1161,7 @@ export default function AddProduct() {
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  Enter a price value or "Discontinued" if not available
+                  Enter a price value or &quot;Discontinued&quot; if not available
                 </p>
               </div>
 

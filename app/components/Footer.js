@@ -63,20 +63,20 @@ const Footer = () => {
         </div>
         <div className="relative max-w-[1120px] w-full mx-auto h-full">
           {/* Background for desktop */}
-          <div
+          {/* <div
             className="hidden lg:block absolute inset-0 z-10 w-full h-full bg-no-repeat bottom-0 -ml-5"
             style={{ backgroundImage: "url('/assets/footer-bg.svg')" }}
-          />
+          /> */}
           {/* Background for mobile */}
-          <div
+          {/* <div
             className="lg:hidden absolute inset-0 z-10 w-full h-full bg-no-repeat bg-cover"
             style={{ backgroundImage: "url('/assets/footer-bg-mobile.svg')" }}
-          />
+          /> */}
           <div className="px-5 w-full relative top-0 z-50 left-0 h-full flex flex-col items-center">
             <h2 className="text-[#000000] max-w-[603px] text-[32px] md:text-[40px] leading-[95%] font-semibold text-center">
               {safeT("footer.headline")}
             </h2>
-            <div className="mt-12 lg:mt-[83px] w-full max-w-[1100px] mx-auto gap-8 grid grid-cols-1 sm:grid-cols-2 lg:flex items-start justify-between">
+            <div className="my-12 lg:mt-[83px] w-full max-w-[1100px] mx-auto gap-8 grid grid-cols-1 sm:grid-cols-2 lg:flex items-start justify-between">
               <ul className="lg:w-[240px]">
                 <li className="text-black text-[18px] md:text-[24px] font-semibold mb-3 lg:mb-6 !leading-[29px]">
                   {t("footer.contacts.title")}
@@ -96,18 +96,12 @@ const Footer = () => {
                 <li className="text-black text-[18px] md:text-[24px] font-semibold mb-3 lg:mb-6 !leading-[29px]">
                   {t("footer.services.title")}
                 </li>
-                <li
+                {/* <li
                   className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
                   onClick={() => scrollToHomeFormSection("sell")}
                 >
                   {t("footer.services.sell")}
-                </li>
-                <li
-                  className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
-                  onClick={() => scrollToHomeFormSection("buy")}
-                >
-                  {t("footer.services.buy")}
-                </li>
+                </li> */}
 
                 <li
                   className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
@@ -117,15 +111,21 @@ const Footer = () => {
                 </li>
                 <li
                   className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
+                  onClick={() => scrollToHomeFormSection("authenticate")}
+                >
+                  {t("footer.services.authenticate")}
+                </li>
+                <li
+                  className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
                   onClick={() => scrollToHomeFormSection("source")}
                 >
                   {t("footer.services.source")}
                 </li>
                 <li
                   className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
-                  onClick={() => scrollToHomeFormSection("authenticate")}
+                  onClick={() => scrollToHomeFormSection("buy")}
                 >
-                  {t("footer.services.authenticate")}
+                  {t("footer.services.buy")}
                 </li>
               </ul>
 
@@ -138,6 +138,9 @@ const Footer = () => {
                 </li>
                 <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors">
                   <Link href="/privacy-policy">Privacy policy</Link>
+                </li>
+                <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px]">
+                  Copyright © 2025
                 </li>
               </ul>
 
@@ -200,18 +203,21 @@ const Footer = () => {
                   <Link href="https://wa.me/447394784277" target="_blank">
                     <Whatsapp />
                   </Link>
+                  <Link href="/" target="_blank">
+                  <Telegram/>
+                  </Link>
                   {/* <Link href="/">
                     <Telegram />
                   </Link> */}
                 </div>
               </div>
             </div>
-            <h2 className="lg:pb-11 mt-12 lg:mt-[95px] text-center text-[#000000] text-[14px] md:text-[18px] font-normal">
+            {/* <h2 className="lg:pb-11 mt-12 lg:mt-[95px] text-center text-[#000000] text-[14px] md:text-[18px] font-normal">
               {safeT("footer.rights")}
             </h2>
             <h2 className="pb-6 pt-[15px] md:pb-11 text-center text-[#000000] text-[14px] font-normal lg:hidden block">
               {safeT("footer.designBy")}
-            </h2>
+            </h2> */}
           </div>
         </div>
       </div>
