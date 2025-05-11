@@ -3,11 +3,9 @@
 import React from "react";
 
 const Description = ({ product }) => {
-  // Format the description to display paragraphs if needed
   const formatDescription = (description) => {
     if (!description) return "No description available";
 
-    // Split by newlines or double spaces to create paragraphs
     return description.split(/\n{2,}|\s{2,}/).map((paragraph, index) => (
       <p
         key={index}
