@@ -147,7 +147,7 @@ const WithUsYouCan = () => {
               <h2 className="text-black text-[18px] sm:text-[24px] font-semibold !leading-[29px] mb-3 sm:mb-[18px]">
                 {t("withUsYouCan.authenticate.title")}
               </h2>
-              <p className="text-black text-[14px] sm:text-[16px] font-normal !leading-[120%] mb-[15px]">
+              <p className="max-w-[300px] lg:w-fit text-black text-[14px] sm:text-[16px] font-normal !leading-[120%] mb-[15px]">
                 {t("withUsYouCan.authenticate.description")}
               </p>
             </div>

@@ -73,27 +73,27 @@ const Footer = () => {
             style={{ backgroundImage: "url('/assets/footer-bg-mobile.svg')" }}
           /> */}
           <div className="px-5 w-full relative top-0 z-50 left-0 h-full flex flex-col items-center">
-            <h2 className="text-[#000000] max-w-[603px] text-[32px] md:text-[40px] leading-[95%] font-semibold text-center">
+            <h2 className="text-[#000000] px-2 sm:px-0 max-w-[545px] text-[24px] md:text-[36px] leading-[95%] font-semibold text-center">
               {safeT("footer.headline")}
             </h2>
-            <div className="my-12 lg:mt-[83px] w-full max-w-[1100px] mx-auto gap-8 grid grid-cols-1 sm:grid-cols-2 lg:flex items-start justify-between">
+            <div className="mb-12 mt-[32px] md:mt-[48px] w-full max-w-[1100px] mx-auto gap-8 grid grid-cols-1 sm:grid-cols-2 lg:flex items-start justify-between">
               <ul className="lg:w-[240px]">
-                <li className="text-black text-[18px] md:text-[24px] font-semibold mb-3 lg:mb-6 !leading-[29px]">
+                <li className="text-black text-[18px] md:text-[24px] font-semibold mb-3 lg:mb-6 leading-[22px] sm:leading-[29px]">
                   {t("footer.contacts.title")}
                 </li>
-                <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px]">
+                <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] leading-[17px] sm:leading-[22px]">
                   Hatton Garden, London
                 </li>
-                <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px]">
+                <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] leading-[17px] sm:leading-[22px]">
                   <a href="mailto:info@finerlux.com">info@finerlux.com</a>
                 </li>
-                <li className="text-black text-[14px] md:text-[18px] font-normal !leading-[22px]">
+                <li className="text-black text-[14px] md:text-[18px] font-normal leading-[17px] sm:leading-[22px]">
                   <a href="tel:++447355581510">+44 735 558 1510</a>
                 </li>
               </ul>
 
               <ul className="lg:w-[140px]">
-                <li className="text-black text-[18px] md:text-[24px] font-semibold mb-3 lg:mb-6 !leading-[29px]">
+                <li className="text-black text-[18px] md:text-[24px] font-semibold mb-3 lg:mb-6 leading-[22px] sm:leading-[29px]">
                   {t("footer.services.title")}
                 </li>
                 {/* <li
@@ -104,25 +104,25 @@ const Footer = () => {
                 </li> */}
 
                 <li
-                  className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
+                  className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] leading-[17px] sm:leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
                   onClick={() => scrollToHomeFormSection("part-exchange")}
                 >
                   {t("footer.services.partExchange")}
                 </li>
                 <li
-                  className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
+                  className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] leading-[17px] sm:leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
                   onClick={() => scrollToHomeFormSection("authenticate")}
                 >
                   {t("footer.services.authenticate")}
                 </li>
                 <li
-                  className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
+                  className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] leading-[17px] sm:leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
                   onClick={() => scrollToHomeFormSection("source")}
                 >
                   {t("footer.services.source")}
                 </li>
                 <li
-                  className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
+                  className="text-black text-[14px] md:text-[18px] font-normal leading-[17px] sm:leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors"
                   onClick={() => scrollToHomeFormSection("buy")}
                 >
                   {t("footer.services.buy")}
@@ -130,16 +130,16 @@ const Footer = () => {
               </ul>
 
               <ul className="lg:w-[240px]">
-                <li className="text-black text-[18px] md:text-[24px] font-semibold mb-3 lg:mb-6 !leading-[29px]">
+                <li className="text-black text-[18px] md:text-[24px] font-semibold mb-3 lg:mb-6 leading-[22px] sm:leading-[29px]">
                   {t("footer.privacy.title")}
                 </li>
-                <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors">
+                <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] leading-[17px] sm:leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors">
                   <Link href="/terms-condition">Terms & Conditions</Link>
                 </li>
-                <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors">
+                <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] leading-[17px] sm:leading-[22px] cursor-pointer hover:text-[#017EFE] transition-colors">
                   <Link href="/privacy-policy">Privacy policy</Link>
                 </li>
-                <li className="text-black text-[14px] md:text-[18px] font-normal mb-[12px] lg:mb-[18px] !leading-[22px]">
+                <li className="text-black text-[14px] md:text-[18px] font-normal leading-[17px] sm:leading-[22px]">
                   Copyright © 2025
                 </li>
               </ul>
@@ -193,7 +193,7 @@ const Footer = () => {
                   </div>
                 )}
 
-                <div className="mt-6 flex items-center gap-4 md:gap-[30px]">
+                <div className="mt-8 sm:mt-6 flex items-center gap-4 md:gap-[30px]">
                   <Link
                     href="https://www.instagram.com/finerlux.co"
                     target="_blank"
@@ -203,9 +203,9 @@ const Footer = () => {
                   <Link href="https://wa.me/447394784277" target="_blank">
                     <Whatsapp />
                   </Link>
-                  <Link href="/" target="_blank">
+                  {/* <Link href="/" target="_blank">
                   <Telegram/>
-                  </Link>
+                  </Link> */}
                   {/* <Link href="/">
                     <Telegram />
                   </Link> */}

@@ -65,7 +65,6 @@ const ImageUploader = ({ onImagesChange, disabled }) => {
     toast.success("File removed successfully");
   };
 
-  // Handler for clicking on the main container div
   const handleContainerClick = () => {
     if (!disabled) {
       fileInputRef.current.click();
@@ -74,11 +73,11 @@ const ImageUploader = ({ onImagesChange, disabled }) => {
 
   return (
     <div>
-      <label className="block text-[14px] font-normal text-black mb-2 md:mb-3">
+      <label className="block text-[14px] sm:text-[16px] font-normal text-black mb-2 md:mb-3">
         {t("form.uploadFileTitle")}
       </label>
       <div
-        className={`h-[200px] md:min-h-[191px] group rounded-[20px] md:rounded-[30px] p-3 md:p-4 flex flex-col items-start justify-start bg-[#E3E8ED] cursor-pointer `}
+        className={`h-[165px] md:min-h-[191px] group rounded-[20px] md:rounded-[30px] p-3 md:p-4 flex flex-col items-start justify-start bg-[#E3E8ED] cursor-pointer `}
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
         onClick={handleContainerClick}
@@ -111,12 +110,12 @@ const ImageUploader = ({ onImagesChange, disabled }) => {
                 className="hidden group-hover:block"
               />
             </div>
-            <p className="text-[#828282] text-sm md:text-base font-normal mt-2 text-center">
+            <p className="text-[#828282] ml-2 text-[14px] md:text-[16px] font-normal mt-2 sm:mt-4 text-center">
               {t("form.dragAndDrop")}
             </p>
-            <p className="text-[#828282] text-xs font-normal mt-1 text-center">
+            {/* <p className="text-[#828282] text-xs font-normal mt-1 text-center">
               {t("form.supportsImages")}
-            </p>
+            </p> */}
           </div>
         ) : (
           <div
@@ -148,7 +147,7 @@ const ImageUploader = ({ onImagesChange, disabled }) => {
                 {(hoveredIndex === index || window.innerWidth < 768) && (
                   <button
                     onClick={(e) => {
-                      e.stopPropagation(); // Prevent container click when removing
+                      e.stopPropagation(); 
                       handleRemove(index);
                     }}
                     className="absolute !z-50 -top-2 -right-2 w-6 h-6 group"
@@ -192,7 +191,7 @@ const ImageUploader = ({ onImagesChange, disabled }) => {
             <label
               htmlFor="file-upload"
               className="h-16 w-16 md:w-20 md:h-20 overflow-visible flex items-center justify-center bg-white border border-[#828282] hover:border-[#017EFE] rounded-[14px] cursor-pointer group"
-              onClick={(e) => e.stopPropagation()} // Prevent container click when clicking the + button
+              onClick={(e) => e.stopPropagation()}  
             >
               <svg
                 className="text-[#828282] group-hover:text-[#017EFE]"

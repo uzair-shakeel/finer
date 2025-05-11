@@ -139,7 +139,7 @@ const Hero = () => {
             </div>
           </div>
           <picture>
-            <source media="(min-width: 640px)" srcSet="/assets/hero-image-updated.svg" />
+            <source media="(min-width: 800px)" srcSet="/assets/hero-image-updated.svg" />
             <img
               src="/assets/mobile-hero-image.svg"
               alt="Rolex GMT-Master II"

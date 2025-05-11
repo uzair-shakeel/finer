@@ -72,8 +72,8 @@
      "form": {
           "submit": "Submit",
           "submitting": "Submitting...",
-          "uploadFileTitle": " Upload photos and videos of item",
-          "dragAndDrop": "Drag and drop files here or click to upload",
+          "uploadFileTitle": "Upload photos of item",
+          "dragAndDrop": "Drag an image here",
           "supportsImages": "Supports images and videos (GIFs not allowed)",
           "mandatoryField": "It is mandatory field",
           "nameContainNumbers": "Name cannot contain numbers",
