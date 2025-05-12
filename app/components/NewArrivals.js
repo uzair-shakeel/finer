@@ -35,7 +35,7 @@ const ProductCardSkeleton = memo(() => (
     </div>
   </div>
 ));
-ProductCardSkeleton.displayName = 'ProductCardSkeleton';
+ProductCardSkeleton.displayName = "ProductCardSkeleton";
 
 // Main grid loading skeleton
 const ProductsGridSkeleton = memo(() => (
@@ -45,17 +45,14 @@ const ProductsGridSkeleton = memo(() => (
     ))}
   </div>
 ));
-ProductsGridSkeleton.displayName = 'ProductsGridSkeleton';
+ProductsGridSkeleton.displayName = "ProductsGridSkeleton";
 
 // Memoized product card component
 const ProductCard = memo(({ product, formatPrice, t }) => {
   const isSoldOut = product.status === "sold_out";
 
   return (
-    <Link
-      href={`/single-product/${product._id}`}
-      className="block"
-    >
+    <Link href={`/single-product/${product._id}`} className="block">
       <div className="bg-white rounded-[24px] sm:rounded-[30px] p-[12px] sm:p-[18px] w-full transition-shadow duration-300">
         <div className="w-full h-[168px] sm:h-[248px] overflow-hidden rounded-[20px] relative flex items-center justify-center group">
           <Image
@@ -98,9 +95,9 @@ const ProductCard = memo(({ product, formatPrice, t }) => {
             <h3 className="flex items-center gap-2 text-black text-[10px] sm:text-[14px] sm:!leading-[10px] !leading-[7px]">
               {t("newArrivals.box")}{" "}
               {product.condition &&
-                (typeof product.condition === "object"
-                  ? product.condition.hasBox
-                  : product.condition.includes("Box")) ? (
+              (typeof product.condition === "object"
+                ? product.condition.hasBox
+                : product.condition.includes("Box")) ? (
                 <Right />
               ) : (
                 <Cross />
@@ -109,9 +106,9 @@ const ProductCard = memo(({ product, formatPrice, t }) => {
             <h3 className="flex items-center gap-2 text-black text-[10px] sm:text-[14px] sm:!leading-[10px] !leading-[7px]">
               {t("newArrivals.papers")}{" "}
               {product.condition &&
-                (typeof product.condition === "object"
-                  ? product.condition.hasPapers
-                  : product.condition.includes("Papers")) ? (
+              (typeof product.condition === "object"
+                ? product.condition.hasPapers
+                : product.condition.includes("Papers")) ? (
                 <Right />
               ) : (
                 <Cross />
@@ -128,10 +125,9 @@ const ProductCard = memo(({ product, formatPrice, t }) => {
           ) : (
             <>
               <h3
-                className={`text-[16px] sm:text-[24px] sm:!leading-[29px] !leading-[19px] font-semibold ${product.discountedPrice > 0
-                    ? "text-[#017EFE]"
-                    : "text-black"
-                  }`}
+                className={`text-[16px] sm:text-[24px] sm:!leading-[29px] !leading-[19px] font-semibold ${
+                  product.discountedPrice > 0 ? "text-[#017EFE]" : "text-black"
+                }`}
               >
                 {formatPrice(
                   product.discountedPrice > 0
@@ -151,7 +147,7 @@ const ProductCard = memo(({ product, formatPrice, t }) => {
     </Link>
   );
 });
-ProductCard.displayName = 'ProductCard';
+ProductCard.displayName = "ProductCard";
 
 const NewArrivals = () => {
   const { t } = useTranslation();
@@ -182,8 +178,8 @@ const NewArrivals = () => {
         const response = await fetch("/api/products?featured=true", {
           signal,
           headers: {
-            'Cache-Control': 'no-store'
-          }
+            "Cache-Control": "no-store",
+          },
         });
 
         if (!response.ok) {
@@ -194,7 +190,7 @@ const NewArrivals = () => {
         setProducts(data.products);
         setLoading(false);
       } catch (error) {
-        if (error.name !== 'AbortError') {
+        if (error.name !== "AbortError") {
           console.error("Fetch products error:", error);
           setError("Failed to load products");
           setLoading(false);
@@ -218,9 +214,7 @@ const NewArrivals = () => {
 
         {loading && <ProductsGridSkeleton />}
 
-        {error && (
-          <div className="text-center text-red-500 py-4">{error}</div>
-        )}
+        {error && <div className="text-center text-red-500 py-4">{error}</div>}
 
         {!loading && !error && products.length === 0 && (
           <div className="text-center py-4">No products available</div>
