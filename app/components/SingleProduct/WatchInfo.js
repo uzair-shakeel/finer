@@ -276,8 +276,7 @@ const WatchInfo = ({ product }) => {
         <div className="my-[12px] sm:mt-[12px] text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
           <div>
             RRP:{" "}
-            {product.originalPrice === "Discontinued" ||
-            product.originalPrice === "discontinued"
+            {isNaN(product.originalPrice) || product.originalPrice === 0
               ? "Discontinued"
               : formatPrice(product.originalPrice)}
           </div>
