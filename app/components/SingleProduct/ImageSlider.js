@@ -6,6 +6,8 @@ export default function ImageSlider({ images, coverImage }) {
   const [displayedImage, setDisplayedImage] = useState(coverImage);
   const [selectedThumbnail, setSelectedThumbnail] = useState(-1);
   const [imageError, setImageError] = useState(false);
+  const [showMagnifier, setShowMagnifier] = useState(false);
+  const [magnifierPosition, setMagnifierPosition] = useState({ x: 0, y: 0 });
 
   // Reset the display when images array changes
   useEffect(() => {
@@ -78,6 +80,25 @@ export default function ImageSlider({ images, coverImage }) {
     setImageError(true);
   };
 
+  const handleMouseEnter = () => {
+    setShowMagnifier(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowMagnifier(false);
+  };
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setMagnifierPosition({
+      x: Math.max(100, Math.min(x, rect.width - 100)),
+      y: Math.max(100, Math.min(y, rect.height - 100)),
+    });
+  };
+
   return (
     <div className="w-full relative">
       {/* Main image container */}
@@ -117,7 +138,13 @@ export default function ImageSlider({ images, coverImage }) {
               <p className="text-xs mt-2">{displayedImage}</p>
             </div>
           ) : (
-            <div className="relative w-full h-full transition-all duration-500 ease-in-out">
+            <div
+              className="relative w-full h-full"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              onMouseMove={handleMouseMove}
+              style={{ cursor: "none" }}
+            >
               <Image
                 src={displayedImage || "/placeholder.svg"}
                 alt="Product image"
@@ -125,10 +152,40 @@ export default function ImageSlider({ images, coverImage }) {
                 height={2000}
                 className="rounded-[20px] w-full h-full"
                 draggable="false"
-                style={{ objectFit: "cover" }}
+                style={{ objectFit: "cover", cursor: "none" }}
                 priority
                 onError={handleImageError}
               />
+              {showMagnifier && (
+                <div
+                  className="absolute pointer-events-none rounded-lg shadow-lg border border-gray-200 bg-white overflow-hidden"
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    left: magnifierPosition.x - 100,
+                    top: magnifierPosition.y - 100,
+                    zIndex: 2,
+                    cursor: "none",
+                  }}
+                >
+                  <Image
+                    src={displayedImage || "/placeholder.svg"}
+                    alt="Zoomed product image"
+                    width={2000}
+                    height={2000}
+                    className="rounded-lg"
+                    style={{
+                      objectFit: "none",
+                      width: "800px",
+                      height: "800px",
+                      objectPosition: `${-4 * (magnifierPosition.x - 100)}px ${
+                        -4 * (magnifierPosition.y - 100)
+                      }px`,
+                      cursor: "none",
+                    }}
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
