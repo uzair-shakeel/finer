@@ -1181,6 +1181,28 @@ export default function EditProduct({ params }) {
                     : "Enter a percentage discount to automatically calculate discounted price"}
                 </p>
               </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="showRRP"
+                  name="rrpStatus"
+                  checked={formData.rrpStatus !== "Hidden"}
+                  onChange={(e) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      rrpStatus: e.target.checked ? "Regular" : "Hidden",
+                    }));
+                  }}
+                  className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                />
+                <label
+                  htmlFor="showRRP"
+                  className="ml-2 block text-sm font-medium text-gray-700"
+                >
+                  Display RRP on product page
+                </label>
+              </div>
             </div>
 
             {/* Specifications */}

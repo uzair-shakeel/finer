@@ -273,16 +273,18 @@ const WatchInfo = ({ product }) => {
             </div>
           </>
         )}
-        <div className="my-[12px] sm:mt-[12px] text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
-          <div>
-            RRP:{" "}
-            {isNaN(product.originalPrice) || product.originalPrice === 0
-              ? "Discontinued"
-              : formatPrice(product.originalPrice)}
+        {product.rrpStatus !== "Hidden" && (
+          <div className="mt-[12px]  text-[#828282] text-[14px] sm:text-[16px] font-normal leading-[10px] sm:leading-[12px]">
+            <div>
+              RRP:{" "}
+              {isNaN(product.originalPrice) || product.originalPrice === 0
+                ? "Discontinued"
+                : formatPrice(product.originalPrice)}
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="flex   gap-2 ">
+        <div className="flex  mt-[12px]  gap-2 ">
           <div className="flex flex-col md:flex-row  md:items-center items-start gap-2">
             {isSoldOut ? (
               <div></div>
