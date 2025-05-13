@@ -132,7 +132,7 @@ const SingleProduct = ({ product }) => {
                 </h2>
               </div>
               <div className="flex items-center gap-2">
-                <Coins className="min-w-[24px] h-[24]"/>
+                <Coins className="sm:min-w-6 min-w-5 h-5 sm:h-6 sm:max-w-6 max-w-5"/>
                 <h2 className="text-[14px] sm:text-[16px] font-normal leading-[17px] sm:leading-[19px] text-black">
                   <span className="font-semibold">A deposit for 2%</span> of the
                   watch price is required{" "}
