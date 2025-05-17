@@ -53,19 +53,40 @@ const Products = () => {
           { label: "Large(>39mm)", sizes: [40, 41, 42, 43, 44, 45] },
      ];
 
+     const strapOptions = [
+          { label: "Bracelet", value: "bracelet" },
+          { label: "Leather", value: "leather" },
+          { label: "Fabric", value: "fabric" },
+          { label: "Rubber", value: "rubber" },
+     ];
+
+     const boxPapersOptions = [
+          { label: "Yes", value: "yes" },
+          { label: "No", value: "no" },
+     ];
+
+     const materialOptions = [
+          { label: "Stainless Steel", value: "Stainless Steel" },
+          { label: "Yellow Gold", value: "Yellow Gold" },
+          { label: "Rose Gold ", value: "Rose Gold " },
+          { label: "Pink Gold", value: "Pink Gold" },
+          { label: "White Gold", value: "White Gold" },
+     ];
+
+     const yearOptions = [{ label: "1900 - 2025", value: { min: 1900, max: 2025 } }];
+
      const [selectedBrands, setSelectedBrands] = useState([]);
      const [selectedPrice, setSelectedPrice] = useState([]);
      const [selectedColor, setSelectedColor] = useState([]);
      const [selectedSizes, setSelectedSizes] = useState([]);
+     const [selectedStraps, setSelectedStraps] = useState([]);
+     const [selectedBoxPapers, setSelectedBoxPapers] = useState([]);
+     const [selectedMaterials, setSelectedMaterials] = useState([]);
+     const [selectedYears, setSelectedYears] = useState([]);
 
      const handleBrandSelect = (options) => {
           setSelectedBrands(options);
           console.log("Selected Brands:", options.map((opt) => opt.label));
-     };
-
-     const handleColorSelect = (options) => {
-          setSelectedColor(options);
-          console.log("Selected Color:", options.map((opt) => opt.label));
      };
 
      const handlePriceSelect = (options) => {
@@ -73,9 +94,54 @@ const Products = () => {
           console.log("Selected Price Range:", options.map((opt) => opt.value));
      };
 
+     const handleColorSelect = (options) => {
+          setSelectedColor(options);
+          console.log("Selected Color:", options.map((opt) => opt.label));
+     };
+
      const handleSizeSelect = (options) => {
           setSelectedSizes(options);
           console.log("Selected Sizes:", options.map((opt) => opt.value));
+     };
+
+     const handleStrapSelect = (options) => {
+          setSelectedStraps(options);
+          console.log("Selected Straps:", options.map((opt) => opt.label));
+     };
+
+     const handleBoxPapersSelect = (options) => {
+          setSelectedBoxPapers(options);
+          console.log("Selected Box and Papers:", options.map((opt) => opt.label));
+     };
+
+     const handleMaterialSelect = (options) => {
+          setSelectedMaterials(options);
+          console.log("Selected Materials:", options.map((opt) => opt.label));
+     };
+
+     const handleYearSelect = (options) => {
+          setSelectedYears(options);
+          console.log("Selected Years:", options.map((opt) => opt.value));
+     };
+
+     const handleRemoveOption = (filterType, option) => {
+          if (filterType === "brands") {
+               setSelectedBrands(selectedBrands.filter((opt) => opt.value !== option.value));
+          } else if (filterType === "price") {
+               setSelectedPrice(selectedPrice.filter((opt) => opt.value !== option.value));
+          } else if (filterType === "color") {
+               setSelectedColor(selectedColor.filter((opt) => opt.value !== option.value));
+          } else if (filterType === "size") {
+               setSelectedSizes(selectedSizes.filter((opt) => opt.value !== option.value));
+          } else if (filterType === "strap") {
+               setSelectedStraps(selectedStraps.filter((opt) => opt.value !== option.value));
+          } else if (filterType === "boxpapers") {
+               setSelectedBoxPapers(selectedBoxPapers.filter((opt) => opt.value !== option.value));
+          } else if (filterType === "material") {
+               setSelectedMaterials(selectedMaterials.filter((opt) => opt.value !== option.value));
+          } else if (filterType === "year") {
+               setSelectedYears(selectedYears.filter((opt) => opt.value !== option.value));
+          }
      };
 
      const handleResetFilters = () => {
@@ -83,6 +149,10 @@ const Products = () => {
           setSelectedPrice([]);
           setSelectedColor([]);
           setSelectedSizes([]);
+          setSelectedStraps([]);
+          setSelectedBoxPapers([]);
+          setSelectedMaterials([]);
+          setSelectedYears([]);
      };
 
      const allSelectedOptions = [
@@ -90,6 +160,10 @@ const Products = () => {
           ...selectedPrice.map((opt) => ({ ...opt, filterType: "price" })),
           ...selectedColor.map((opt) => ({ ...opt, filterType: "color" })),
           ...selectedSizes.map((opt) => ({ ...opt, filterType: "size" })),
+          ...selectedStraps.map((opt) => ({ ...opt, filterType: "strap" })),
+          ...selectedBoxPapers.map((opt) => ({ ...opt, filterType: "boxpapers" })),
+          ...selectedMaterials.map((opt) => ({ ...opt, filterType: "material" })),
+          ...selectedYears.map((opt) => ({ ...opt, filterType: "year" })),
      ];
 
      const { t } = useTranslation();
@@ -199,18 +273,32 @@ const Products = () => {
                     {showMoreFilters && (
                          <>
                               <Filters
-                                   label="Brands"
-                                   type="list"
-                                   options={brandOptions}
-                                   selectedOptions={selectedBrands}
-                                   onSelect={handleBrandSelect}
+                                   label="Strap"
+                                   type="strap"
+                                   options={strapOptions}
+                                   selectedOptions={selectedStraps}
+                                   onSelect={handleStrapSelect}
                               />
                               <Filters
-                                   label="Brands"
-                                   type="list"
-                                   options={brandOptions}
-                                   selectedOptions={selectedBrands}
-                                   onSelect={handleBrandSelect}
+                                   label="Box and Papers"
+                                   type="boxpapers"
+                                   options={boxPapersOptions}
+                                   selectedOptions={selectedBoxPapers}
+                                   onSelect={handleBoxPapersSelect}
+                              />
+                              <Filters
+                                   label="Case Material"
+                                   type="material"
+                                   options={materialOptions}
+                                   selectedOptions={selectedMaterials}
+                                   onSelect={handleMaterialSelect}
+                              />
+                              <Filters
+                                   label="Year"
+                                   type="year"
+                                   options={yearOptions}
+                                   selectedOptions={selectedYears}
+                                   onSelect={handleYearSelect}
                               />
                          </>
                     )}
@@ -228,14 +316,25 @@ const Products = () => {
                {/* Selected Options Tags */}
                {allSelectedOptions.length > 0 && (
                     <div className="flex flex-wrap gap-3 items-center justify-center max-w-[876px] mx-auto">
-                         <button onClick={handleResetFilters} className="border border-[#828282] w-[166px] h-[31px] rounded-[100px] flex items-center justify-center gap-2 text-[#828282] text-[16px] leading-[19px] font-normal">
+                         <button
+                              onClick={handleResetFilters}
+                              className="border border-[#828282] w-[166px] h-[31px] rounded-[100px] flex items-center justify-center gap-2 text-[#828282] text-[16px] leading-[19px] font-normal"
+                         >
                               <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                   <path d="M5.54167 10.2917L2.375 7.12504M2.375 7.12504L5.54167 3.95837M2.375 7.12504H12.6667C14.8528 7.12504 16.625 8.89725 16.625 11.0834C16.625 13.2695 14.8528 15.0417 12.6667 15.0417H8.70833" stroke="#828282" stroke-linecap="round" stroke-linejoin="round" />
+                                   <path
+                                        d="M5.54167 10.2917L2.375 7.12504M2.375 7.12504L5.54167 3.95837M2.375 7.12504H12.6667C14.8528 7.12504 16.625 8.89725 16.625 11.0834C16.625 13.2695 14.8528 15.0417 12.6667 15.0417H8.70833"
+                                        stroke="#828282"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                   />
                               </svg>
                               Reset filters
                          </button>
                          {allSelectedOptions.map((option, index) => (
-                              <div key={index} className="flex items-center justify-center px-6 bg-white rounded-[100px] h-[31px] text-base leading-[19px] font-normal">
+                              <div
+                                   key={index}
+                                   className="flex items-center justify-center px-6 bg-white rounded-[100px] h-[31px] text-base leading-[19px] font-normal"
+                              >
                                    <span>{option.label.toUpperCase()}</span>
                               </div>
                          ))}
@@ -254,12 +353,7 @@ const Products = () => {
                     {/* Product Grid Div */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
                          {currentItems.map((product) => (
-                              <ProductCard
-                                   key={product._id}
-                                   product={product}
-                                   formatPrice={formatPrice}
-                                   t={t}
-                              />
+                              <ProductCard key={product._id} product={product} formatPrice={formatPrice} t={t} />
                          ))}
                     </div>
 

@@ -11,7 +11,7 @@ const Filters = ({ label, type = "list", options, selectedOptions, onSelect }) =
      const handleToggle = () => setIsOpen(!isOpen);
 
      const handleOptionClick = (option, keepOpen = false) => {
-          if (type === "size" || type === "list") {
+          if (type === "size" || type === "list" || type === "strap" || type === "material") {
                const isSelected = selectedOptions.some((opt) => opt.value === option.value);
                let updatedOptions;
                if (isSelected) {
@@ -20,7 +20,7 @@ const Filters = ({ label, type = "list", options, selectedOptions, onSelect }) =
                     updatedOptions = [...selectedOptions, option];
                }
                if (onSelect) onSelect(updatedOptions);
-          } else if (type === "range" || type === "color") {
+          } else if (type === "range" || type === "color" || type === "boxpapers" || type === "year") {
                const updatedOptions = [option];
                if (onSelect) onSelect(updatedOptions);
                if (!keepOpen) setIsOpen(false);
@@ -38,23 +38,32 @@ const Filters = ({ label, type = "list", options, selectedOptions, onSelect }) =
           return () => document.removeEventListener("mousedown", handleClickOutside);
      }, []);
 
-     const handleSliderChange = (value) => {
+     const handleSliderChange = (value, isYear = false) => {
           const [min, max] = value;
-          const option = { label: `${min}£ - ${max}£`, value: { min, max } };
+          const option = isYear
+               ? { label: `${min} - ${max}`, value: { min, max } }
+               : { label: `${min}£ - ${max}£`, value: { min, max } };
           handleOptionClick(option, true);
      };
 
-     const handleMinChange = (e) => {
-          const min = Math.min(parseInt(e.target.value) || 0, selectedOptions[0]?.value?.max || 15350);
-          const max = selectedOptions[0]?.value?.max || 15350;
-          const option = { label: `${min}£ - ${max}£`, value: { min, max } };
+     const handleMinChange = (e, isYear = false) => {
+          const maxValue = isYear ? 2025 : 15350;
+          const min = Math.min(parseInt(e.target.value) || 0, selectedOptions[0]?.value?.max || maxValue);
+          const max = selectedOptions[0]?.value?.max || maxValue;
+          const option = isYear
+               ? { label: `${min} - ${max}`, value: { min, max } }
+               : { label: `${min}£ - ${max}£`, value: { min, max } };
           handleOptionClick(option, true);
      };
 
-     const handleMaxChange = (e) => {
-          const max = Math.max(parseInt(e.target.value) || 15350, selectedOptions[0]?.value?.min || 0);
-          const min = selectedOptions[0]?.value?.min || 0;
-          const option = { label: `${min}£ - ${max}£`, value: { min, max } };
+     const handleMaxChange = (e, isYear = false) => {
+          const maxValue = isYear ? 2025 : 15350;
+          const minValue = isYear ? 1900 : 0;
+          const max = Math.max(parseInt(e.target.value) || maxValue, selectedOptions[0]?.value?.min || minValue);
+          const min = selectedOptions[0]?.value?.min || minValue;
+          const option = isYear
+               ? { label: `${min} - ${max}`, value: { min, max } }
+               : { label: `${min}£ - ${max}£`, value: { min, max } };
           handleOptionClick(option, true);
      };
 
@@ -70,8 +79,8 @@ const Filters = ({ label, type = "list", options, selectedOptions, onSelect }) =
                                              key={index}
                                              onClick={() => handleOptionClick(option)}
                                              className={`flex items-center gap-2 border rounded-[100px] min-h-[31px] px-6 ${selectedOptions.some((opt) => opt.value === option.value)
-                                                       ? "bg-blue-500 text-white border-blue-500"
-                                                       : "border-black text-black"
+                                                  ? "bg-blue-500 text-white border-blue-500"
+                                                  : "border-black text-black"
                                                   }`}
                                         >
                                              <div
@@ -100,7 +109,7 @@ const Filters = ({ label, type = "list", options, selectedOptions, onSelect }) =
                                         max={15350}
                                         step={50}
                                         value={[initialRange.min, initialRange.max]}
-                                        onChange={handleSliderChange}
+                                        onChange={(value) => handleSliderChange(value)}
                                         trackStyle={{ backgroundColor: "#017EFE", height: "4px" }}
                                         handleStyle={{
                                              borderColor: "#017EFE",
@@ -117,7 +126,7 @@ const Filters = ({ label, type = "list", options, selectedOptions, onSelect }) =
                                    <input
                                         type="number"
                                         value={initialRange.min}
-                                        onChange={handleMinChange}
+                                        onChange={(e) => handleMinChange(e)}
                                         min="0"
                                         max={initialRange.max}
                                         className="w-[205px] px-3 h-[42px] rounded-[30px] outline-none bg-[#E3E8ED] placeholder:text-gray-500"
@@ -127,7 +136,7 @@ const Filters = ({ label, type = "list", options, selectedOptions, onSelect }) =
                                    <input
                                         type="number"
                                         value={initialRange.max}
-                                        onChange={handleMaxChange}
+                                        onChange={(e) => handleMaxChange(e)}
                                         min={initialRange.min}
                                         max="15350"
                                         className="w-[205px] px-3 h-[42px] rounded-[30px] outline-none bg-[#E3E8ED] placeholder:text-gray-500"
@@ -153,8 +162,8 @@ const Filters = ({ label, type = "list", options, selectedOptions, onSelect }) =
                                                        />
                                                        <span
                                                             className={`px-6 min-h-[31px] flex items-center justify-center border rounded-full text-base leading-[19px] font-normal cursor-pointer ${selectedOptions.some((opt) => opt.value === size)
-                                                                      ? "bg-blue-500 text-white border-blue-500"
-                                                                      : "bg-white text-black border-black"
+                                                                 ? "bg-blue-500 text-white border-blue-500"
+                                                                 : "bg-white text-black border-black"
                                                                  }`}
                                                        >
                                                             {size}
@@ -164,6 +173,97 @@ const Filters = ({ label, type = "list", options, selectedOptions, onSelect }) =
                                         </div>
                                    </div>
                               ))}
+                         </div>
+                    );
+               case "strap":
+                    return (
+                         <div className="p-6 flex flex-col">
+                              <h1 className="text-[24px] leading-[29px] font-semibold mb-3">Strap Type (do we need it?)</h1>
+                              <div className="flex items-center flex-wrap gap-3">
+                                   {options.map((option, index) => (
+                                        <button
+                                             key={index}
+                                             onClick={() => handleOptionClick(option, true)}
+                                             className={`border h-[31px] rounded-[100px] px-6 text-base leading-[19px] font-normal ${selectedOptions.some((opt) => opt.value === option.value)
+                                                  ? "bg-blue-500 text-white border-blue-500"
+                                                  : "border-black text-black"
+                                                  }`}
+                                        >
+                                             {option.label}
+                                        </button>
+                                   ))}
+                              </div>
+                         </div>
+                    );
+               case "boxpapers":
+                    return (
+                         <div className="p-6 flex flex-col">
+                              <h1 className="text-[24px] leading-[29px] font-semibold mb-3">Set</h1>
+                              <div className="flex items-center flex-wrap gap-3">
+                                   {options.map((option, index) => (
+                                        <button
+                                             key={index}
+                                             onClick={() => handleOptionClick(option)}
+                                             className={`border h-[31px] rounded-[100px] px-6 text-base leading-[19px] font-normal ${selectedOptions.some((opt) => opt.value === option.value)
+                                                  ? "bg-blue-500 text-white border-blue-500"
+                                                  : "border-black text-black"
+                                                  }`}
+                                        >
+                                             {option.label}
+                                        </button>
+                                   ))}
+                              </div>
+                         </div>
+                    );
+               case "material":
+                    return (
+                         <div className="p-6 flex flex-col">
+                              <h1 className="text-[24px] leading-[29px] font-semibold mb-3">Material</h1>
+                              <div className="flex items-center flex-wrap gap-3">
+                                   {options.map((option, index) => (
+                                        <button
+                                             key={index}
+                                             onClick={() => handleOptionClick(option, true)}
+                                             className={`border h-[31px] rounded-[100px] px-6 text-base leading-[19px] font-normal ${selectedOptions.some((opt) => opt.value === option.value)
+                                                  ? "bg-blue-500 text-white border-blue-500"
+                                                  : "border-black text-black"
+                                                  }`}
+                                        >
+                                             {option.label}
+                                        </button>
+                                   ))}
+                              </div>
+                         </div>
+                    );
+               case "year":
+                    const initialYearRange = selectedOptions[0]?.value || { min: 1900, max: 2025 };
+                    return (
+                         <div className="p-6">
+                              <h1 className="text-[24px] leading-[29px] font-semibold mb-6">Year</h1>
+                              <div className="flex items-center justify-between gap-4 mb-4">
+                                   <h1 className="text-[16px] leading-[19px] font-normal">1975</h1>
+                                   <h1 className="text-[16px] leading-[19px] font-normal">2025</h1>
+                              </div>
+                              <div className="mb-6 px-2">
+                                   <Slider
+                                        range
+                                        min={1900}
+                                        max={2025}
+                                        step={1}
+                                        value={[initialYearRange.min, initialYearRange.max]}
+                                        onChange={(value) => handleSliderChange(value, true)}
+                                        trackStyle={{ backgroundColor: "#017EFE", height: "4px" }}
+                                        handleStyle={{
+                                             borderColor: "#017EFE",
+                                             backgroundColor: "#017EFE",
+                                             width: "16px",
+                                             height: "16px",
+                                             marginTop: "-6px",
+                                             opacity: "100",
+                                        }}
+                                        railStyle={{ backgroundColor: "#828282", height: "5px" }}
+                                   />
+                              </div>
                          </div>
                     );
                case "list":
@@ -177,8 +277,8 @@ const Filters = ({ label, type = "list", options, selectedOptions, onSelect }) =
                                              key={index}
                                              onClick={() => handleOptionClick(option, true)}
                                              className={`border h-[31px] rounded-[100px] px-6 text-base leading-[19px] font-normal ${selectedOptions.some((opt) => opt.value === option.value)
-                                                       ? "bg-blue-500 text-white border-blue-500"
-                                                       : "border-black text-black"
+                                                  ? "bg-blue-500 text-white border-blue-500"
+                                                  : "border-black text-black"
                                                   }`}
                                         >
                                              {option.label}
@@ -199,7 +299,8 @@ const Filters = ({ label, type = "list", options, selectedOptions, onSelect }) =
                >
                     {label}
                     <svg
-                         className={`w-auto h-[11px] transition-transform duration-200 ${isOpen ? "-rotate-90 text-[#FFFFFF]" : "text-[#828282]"}`}
+                         className={`w-auto h-[11px] transition-transform duration-200 ${isOpen ? "-rotate-90 text-[#FFFFFF]" : "text-[#828282]"
+                              }`}
                          viewBox="0 0 17 11"
                          fill="none"
                          xmlns="http://www.w3.org/2000/svg"
