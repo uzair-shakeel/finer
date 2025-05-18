@@ -163,7 +163,7 @@ export default function ImageSlider({ images, coverImage }) {
                     width: "200px",
                     height: "200px",
                     left: magnifierPosition.x - 100,
-                    top: magnifierPosition.y - 100,
+                    top: magnifierPosition.y + 20,
                     zIndex: 2,
                     cursor: "none",
                   }}
