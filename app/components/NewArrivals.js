@@ -207,7 +207,7 @@ const NewArrivals = () => {
 
   return (
     <div className="px-[9px] sm:px-5">
-      <div className="mt-[24px] md:mt-[48px] w-full max-w-[1296px] mx-auto">
+      <div className="mt-[32px] md:mt-[48px] w-full max-w-[1296px] mx-auto">
         <h2 className="pl-[11px] sm:pl-0 text-[22px] md:text-[36px] font-semibold !leading-[34px] mb-3 md:mb-6">
           {t("newArrivals.title")}
         </h2>

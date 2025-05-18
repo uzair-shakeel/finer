@@ -102,13 +102,13 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="px-[9px] sm:px-5 mt-[74px] sm:mt-[35px]">
+    <div className="px-[9px] sm:px-5 mt-[74px] sm:mt-[35px] ">
       {loading ? (
         <SkeletonHero />
       ) : (
         <div className="max-w-[1360px] w-full mx-auto bg-white flex items-center justify-between rounded-[20px] md:rounded-[45px] h-[207px] sm:h-[444px] relative overflow-hidden">
           <div className="w-full text-left sm:w-[500px] z-30 rounded-tr-[30px] absolute bottom-0 sm:bg-white pb-[9px] sm:py-8 sm:pl-7">
-            <h1 className="ml-[19px] sm:ml-0 text-[16px] sm:text-[40px] leading-[15px] sm:leading-[95%] font-semibold mb-1.5 sm:mb-6 max-w-[170px] sm:max-w-[417px]">
+            <h1 className="ml-[17px] sm:ml-0 text-[18px] sm:text-[40px] leading-[15px] sm:leading-[95%] font-semibold mb-1.5 sm:mb-6 max-w-[182px] sm:max-w-[417px]">
               Pre-Owned Watches & Jewellery
             </h1>
             <p className="sm:block hidden text-[14px] md:text-[18px] font-normal leading-[100%] md:leading-[114.99999999999999%]">
@@ -116,7 +116,7 @@ const Hero = () => {
               collectors save time, elevate their style, and enjoy more of what
               they love.
             </p>
-            <p className="ml-[19px] sm:ml-0 block sm:hidden w-[182px] text-[12px] font-normal leading-[14px] md:leading-[114.99999999999999%]">
+            <p className="ml-[17px] sm:ml-0 block sm:hidden w-[182px] text-[14px] font-normal leading-[14px] md:leading-[114.99999999999999%]">
               We buy, sell, and source luxury watches, helping collectors save
               time and enjoy more of
             </p>
