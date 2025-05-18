@@ -66,7 +66,7 @@ export default function Tab() {
     <main
       id="homeFormSection"
       data-active-tab={activeTab}
-      className="flex mt-[12px] md:mt-[32px] flex-col items-center justify-center px-5"
+      className="flex mt-[12px] md:mt-[32px] flex-col items-center justify-center px-[9px] sm:px-5"
     >
       <div className="w-full max-w-[1296px] mx-auto bg-white rounded-[20px] md:rounded-[30px] p-2.5 md:p-6 overflow-hidden">
         <TabsNavigation

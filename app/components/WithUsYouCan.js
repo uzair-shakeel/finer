@@ -9,7 +9,7 @@ const WithUsYouCan = () => {
 
   return (
     <div
-      className="scroll-mt-[80px] md:scroll-mt-[80px] px-5 w-full"
+      className="scroll-mt-[80px] md:scroll-mt-[80px] px-[9px] sm:px-5 w-full"
       id="withusyoucan"
     >
       <div className="mt-[24px] md:mt-[48px] max-w-[1296px] mx-auto w-full">

@@ -102,7 +102,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="px-5 mt-[74px] sm:mt-[35px]">
+    <div className="px-[9px] sm:px-5 mt-[74px] sm:mt-[35px]">
       {loading ? (
         <SkeletonHero />
       ) : (
@@ -112,10 +112,13 @@ const Hero = () => {
               Pre-Owned Watches & Jewellery
             </h1>
             <p className="sm:block hidden text-[14px] md:text-[18px] font-normal leading-[100%] md:leading-[114.99999999999999%]">
-              We buy, sell, and source luxury watches and jewellery, helping collectors save time, elevate their style, and enjoy more of what they love.
+              We buy, sell, and source luxury watches and jewellery, helping
+              collectors save time, elevate their style, and enjoy more of what
+              they love.
             </p>
             <p className="ml-[19px] sm:ml-0 block sm:hidden w-[182px] text-[12px] font-normal leading-[14px] md:leading-[114.99999999999999%]">
-              We buy, sell, and source luxury watches, helping collectors save time and enjoy more of
+              We buy, sell, and source luxury watches, helping collectors save
+              time and enjoy more of
             </p>
             <div className="mt-3 md:mt-[32px] flex items-center flex-wrap md:flex-nowrap justify-center sm:justify-start gap-3 sm:gap-6">
               <button
@@ -139,7 +142,10 @@ const Hero = () => {
             </div>
           </div>
           <picture>
-            <source media="(min-width: 800px)" srcSet="/assets/hero-image-updated.svg" />
+            <source
+              media="(min-width: 800px)"
+              srcSet="/assets/hero-image-updated.svg"
+            />
             <img
               src="/assets/mobile-hero-image.svg"
               alt="Rolex GMT-Master II"
