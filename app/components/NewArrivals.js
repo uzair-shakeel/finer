@@ -199,7 +199,7 @@ const NewArrivals = () => {
     };
 
     fetchProducts();
-
+    
     return () => {
       controller.abort();
     };

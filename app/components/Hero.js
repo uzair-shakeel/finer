@@ -141,7 +141,7 @@ const Hero = () => {
               </Link>
             </div>
           </div>
-          <picture>
+          <picture className="bg-white">
             <source
               media="(min-width: 800px)"
               srcSet="/assets/hero-image-updated.svg"
@@ -149,7 +149,7 @@ const Hero = () => {
             <img
               src="/assets/mobile-hero-image.svg"
               alt="Rolex GMT-Master II"
-              className="w-full h-full min-h-full absolute inset-0 top-0 bottom-0 left-0 right-0 object-cover"
+              className="w-full h-full min-h-full absolute inset-0 top-0 bottom-0 left-0 right-0 object-cover bg-white"
               loading="eager"
               fetchPriority="high"
             />
