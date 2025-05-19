@@ -7,20 +7,16 @@ import Image from "next/image";
 import { useState, useEffect, memo, useCallback } from "react";
 import Link from "next/link";
 
-// Skeleton component for product card
 const ProductCardSkeleton = memo(() => (
   <div className="bg-white rounded-[24px] sm:rounded-[30px] p-[12px] sm:p-[18px] w-full">
-    {/* Image skeleton */}
     <div className="w-full h-[168px] sm:h-[248px] rounded-[20px] relative bg-gray-200 animate-pulse"></div>
 
-    {/* Title skeletons */}
     <div className="mt-[12px] space-y-1.5 sm:space-y-3">
       <div className="h-[9px] sm:h-[12px] w-1/2 bg-gray-200 animate-pulse rounded"></div>
       <div className="h-[15px] sm:h-[20px] w-3/4 bg-gray-200 animate-pulse rounded"></div>
       <div className="h-[9px] sm:h-[12px] w-1/3 bg-gray-200 animate-pulse rounded"></div>
     </div>
 
-    {/* Year and condition skeleton */}
     <div className="w-fit bg-gray-100 p-[8px] sm:p-[9px] rounded-xl mt-3">
       <div className="h-[7px] sm:h-[10px] w-[50px] sm:w-[80px] bg-gray-200 animate-pulse rounded"></div>
       <div className="mt-[8px] sm:mt-[12px] flex items-center gap-3">
@@ -29,7 +25,6 @@ const ProductCardSkeleton = memo(() => (
       </div>
     </div>
 
-    {/* Price skeleton */}
     <div className="my-[12px] flex items-center gap-2 sm:gap-[18px]">
       <div className="h-[19px] sm:h-[29px] w-[80px] sm:w-[120px] bg-gray-200 animate-pulse rounded"></div>
     </div>
@@ -37,7 +32,6 @@ const ProductCardSkeleton = memo(() => (
 ));
 ProductCardSkeleton.displayName = "ProductCardSkeleton";
 
-// Main grid loading skeleton
 const ProductsGridSkeleton = memo(() => (
   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-6">
     {Array.from({ length: 10 }).map((_, index) => (
@@ -47,7 +41,6 @@ const ProductsGridSkeleton = memo(() => (
 ));
 ProductsGridSkeleton.displayName = "ProductsGridSkeleton";
 
-// Memoized product card component
 const ProductCard = memo(({ product, formatPrice, t }) => {
   const isSoldOut = product.status === "sold_out";
 
