@@ -166,7 +166,7 @@ const MobileNavbar = () => {
                     </div>
                     <div
                          ref={mobileMenuRef}
-                         className="w-full bg-white transition-all duration-300 ease-in-out overflow-hidden"
+                         className="w-full bg-white transition-all duration-300 ease-in-out"
                          style={{
                               height: `${menuHeight}px`,
                               visibility: menuHeight === 0 ? "hidden" : "visible",
@@ -176,6 +176,27 @@ const MobileNavbar = () => {
                          <div className="p-6 flex flex-col gap-8">
                               <SearchInput />
                               <div className="flex flex-col gap-4">
+                                   <div>
+                                        <button className="flex items-center gap-4">
+                                             <h3 className="text-sm leading-[17px] font-normal">Watches</h3>
+                                              <svg
+                                                       width="8"
+                                                       height="15"
+                                                       viewBox="0 0 8 15"
+                                                       fill="none"
+                                                       xmlns="http://www.w3.org/2000/svg"
+                                                  >
+                                                       <path
+                                                            d="M1 13.5L7 7.5L0.999999 1.5"
+                                                            stroke="#828282"
+                                                            strokeWidth="1.5"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                       />
+                                                  </svg>
+                                        </button>
+                                   </div>
+
                                    {NAV_LINKS.map((link) => (
                                         <div key={link.href} className="flex items-center gap-4">
                                              <NavLink
