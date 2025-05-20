@@ -382,10 +382,10 @@ const Navbar = () => {
             <MobileHeaderSearch />
           </button>
 
-          {/* Mobile Menu Content with improved height transition */}
+          {/* Mobile Menu Content */}
           <div
             ref={mobileMenuRef}
-            className={`absolute top-full z-50 left-0 right-0 w-full shadow-lg bg-white rounded-b-[30px] transition-all duration-500 ease-in-out overflow-hidden`}
+            className={`absolute top-full z-50 left-0 right-0 w-full shadow-lg bg-white rounded-b-[30px] transition-all duration-300 ease-in-out overflow-hidden`}
             style={{ 
               height: `${menuHeight}px`,
               visibility: menuHeight === 0 ? 'hidden' : 'visible',
