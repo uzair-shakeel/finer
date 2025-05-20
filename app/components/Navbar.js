@@ -382,15 +382,14 @@ const Navbar = () => {
             <MobileHeaderSearch />
           </button>
 
-          {/* Mobile Menu Content */}
+          {/* Mobile Menu Content with improved height transition */}
           <div
             ref={mobileMenuRef}
             className={`absolute top-full z-50 left-0 right-0 w-full shadow-lg bg-white rounded-b-[30px] transition-all duration-500 ease-in-out overflow-hidden`}
             style={{ 
               height: `${menuHeight}px`,
-              opacity: isMenuOpen ? 1 : 0,
               visibility: menuHeight === 0 ? 'hidden' : 'visible',
-              transitionProperty: "height, opacity, visibility",
+              transitionProperty: "height, visibility",
             }}
           >
             <div className="p-6 flex flex-col gap-8 rounded-b-[30px]">
@@ -426,11 +425,6 @@ const Navbar = () => {
                   <div
                     key={link.href}
                     className="flex items-center gap-4"
-                    style={{
-                      // opacity: isMenuOpen ? 1 : 0,
-                      // transform: isMenuOpen ? "translateY(0)" : "translateY(10px)",
-                      // transition: `opacity 400ms ease-out ${150 + index * 50}ms, transform 400ms ease-out ${150 + index * 50}ms`
-                    }}
                   >
                     <NavLink
                       href={link.href}
@@ -462,11 +456,6 @@ const Navbar = () => {
               </div>
               <div
                 className="w-full"
-                style={{
-                  // opacity: isMenuOpen ? 1 : 0,
-                  // transform: isMenuOpen ? "translateY(0)" : "translateY(10px)",
-                  // transition: `opacity 400ms ease-out 350ms, transform 400ms ease-out 350ms`
-                }}
               >
                 <div className="w-full bg-[#E3E8ED] rounded-[15px] px-5 py-2.5 text-center">
                   <ContactLink onClick={toggleMenu} />
