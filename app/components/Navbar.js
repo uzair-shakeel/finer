@@ -106,8 +106,8 @@ const NavLink = ({ href, label, currentLang, isMobile = false, onClick }) => {
     <Link
       href={linkHref}
       className={`${isMobile
-          ? "text-sm leading-[17px]"
-          : "px-3 py-1.5 text-base leading-[19px]"
+        ? "text-sm leading-[17px]"
+        : "px-3 py-1.5 text-base leading-[19px]"
         } font-normal text-black   transition-colors`}
       onClick={onClick}
     >
@@ -192,8 +192,8 @@ const Navbar = () => {
             <div className="watches-dropdown-container group">
               <button
                 className={`px-3 py-1.5 text-base leading-[19px] font-normal ${isWatchesDropdownOpen
-                    ? "bg-[#017EFE] rounded-[30px] text-white"
-                    : "text-black"
+                  ? "bg-[#017EFE] rounded-[30px] text-white"
+                  : "text-black"
                   } hover:bg-[#017EFE] hover:text-white transition-colors rounded-[30px]`}
                 onClick={toggleWatchesDropdown}
               >
@@ -339,6 +339,7 @@ const Navbar = () => {
             <ContactLink />
           </div>
         </div>
+        
       </div>
 
       {/* Mobile Navigation */}
@@ -368,19 +369,26 @@ const Navbar = () => {
           >
             <MobileHeaderSearch />
           </button>
+
           {/* Mobile Menu Content */}
           <div
-            className={`absolute top-full z-50 left-0 right-0 w-full shadow-lg transition-transform duration-300 rounded-b-[30px] ease-in-out ${isMenuOpen
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 -translate-y-10 pointer-events-none"
+            className={`absolute top-full z-50 left-0 right-0 w-full shadow-lg bg-white rounded-b-[30px] transition-all duration-500 ease-in-out transform origin-top ${isMenuOpen
+                ? "opacity-100 translate-y-0 scale-y-100 max-h-[500px]"
+                : "opacity-0 -translate-y-4 scale-y-95 max-h-0 pointer-events-none"
               }`}
+            style={{
+              transitionProperty: "transform, opacity, max-height",
+              transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+              overflow: isMenuOpen ? "visible" : "hidden"
+            }}
           >
-            <div className="bg-white p-6 overflow-hidden flex flex-col gap-8 rounded-b-[30px]">
+            <div className="p-6 flex flex-col gap-8 rounded-b-[30px]">
               <SearchInput isMobile />
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-4">
                   <button
-                    className="text-sm leading-[17px] font-normal text-black hover:text-[#017EFE]"
+                    className={`text-sm leading-[17px] font-normal transition-colors duration-300 ${isWatchesDropdownOpen ? "text-[#017EFE]" : "text-black hover:text-[#017EFE]"
+                      }`}
                     onClick={toggleWatchesDropdown}
                   >
                     Watches
@@ -391,6 +399,8 @@ const Navbar = () => {
                     viewBox="0 0 8 15"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    className={`transition-transform duration-300 ${isWatchesDropdownOpen ? "rotate-90" : ""
+                      }`}
                   >
                     <path
                       d="M1 13.5L7 7.5L0.999999 1.5"
@@ -401,8 +411,16 @@ const Navbar = () => {
                     />
                   </svg>
                 </div>
-                {NAV_LINKS.map((link) => (
-                  <div key={link.href} className="flex items-center gap-4">
+                {NAV_LINKS.map((link, index) => (
+                  <div
+                    key={link.href}
+                    className="flex items-center gap-4"
+                    style={{
+                      opacity: isMenuOpen ? 1 : 0,
+                      transform: isMenuOpen ? "translateY(0)" : "translateY(10px)",
+                      transition: `opacity 400ms ease-out ${150 + index * 50}ms, transform 400ms ease-out ${150 + index * 50}ms`
+                    }}
+                  >
                     <NavLink
                       href={link.href}
                       label={link.label}
@@ -431,7 +449,14 @@ const Navbar = () => {
                   </div>
                 ))}
               </div>
-              <div className="w-full">
+              <div
+                className="w-full"
+                style={{
+                  opacity: isMenuOpen ? 1 : 0,
+                  transform: isMenuOpen ? "translateY(0)" : "translateY(10px)",
+                  transition: `opacity 400ms ease-out 350ms, transform 400ms ease-out 350ms`
+                }}
+              >
                 <div className="w-full bg-[#E3E8ED] rounded-[15px] px-5 py-2.5 text-center">
                   <ContactLink onClick={toggleMenu} />
                 </div>

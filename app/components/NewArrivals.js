@@ -309,7 +309,7 @@ const styles = `
   }
   
   .swiper-pagination-bullet {
-    width: 9px;
+    width: 8px;
     height: 8px;
     background-color: #828282;
     opacity: 1;
