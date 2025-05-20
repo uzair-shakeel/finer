@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
@@ -10,14 +10,12 @@ const SearchHeader = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M19.2933 20.7075C19.684 21.0978 20.3172 21.0975 20.7075 20.7067C21.0978 20.316 21.0975 19.6828 20.7067 19.2925L19.2933 20.7075ZM20 20L20.7067 19.2925L16.0848 14.6758L15.3781 15.3833L14.6714 16.0908L19.2933 20.7075L20 20ZM17.3333 10.6667H16.3333C16.3333 13.7963 13.7963 16.3333 10.6667 16.3333V17.3333V18.3333C14.9009 18.3333 18.3333 14.9009 18.3333 10.6667H17.3333ZM10.6667 17.3333V16.3333C7.53705 16.3333 5 13.7963 5 10.6667H4H3C3 14.9009 6.43248 18.3333 10.6667 18.3333V17.3333ZM4 10.6667H5C5 7.53705 7.53705 5 10.6667 5V4V3C6.43248 3 3 6.43248 3 10.6667H4ZM10.6667 4V5C13.7963 5 16.3333 7.53705 16.3333 10.6667H17.3333H18.3333C18.3333 6.43248 14.9009 3 10.6667 3V4Z" fill="#828282" />
   </svg>
-
 );
 
 const MobileHeaderSearch = () => (
   <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M25.96 27.3743C26.3507 27.7646 26.9839 27.7643 27.3742 27.3735C27.7645 26.9828 27.7641 26.3496 27.3734 25.9593L25.96 27.3743ZM26.6667 26.6668L27.3734 25.9593L21.2109 19.8037L20.5042 20.5112L19.7974 21.2188L25.96 27.3743L26.6667 26.6668ZM23.1111 14.2224H22.1111C22.1111 18.5793 18.5791 22.1113 14.2222 22.1113V23.1113V24.1113C19.6837 24.1113 24.1111 19.6839 24.1111 14.2224H23.1111ZM14.2222 23.1113V22.1113C9.86532 22.1113 6.33334 18.5793 6.33334 14.2224H5.33334H4.33334C4.33334 19.6839 8.76075 24.1113 14.2222 24.1113V23.1113ZM5.33334 14.2224H6.33334C6.33334 9.86547 9.86532 6.3335 14.2222 6.3335V5.3335V4.3335C8.76075 4.3335 4.33334 8.7609 4.33334 14.2224H5.33334ZM14.2222 5.3335V6.3335C18.5791 6.3335 22.1111 9.86547 22.1111 14.2224H23.1111H24.1111C24.1111 8.7609 19.6837 4.3335 14.2222 4.3335V5.3335Z" fill="black" />
   </svg>
-
 );
 
 const NAV_LINKS = [
@@ -137,6 +135,8 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isWatchesDropdownOpen, setIsWatchesDropdownOpen] = useState(false);
+  const mobileMenuRef = useRef(null);
+  const [menuHeight, setMenuHeight] = useState(0);
 
   const handleScroll = useCallback(() => {
     setIsScrolled(window.scrollY > 20);
@@ -149,6 +149,18 @@ const Navbar = () => {
   const toggleWatchesDropdown = useCallback(() => {
     setIsWatchesDropdownOpen((prev) => !prev);
   }, []);
+
+  // Calculate and set the menu height when it opens
+  useEffect(() => {
+    if (isMenuOpen && mobileMenuRef.current) {
+      // Set actual height when menu opens
+      const height = mobileMenuRef.current.scrollHeight;
+      setMenuHeight(height);
+    } else {
+      // Reset height when menu closes
+      setMenuHeight(0);
+    }
+  }, [isMenuOpen, isWatchesDropdownOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -372,14 +384,13 @@ const Navbar = () => {
 
           {/* Mobile Menu Content */}
           <div
-            className={`absolute top-full z-50 left-0 right-0 w-full shadow-lg bg-white rounded-b-[30px] transition-all duration-500 ease-in-out transform origin-top ${isMenuOpen
-                ? "opacity-100 translate-y-0 scale-y-100 max-h-[500px]"
-                : "opacity-0 -translate-y-4 scale-y-95 max-h-0 pointer-events-none"
-              }`}
-            style={{
-              transitionProperty: "transform, opacity, max-height",
-              transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-              overflow: isMenuOpen ? "visible" : "hidden"
+            ref={mobileMenuRef}
+            className={`absolute top-full z-50 left-0 right-0 w-full shadow-lg bg-white rounded-b-[30px] transition-all duration-500 ease-in-out overflow-hidden`}
+            style={{ 
+              height: `${menuHeight}px`,
+              opacity: isMenuOpen ? 1 : 0,
+              visibility: menuHeight === 0 ? 'hidden' : 'visible',
+              transitionProperty: "height, opacity, visibility",
             }}
           >
             <div className="p-6 flex flex-col gap-8 rounded-b-[30px]">
@@ -416,9 +427,9 @@ const Navbar = () => {
                     key={link.href}
                     className="flex items-center gap-4"
                     style={{
-                      opacity: isMenuOpen ? 1 : 0,
-                      transform: isMenuOpen ? "translateY(0)" : "translateY(10px)",
-                      transition: `opacity 400ms ease-out ${150 + index * 50}ms, transform 400ms ease-out ${150 + index * 50}ms`
+                      // opacity: isMenuOpen ? 1 : 0,
+                      // transform: isMenuOpen ? "translateY(0)" : "translateY(10px)",
+                      // transition: `opacity 400ms ease-out ${150 + index * 50}ms, transform 400ms ease-out ${150 + index * 50}ms`
                     }}
                   >
                     <NavLink
@@ -452,9 +463,9 @@ const Navbar = () => {
               <div
                 className="w-full"
                 style={{
-                  opacity: isMenuOpen ? 1 : 0,
-                  transform: isMenuOpen ? "translateY(0)" : "translateY(10px)",
-                  transition: `opacity 400ms ease-out 350ms, transform 400ms ease-out 350ms`
+                  // opacity: isMenuOpen ? 1 : 0,
+                  // transform: isMenuOpen ? "translateY(0)" : "translateY(10px)",
+                  // transition: `opacity 400ms ease-out 350ms, transform 400ms ease-out 350ms`
                 }}
               >
                 <div className="w-full bg-[#E3E8ED] rounded-[15px] px-5 py-2.5 text-center">
