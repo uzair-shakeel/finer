@@ -121,16 +121,16 @@ const Hero = () => {
             </p>
             <div className="mt-3 md:mt-[32px] flex items-center flex-wrap md:flex-nowrap justify-center sm:justify-start gap-3 sm:gap-6">
               <button
-                onClick={handleBuyClick}
-                className="bg-[#017EFE] w-fit px-8 sm:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#003D7B]"
-              >
-                {t("hero.buyBtn")}
-              </button>
-              <button
                 onClick={handleSellClick}
                 className="bg-[#017EFE] w-fit px-8 sm:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#003D7B]"
               >
                 {t("hero.sellBtn")}
+              </button>
+              <button
+                onClick={handleBuyClick}
+                className="bg-[#017EFE] w-fit px-8 sm:px-10 rounded-[60px] text-white text-[12px] md:text-[16px] font-medium h-[35px] md:h-[39px] transition duration-300 hover:bg-[#003D7B]"
+              >
+                {t("hero.buyBtn")}
               </button>
               <Link
                 href="/services"

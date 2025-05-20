@@ -30,38 +30,41 @@ const Pagination = ({ totalItems, itemsPerPage, onPageChange, currentPage }) => 
 
      return (
           <div className="flex items-center justify-center gap-2 mt-12">
-               <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="w-[87px] h-[30px] flex items-center gap-3 justify-center border border-[#828282] bg-transparent disabled:cursor-not-allowed rounded-[5px] text-[#828282] text-base font-normal leading-[12px]"
-               >
-                    <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                         <path d="M8 15L1 8L8 1" stroke="#828282" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    Prev
-               </button>
+               {currentPage !== 1 && (
+                    <button
+                         onClick={() => handlePageChange(currentPage - 1)}
+                         className="w-[87px] h-[30px] flex items-center gap-3 justify-center border border-[#828282] bg-transparent rounded-[5px] text-[#828282] text-base font-normal leading-[12px]"
+                    >
+                         <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M8 15L1 8L8 1" stroke="#828282" stroke-linecap="round" stroke-linejoin="round" />
+                         </svg>
+                         Prev
+                    </button>
+               )}
                {getPageNumbers().map((number) => (
                     <button
                          key={number}
                          onClick={() => handlePageChange(number)}
-                         className={`min-w-[30px] h-[30px] text-base font-normal rounded-[5px] ${currentPage === number
-                              ? "border border-[#017EFE] text-[#017EFE]"
-                              : "bg-transparent text-[#828282]"
-                              }`}
+                         className={`min-w-[30px] h-[30px] text-base font-normal rounded-[5px] ${
+                              currentPage === number
+                                   ? "border border-[#017EFE] text-[#017EFE]"
+                                   : "bg-transparent text-[#828282]"
+                         }`}
                     >
                          {number}
                     </button>
                ))}
-               <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="w-[87px] h-[30px] flex items-center gap-3 justify-center border border-[#828282] bg-transparent disabled:cursor-not-allowed rounded-[5px] text-[#828282] text-base font-normal leading-[12px]"
-               >
-                    Next
-                    <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                         <path d="M1 1L8 8L1 15" stroke="#828282" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-               </button>
+               {currentPage !== totalPages && (
+                    <button
+                         onClick={() => handlePageChange(currentPage + 1)}
+                         className="w-[87px] h-[30px] flex items-center gap-3 justify-center border border-[#828282] bg-transparent rounded-[5px] text-[#828282] text-base font-normal leading-[12px]"
+                    >
+                         Next
+                         <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M1 1L8 8L1 15" stroke="#828282" stroke-linecap="round" stroke-linejoin="round" />
+                         </svg>
+                    </button>
+               )}
           </div>
      );
 };

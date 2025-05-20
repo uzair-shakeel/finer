@@ -94,7 +94,7 @@ const NavLink = ({ href, label, currentLang }) => {
   return (
     <Link
       href={linkHref}
-      className="px-3 py-1.5 text-base leading-[19px] font-normal text-black transition-colors"
+      className="px-3 py-1.5 text-base hover:bg-[#017EFE] hover:text-white rounded-[30px] leading-[19px] font-normal text-black transition-colors"
     >
       {label.startsWith("navbar.") ? t(label) : label}
     </Link>
@@ -201,7 +201,7 @@ const DesktopNavbar = () => {
                               <li key={brand.label}>
                                 <Link
                                   href={`/watches/${brand.label.toLowerCase().replace(/\s+/g, "-")}`}
-                                  className="text-base leading-[19px] font-normal"
+                                  className="text-base leading-[19px] font-normal "
                                 >
                                   {brand.label}{" "}
                                   <span className="ml-3 text-sm text-[#828282] leading-[17px]">
