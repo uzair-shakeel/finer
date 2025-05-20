@@ -8,7 +8,6 @@ import { useState, useEffect, memo, useCallback, useRef } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -180,7 +179,8 @@ const NewArrivals = () => {
           throw new Error("Failed to fetch products");
         }
         const data = await response.json();
-        setProducts(data.products);
+        // Limit to only 10 products
+        setProducts(data.products.slice(0, 10));
         setLoading(false);
       } catch (error) {
         if (error.name !== "AbortError") {
@@ -191,7 +191,6 @@ const NewArrivals = () => {
       }
     };
     fetchProducts();
-
     return () => {
       controller.abort();
     };
@@ -271,10 +270,8 @@ const NewArrivals = () => {
                   />
                 </SwiperSlide>
               ))}
-
               <div className="swiper-pagination mt-[24px] z-10 flex justify-center gap-2"></div>
             </Swiper>
-
             <button ref={navigationPrevRef} className="absolute left-0 top-[161px] -translate-y-1/2 z-10 -ml-8 lg:block hidden" aria-label="Previous slide">
               <svg width="10" height="18" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M9 16.5265L0.999999 9.03313L9 1.53977" stroke="#828282" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -302,7 +299,6 @@ const styles = `
     margin-top: 24px !important;
     position: relative !important;
   }
-
   .new-arrivals-swiper{
     padding: 0px !important;
     padding-bottom: 0px !important;
