@@ -13,7 +13,7 @@ const WithUsYouCan = () => {
       id="withusyoucan"
     >
       <div className="mt-[24px] md:mt-[48px] max-w-[1296px] mx-auto w-full">
-        <h2 className="text-[22px] md:text-[36px] font-semibold !leading-[95%] mb-3 md:mb-9">
+        <h2 className="text-[22px] md:text-[36px] font-semibold !leading-[95%] pl-[11px] sm:pl-0 mb-3 md:mb-9">
           {t("withUsYouCan.title")}
         </h2>
         <div className="w-full flex xl:flex-row flex-col items-start gap-3 sm:gap-6">
