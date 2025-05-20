@@ -146,7 +146,7 @@ const Hero = () => {
               srcSet="/assets/hero-image-updated.svg"
             />
             <img
-              src="/assets/mobile-hero-image.svg"
+              src="/assets/mobile-hero-image.webp"
               alt="Rolex GMT-Master II"
               className="w-full h-full min-h-full absolute inset-0 top-0 bottom-0 left-0 right-0 object-cover bg-white"
               loading="eager"
