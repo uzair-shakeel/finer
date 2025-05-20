@@ -116,9 +116,8 @@ const Hero = () => {
               collectors save time, elevate their style, and enjoy more of what
               they love.
             </p>
-            <p className="ml-[17px] sm:ml-0 block sm:hidden w-[182px] text-[14px] font-normal leading-[14px] md:leading-[114.99999999999999%]">
-              We buy, sell, and source luxury watches, helping collectors save
-              time and enjoy more of
+            <p className="ml-[17px] sm:ml-0 block sm:hidden w-[200px] text-[14px] font-normal leading-[14px] md:leading-[114.99999999999999%]">
+              We buy, sell, and source luxury watches and jewellery, helping collectors save time.
             </p>
             <div className="mt-3 md:mt-[32px] flex items-center flex-wrap md:flex-nowrap justify-center sm:justify-start gap-3 sm:gap-6">
               <button
