@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback, useRef, useLayoutEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
@@ -110,10 +110,127 @@ const ContactLink = ({ onClick }) => {
                className="text-base leading-[19px] font-normal text-black flex flex-col gap-2 transition-colors"
                onClick={onClick}
           >
-               <span>{t("navbar.needHelp")}</span>+44 735 558 1510
+               <span>{t("navbar.needHelp")}</span>+44 123 456 7890
           </Link>
      );
 };
+
+const TopBrandsContent = ({ onBackClick }) => (
+     <div className="flex flex-col">
+          <button onClick={onBackClick} className="px-3.5 flex justify-between items-center bg-[#E3E8ED] rounded-[20px] w-full h-[36px]">
+               <svg width="8" height="16" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 1L1 8L7 15" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+               </svg>
+               <h3 className="text-[18px] leading-[22px] font-medium">Top Brands</h3>
+               <div></div>
+          </button>
+          <div className="mt-8 mb-10 flex flex-col gap-3">
+               <p className="text-[14px] leading-[17px] font-normal">Vacheron Constantin<span className="ml-2 text-[#828282] text-[12px] leading-[15px]">(71)</span></p>
+               <p className="text-[14px] leading-[17px] font-normal">Audemars Piguet<span className="ml-2 text-[#828282] text-[12px] leading-[15px]">(132)</span></p>
+               <p className="text-[14px] leading-[17px] font-normal">Jaeger-LeCoultre<span className="ml-2 text-[#828282] text-[12px] leading-[15px]">(21)</span></p>
+               <p className="text-[14px] leading-[17px] font-normal">Patek Philippe<span className="ml-2 text-[#828282] text-[12px] leading-[15px]">(120)</span></p>
+               <p className="text-[14px] leading-[17px] font-normal">Rolex<span className="ml-2 text-[#828282] text-[12px] leading-[15px]">(20)</span></p>
+               <p className="text-[14px] leading-[17px] font-normal">Cartier<span className="ml-2 text-[#828282] text-[12px] leading-[15px]">(71)</span></p>
+               <p className="text-[14px] leading-[17px] font-normal">Omega<span className="ml-2 text-[#828282] text-[12px] leading-[15px]">(21)</span></p>
+               <p className="text-[14px] leading-[17px] font-normal">Breitling<span className="ml-2 text-[#828282] text-[12px] leading-[15px]">(153)</span></p>
+               <p className="text-[14px] leading-[17px] font-normal">Hublot<span className="ml-2 text-[#828282] text-[12px] leading-[15px]">(201)</span></p>
+          </div>
+          <SeeAllWatches />
+     </div>
+);
+
+const PopularLinksContent = ({ onBackClick }) => (
+     <div className="flex flex-col">
+          <button onClick={onBackClick} className="px-3.5 flex justify-between items-center bg-[#E3E8ED] rounded-[20px] w-full h-[36px]">
+               <svg width="8" height="16" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 1L1 8L7 15" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+               </svg>
+               <h3 className="text-[18px] leading-[22px] font-medium">Popular Links</h3>
+               <div></div>
+          </button>
+          <div className="mt-8 mb-10 flex flex-col gap-3">
+               <p className="text-[14px] leading-[17px] font-normal">New Arrivals</p>
+               <p className="text-[14px] leading-[17px] font-normal">Rolex Watches</p>
+               <p className="text-[14px] leading-[17px] font-normal">Special Offers</p>
+               <p className="text-[14px] leading-[17px] font-normal">Collections</p>
+          </div>
+          <SeeAllWatches />
+     </div>
+);
+
+const PriceContent = ({ onBackClick }) => (
+     <div className="flex flex-col">
+          <button onClick={onBackClick} className="px-3.5 flex justify-between items-center bg-[#E3E8ED] rounded-[20px] w-full h-[36px]">
+               <svg width="8" height="16" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 1L1 8L7 15" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+               </svg>
+               <h3 className="text-[18px] leading-[22px] font-medium">Price</h3>
+               <div></div>
+          </button>
+          <div className="mt-8 mb-10 flex flex-col gap-3">
+               <p className="text-[14px] leading-[17px] font-normal">Under 1000$</p>
+               <p className="text-[14px] leading-[17px] font-normal">1000$ to 5000$</p>
+               <p className="text-[14px] leading-[17px] font-normal">5000$ to 10000$</p>
+          </div>
+          <SeeAllWatches />
+     </div>
+);
+
+const CategoriesContent = ({ onBackClick }) => (
+     <div className="flex flex-col">
+          <button onClick={onBackClick} className="px-3.5 flex justify-between items-center bg-[#E3E8ED] rounded-[20px] w-full h-[36px]">
+               <svg width="8" height="16" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 1L1 8L7 15" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+               </svg>
+               <h3 className="text-[18px] leading-[22px] font-medium">Categories</h3>
+               <div></div>
+          </button>
+          <div className="mt-8 mb-10 flex flex-col gap-3">
+               <p className="text-[14px] leading-[17px] font-normal">Limited Edition</p>
+               <p className="text-[14px] leading-[17px] font-normal">Vintage</p>
+          </div>
+          <SeeAllWatches />
+     </div>
+);
+
+const SeeAllWatches = () => (
+     <button className="w-[157px] h-[35px] rounded-[60px] border-2 border-[#017EFE] hover:bg-[#017EFE] transition-all duration-300 text-[#017EFE] hover:text-white text-[12px] leading-[15px] font-medium">
+          See All Watches
+     </button>
+);
+
+const WatchesContent = ({ onSubcategoryClick, onBackClick }) => (
+     <div className="flex flex-col">
+          <div className="flex items-center gap-4">
+               <button onClick={onBackClick} className="px-3.5 flex justify-between items-center bg-[#E3E8ED] rounded-[20px] w-full h-[36px]">
+                    <svg width="8" height="16" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                         <path d="M7 1L1 8L7 15" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <h3 className="text-[18px] leading-[22px] font-medium">Watches</h3>
+                    <div></div>
+               </button>
+          </div>
+          <div className="flex flex-col gap-5 mt-8 mb-10">
+               <button onClick={() => onSubcategoryClick("topBrands")} className="flex items-center gap-4">
+                    <h3 className="text-sm leading-[17px] font-normal">Top Brands</h3>
+                    <ArrowWatches />
+               </button>
+               <button onClick={() => onSubcategoryClick("popularLinks")} className="flex items-center gap-4">
+                    <h3 className="text-sm leading-[17px] font-normal">Popular Links</h3>
+                    <ArrowWatches />
+               </button>
+               <button onClick={() => onSubcategoryClick("price")} className="flex items-center gap-4">
+                    <h3 className="text-sm leading-[17px] font-normal">Price</h3>
+                    <ArrowWatches />
+               </button>
+               <button onClick={() => onSubcategoryClick("categories")} className="flex items-center gap-4">
+                    <h3 className="text-sm leading-[17px] font-normal">Categories</h3>
+                    <ArrowWatches />
+               </button>
+          </div>
+          <SeeAllWatches />
+     </div>
+);
 
 const MobileNavbar = () => {
      const { t } = useTranslation();
@@ -121,18 +238,15 @@ const MobileNavbar = () => {
      const [currentLang, setCurrentLang] = useState("en");
      const [isScrolled, setIsScrolled] = useState(false);
      const [isMenuOpen, setIsMenuOpen] = useState(false);
+     const [isWatchesOpen, setIsWatchesOpen] = useState(false);
+     const [activeSubcategory, setActiveSubcategory] = useState(null);
      const mobileMenuRef = useRef(null);
      const [menuHeight, setMenuHeight] = useState(0);
+     const [isSearchOpen, setIsSearchOpen] = useState(false); 
+     const MobileHeaderSearchRef = useRef(null);  
+     const [searchMenuHeight, setSearchMenuHeight] = useState(0); 
 
-     const handleScroll = useCallback(() => {
-          setIsScrolled(window.scrollY > 20);
-     }, []);
-
-     const toggleMenu = useCallback(() => {
-          setIsMenuOpen((prev) => !prev);
-     }, []);
-
-     useEffect(() => {
+     const updateMenuHeight = useCallback(() => {
           if (isMenuOpen && mobileMenuRef.current) {
                const height = mobileMenuRef.current.scrollHeight;
                setMenuHeight(height);
@@ -140,6 +254,52 @@ const MobileNavbar = () => {
                setMenuHeight(0);
           }
      }, [isMenuOpen]);
+
+     const updateSearchMenuHeight = useCallback(() => {
+          if (isSearchOpen && MobileHeaderSearchRef.current) {
+               const height = MobileHeaderSearchRef.current.scrollHeight;
+               setSearchMenuHeight(height);
+          } else {
+               setSearchMenuHeight(0);
+          }
+     }, [isSearchOpen]);
+
+     const handleScroll = useCallback(() => {
+          setIsScrolled(window.scrollY > 20);
+     }, []);
+
+     const toggleMenu = useCallback(() => {
+          setIsMenuOpen((prev) => !prev);
+          if (isWatchesOpen) setIsWatchesOpen(false);
+          if (activeSubcategory) setActiveSubcategory(null);
+          if (isSearchOpen) setIsSearchOpen(false); 
+     }, [isWatchesOpen, activeSubcategory, isSearchOpen]);
+
+     const MobileHeaderSearchMenu = useCallback(() => {
+          setIsSearchOpen((prev) => !prev);
+          if (isMenuOpen) setIsMenuOpen(false); 
+          if (isWatchesOpen) setIsWatchesOpen(false);
+          if (activeSubcategory) setActiveSubcategory(null);
+     }, [isMenuOpen, isWatchesOpen, activeSubcategory]);
+
+     const handleWatchesClick = () => {
+          setIsWatchesOpen(true);
+          setActiveSubcategory(null);
+          setIsSearchOpen(false);  
+     };
+
+     const handleSubcategoryClick = (subcategory) => {
+          setActiveSubcategory(subcategory);
+          setIsSearchOpen(false);  
+     };
+
+     const handleBackClick = () => {
+          if (activeSubcategory) {
+               setActiveSubcategory(null);
+          } else if (isWatchesOpen) {
+               setIsWatchesOpen(false);
+          }
+     };
 
      useEffect(() => {
           const storedLang = localStorage.getItem("selectedLanguage");
@@ -149,6 +309,14 @@ const MobileNavbar = () => {
           window.addEventListener("scroll", handleScroll);
           return () => window.removeEventListener("scroll", handleScroll);
      }, [handleScroll, pathname]);
+
+     useLayoutEffect(() => {
+          updateMenuHeight();
+     }, [isMenuOpen, isWatchesOpen, activeSubcategory, updateMenuHeight]);
+
+     useLayoutEffect(() => {
+          updateSearchMenuHeight();
+     }, [isSearchOpen, updateSearchMenuHeight]);
 
      if (pathname?.includes("/admin")) {
           return null;
@@ -174,14 +342,25 @@ const MobileNavbar = () => {
                               />
                          </button>
                          <Logo isScrolled={isScrolled} currentLang={currentLang} />
-                         <button
-                              onClick={toggleMenu}
-                              aria-expanded={isMenuOpen}
-                              aria-label={isMenuOpen ? "Close search" : "Open search"}
-                         >
+                         <button onClick={MobileHeaderSearchMenu}>
                               <MobileHeaderSearch />
                          </button>
                     </div>
+                    {/* Search Menu */}
+                    <div
+                         ref={MobileHeaderSearchRef}
+                         className="w-full bg-white transition-all duration-300 ease-in-out"
+                         style={{
+                              height: `${searchMenuHeight}px`,
+                              visibility: searchMenuHeight === 0 ? "hidden" : "visible",
+                              transitionProperty: "height, visibility",
+                         }}
+                    >
+                         <div className="py-[27px] px-6">
+                              <SearchInput />
+                         </div>
+                    </div>
+                    {/* Main Menu */}
                     <div
                          ref={mobileMenuRef}
                          className="w-full bg-white transition-all duration-300 ease-in-out"
@@ -192,31 +371,48 @@ const MobileNavbar = () => {
                          }}
                     >
                          <div className="p-6 flex flex-col gap-8">
-                              <SearchInput />
-                              <div className="flex flex-col gap-4">
-                                   <div>
-                                        <button className="flex items-center gap-4">
-                                             <h3 className="text-sm leading-[17px] font-normal">Watches</h3>
-                                             <ArrowWatches/>
-                                        </button>
-                                        {/* inside watches */}
-                                        <div></div>
-                                   </div>
+                              {activeSubcategory ? (
+                                   activeSubcategory === "topBrands" ? (
+                                        <TopBrandsContent onBackClick={handleBackClick} />
+                                   ) : activeSubcategory === "popularLinks" ? (
+                                        <PopularLinksContent onBackClick={handleBackClick} />
+                                   ) : activeSubcategory === "price" ? (
+                                        <PriceContent onBackClick={handleBackClick} />
+                                   ) : (
+                                        <CategoriesContent onBackClick={handleBackClick} />
+                                   )
+                              ) : isWatchesOpen ? (
+                                   <WatchesContent onSubcategoryClick={handleSubcategoryClick} onBackClick={handleBackClick} />
+                              ) : (
+                                   <>
+                                        <SearchInput />
+                                        <div className="flex flex-col gap-4">
+                                             <div>
+                                                  <button
+                                                       onClick={handleWatchesClick}
+                                                       className="flex items-center gap-4"
+                                                  >
+                                                       <h3 className="text-sm leading-[17px] font-normal">Watches</h3>
+                                                       <ArrowWatches />
+                                                  </button>
+                                             </div>
 
-                                   {NAV_LINKS.map((link) => (
-                                        <div key={link.href} className="flex items-center gap-4">
-                                             <NavLink
-                                                  href={link.href}
-                                                  label={link.label}
-                                                  currentLang={currentLang}
-                                                  onClick={toggleMenu}
-                                             />
-                                             {link.label !== "navbar.ourServices" && link.label !== "Blog" && (
-                                                  <ArrowWatches/>
-                                             )}
+                                             {NAV_LINKS.map((link) => (
+                                                  <div key={link.href} className="flex items-center gap-4">
+                                                       <NavLink
+                                                            href={link.href}
+                                                            label={link.label}
+                                                            currentLang={currentLang}
+                                                            onClick={toggleMenu}
+                                                       />
+                                                       {link.label !== "navbar.ourServices" && link.label !== "Blog" && (
+                                                            <ArrowWatches />
+                                                       )}
+                                                  </div>
+                                             ))}
                                         </div>
-                                   ))}
-                              </div>
+                                   </>
+                              )}
                               <div className="w-full">
                                    <div className="w-full bg-[#E3E8ED] rounded-[15px] px-5 py-2.5 text-center">
                                         <ContactLink onClick={toggleMenu} />
