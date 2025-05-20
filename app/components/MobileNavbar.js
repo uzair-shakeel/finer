@@ -62,6 +62,24 @@ const SearchInput = () => (
      </div>
 );
 
+const ArrowWatches = () => (
+     <svg
+          width="8"
+          height="15"
+          viewBox="0 0 8 15"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+     >
+          <path
+               d="M1 13.5L7 7.5L0.999999 1.5"
+               stroke="#828282"
+               strokeWidth="1.5"
+               strokeLinecap="round"
+               strokeLinejoin="round"
+          />
+     </svg>
+);
+
 const NavLink = ({ href, label, currentLang, onClick }) => {
      const { t } = useTranslation();
      const linkHref =
@@ -139,7 +157,7 @@ const MobileNavbar = () => {
      return (
           <header className="fixed top-4 left-0 right-0 z-50 px-5 lg:hidden">
                <div
-                    className="max-w-[1296px] relative bg-white shadow-lg mx-auto w-full min-h-[46px] md:pr-[27px] md:pl-[24px] flex flex-col items-center rounded-[30px] overflow-hidden"
+                    className="max-w-[1296px] relative bg-white shadow-lg mx-auto w-full min-h-[46px] md:pr-[27px] md:pl-[24px] flex flex-col items-center rounded-[20px] overflow-hidden"
                >
                     <div className="flex items-center justify-between w-full relative px-3.5 md:px-0 mt-0.5">
                          <button
@@ -179,22 +197,10 @@ const MobileNavbar = () => {
                                    <div>
                                         <button className="flex items-center gap-4">
                                              <h3 className="text-sm leading-[17px] font-normal">Watches</h3>
-                                              <svg
-                                                       width="8"
-                                                       height="15"
-                                                       viewBox="0 0 8 15"
-                                                       fill="none"
-                                                       xmlns="http://www.w3.org/2000/svg"
-                                                  >
-                                                       <path
-                                                            d="M1 13.5L7 7.5L0.999999 1.5"
-                                                            stroke="#828282"
-                                                            strokeWidth="1.5"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                       />
-                                                  </svg>
+                                             <ArrowWatches/>
                                         </button>
+                                        {/* inside watches */}
+                                        <div></div>
                                    </div>
 
                                    {NAV_LINKS.map((link) => (
@@ -206,21 +212,7 @@ const MobileNavbar = () => {
                                                   onClick={toggleMenu}
                                              />
                                              {link.label !== "navbar.ourServices" && link.label !== "Blog" && (
-                                                  <svg
-                                                       width="8"
-                                                       height="15"
-                                                       viewBox="0 0 8 15"
-                                                       fill="none"
-                                                       xmlns="http://www.w3.org/2000/svg"
-                                                  >
-                                                       <path
-                                                            d="M1 13.5L7 7.5L0.999999 1.5"
-                                                            stroke="#828282"
-                                                            strokeWidth="1.5"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                       />
-                                                  </svg>
+                                                  <ArrowWatches/>
                                              )}
                                         </div>
                                    ))}
