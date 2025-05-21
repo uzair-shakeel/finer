@@ -1161,7 +1161,8 @@ export default function AddProduct() {
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  Enter a price value or &quot;Discontinued&quot; if not available
+                  Enter a price value or &quot;Discontinued&quot; if not
+                  available
                 </p>
               </div>
 
@@ -1298,37 +1299,57 @@ export default function AddProduct() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Case Size
                   </label>
-                  <select
-                    name="caseSize"
-                    value={
-                      formData.caseSize?.length > 0 ? formData.caseSize[0] : ""
-                    }
-                    onChange={handleChange}
-                    className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="">Select case size</option>
-                    <option value="20mm">20mm</option>
-                    <option value="22mm">22mm</option>
-                    <option value="24mm">24mm</option>
-                    <option value="26mm">26mm</option>
-                    <option value="28mm">28mm</option>
-                    <option value="30mm">30mm</option>
-                    <option value="32mm">32mm</option>
-                    <option value="34mm">34mm</option>
-                    <option value="36mm">36mm</option>
-                    <option value="38mm">38mm</option>
-                    <option value="40mm">40mm</option>
-                    <option value="41mm">41mm</option>
-                    <option value="42mm">42mm</option>
-                    <option value="43mm">43mm</option>
-                    <option value="44mm">44mm</option>
-                    <option value="45mm">45mm</option>
-                    <option value="46mm">46mm</option>
-                    <option value="47mm">47mm</option>
-                    <option value="48mm">48mm</option>
-                    <option value="49mm">49mm</option>
-                    <option value="50mm">50mm</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      name="caseSize"
+                      value={
+                        formData.caseSize?.length > 0
+                          ? formData.caseSize[0]
+                          : ""
+                      }
+                      onChange={handleChange}
+                      className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white appearance-none pr-8"
+                    >
+                      <option value="">Select case size</option>
+                      <optgroup label="Small Sizes (20-30mm)">
+                        <option value="20mm">20mm - Extra Small</option>
+                        <option value="22mm">22mm - Very Small</option>
+                        <option value="24mm">24mm - Very Small</option>
+                        <option value="26mm">26mm - Small</option>
+                        <option value="28mm">28mm - Small</option>
+                        <option value="30mm">30mm - Small</option>
+                      </optgroup>
+                      <optgroup label="Medium Sizes (32-38mm)">
+                        <option value="32mm">32mm - Medium Small</option>
+                        <option value="34mm">34mm - Medium Small</option>
+                        <option value="36mm">36mm - Medium</option>
+                        <option value="38mm">38mm - Medium</option>
+                      </optgroup>
+                      <optgroup label="Standard Sizes (40-42mm)">
+                        <option value="40mm">40mm - Standard</option>
+                        <option value="41mm">41mm - Standard</option>
+                        <option value="42mm">42mm - Standard</option>
+                      </optgroup>
+                      <optgroup label="Large Sizes (44mm+)">
+                        <option value="43mm">43mm - Large</option>
+                        <option value="44mm">44mm - Large</option>
+                        <option value="45mm">45mm - Large</option>
+                        <option value="46mm">46mm - Extra Large</option>
+                        <option value="47mm">47mm - Extra Large</option>
+                        <option value="48mm">48mm - Extra Large</option>
+                        <option value="49mm">49mm - Extra Large</option>
+                        <option value="50mm">50mm - Extra Large</option>
+                      </optgroup>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Select the watch case diameter
+                  </p>
                 </div>
 
                 <div>
@@ -1384,100 +1405,143 @@ export default function AddProduct() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Dial Colour
                   </label>
-                  <select
-                    name="dialColour"
-                    value={
-                      formData.dialColour?.length > 0
-                        ? formData.dialColour[0]
-                        : ""
-                    }
-                    onChange={handleChange}
-                    className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="">Select dial colour</option>
-                    <option value="Black">Black</option>
-                    <option value="White">White</option>
-                    <option value="Silver">Silver</option>
-                    <option value="Blue">Blue</option>
-                    <option value="Green">Green</option>
-                    <option value="Red">Red</option>
-                    <option value="Yellow">Yellow</option>
-                    <option value="Orange">Orange</option>
-                    <option value="Brown">Brown</option>
-                    <option value="Purple">Purple</option>
-                    <option value="Pink">Pink</option>
-                    <option value="Grey">Grey</option>
-                    <option value="Champagne">Champagne</option>
-                    <option value="Mother of Pearl">Mother of Pearl</option>
-                    <option value="Meteorite">Meteorite</option>
-                    <option value="Skeleton">Skeleton</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      name="dialColour"
+                      value={
+                        formData.dialColour?.length > 0
+                          ? formData.dialColour[0]
+                          : ""
+                      }
+                      onChange={handleChange}
+                      className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 appearance-none pr-10"
+                    >
+                      <option value="">Select dial colour</option>
+                      <optgroup label="Neutral Tones">
+                        <option value="Black">Black</option>
+                        <option value="White">White</option>
+                        <option value="Silver">Silver</option>
+                        <option value="Grey">Grey</option>
+                        <option value="Champagne">Champagne</option>
+                      </optgroup>
+                      <optgroup label="Primary Colors">
+                        <option value="Blue">Blue</option>
+                        <option value="Green">Green</option>
+                        <option value="Red">Red</option>
+                        <option value="Yellow">Yellow</option>
+                      </optgroup>
+                      <optgroup label="Other Colors">
+                        <option value="Orange">Orange</option>
+                        <option value="Brown">Brown</option>
+                        <option value="Purple">Purple</option>
+                        <option value="Pink">Pink</option>
+                        <option value="Mother of Pearl">Mother of Pearl</option>
+                        <option value="Meteorite">Meteorite</option>
+                        <option value="Skeleton">Skeleton</option>
+                      </optgroup>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Select the primary color of the watch face
+                  </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Bracelet
                   </label>
-                  <select
-                    name="bracelet"
-                    value={
-                      formData.bracelet?.length > 0 ? formData.bracelet[0] : ""
-                    }
-                    onChange={handleChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="">Select bracelet</option>
-                    <option value="Leather">Leather</option>
-                    <option value="Fabric">Fabric</option>
-                    <option value="Rubber">Rubber</option>
-                    <option value="Oyster (Rolex)">Oyster (Rolex)</option>
-                    <option value="Flat Jubilee (Rolex)">Flat Jubilee</option>
-                    <option value="Jubilee (Rolex)">Jubilee (Rolex)</option>
-                    <option value="President (Rolex)">President (Rolex)</option>
-                    <option value="Pearlmaster (Rolex)">
-                      Pearlmaster (Rolex)
-                    </option>
-                    <option value="Santos (Cartier)">Santos (Cartier)</option>
-                    <option value="Ballon Bleu (Cartier)">
-                      Ballon Bleu (Cartier)
-                    </option>
-                    <option value="Speedmaster (Omega)">
-                      Speedmaster (Omega)
-                    </option>
-                    <option value="Seamaster (Omega)">Seamaster (Omega)</option>
-                    <option value="Flat Link (Omega)">Flat Link (Omega)</option>
-                    <option value="Professional (Breitling)">
-                      Professional (Breitling)
-                    </option>
-                    <option value="Pilot (Breitling)">Pilot (Breitling)</option>
-                    <option value="Navitimer (Breitling)">
-                      Navitimer (Breitling)
-                    </option>
-                    <option value="Big Bang Integrated (Hublot)">
-                      Big Bang Integrated (Hublot)
-                    </option>
-                    <option value="Royal Oak (Audemars Piguet)">
-                      Royal Oak (Audemars Piguet)
-                    </option>
-                    <option value="Royal Oak Offshore (Audemars Piguet)">
-                      Royal Oak Offshore (Audemars Piguet)
-                    </option>
-                    <option value="Nautilus (Patek Philippe)">
-                      Nautilus (Patek Philippe)
-                    </option>
-                    <option value="Aquanaut (Patek Philippe)">
-                      Aquanaut (Patek Philippe)
-                    </option>
-                    <option value="Overseas (Vacheron Constantin)">
-                      Overseas (Vacheron Constantin)
-                    </option>
-                    <option value="Polaris (Jaeger-LeCoultre)">
-                      Polaris (Jaeger-LeCoultre)
-                    </option>
-                    <option value="Reverso (Jaeger-LeCoultre)">
-                      Reverso (Jaeger-LeCoultre)
-                    </option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      name="bracelet"
+                      value={
+                        formData.bracelet?.length > 0
+                          ? formData.bracelet[0]
+                          : ""
+                      }
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white appearance-none pr-8"
+                    >
+                      <option value="">Select bracelet type</option>
+                      <optgroup label="Standard Materials">
+                        <option value="Leather">Leather</option>
+                        <option value="Rubber">Rubber</option>
+                        <option value="Fabric">Fabric</option>
+                      </optgroup>
+                      <optgroup label="Rolex Bracelet Types">
+                        <option value="Flat Jubilee (Rolex)">
+                          Flat Jubilee
+                        </option>
+                        <option value="Jubilee (Rolex)">Jubilee</option>
+                        <option value="President (Rolex)">President</option>
+                        <option value="Pearlmaster (Rolex)">Pearlmaster</option>
+                        <option value="Oysterflex (Rolex)">Oysterflex</option>
+                        <option value="Oyster (Rolex)">Oyster</option>
+                      </optgroup>
+                      <optgroup label="Omega Bracelet Types">
+                        <option value="Speedmaster (Omega)">Speedmaster</option>
+                        <option value="Seamaster (Omega)">Seamaster</option>
+                        <option value="Flat Link (Omega)">Flat Link</option>
+                      </optgroup>
+                      <optgroup label="Other Brand Bracelet Types">
+                        <option value="Santos (Cartier)">
+                          Santos (Cartier)
+                        </option>
+                        <option value="Ballon Bleu (Cartier)">
+                          Ballon Bleu (Cartier)
+                        </option>
+                        <option value="Professional (Breitling)">
+                          Professional (Breitling)
+                        </option>
+                        <option value="Pilot (Breitling)">
+                          Pilot (Breitling)
+                        </option>
+                        <option value="Navitimer (Breitling)">
+                          Navitimer (Breitling)
+                        </option>
+                        <option value="Big Bang Integrated (Hublot)">
+                          Big Bang Integrated (Hublot)
+                        </option>
+                        <option value="Royal Oak (Audemars Piguet)">
+                          Royal Oak (AP)
+                        </option>
+                        <option value="Royal Oak Offshore (Audemars Piguet)">
+                          Royal Oak Offshore (AP)
+                        </option>
+                        <option value="Nautilus (Patek Philippe)">
+                          Nautilus (Patek)
+                        </option>
+                        <option value="Aquanaut (Patek Philippe)">
+                          Aquanaut (Patek)
+                        </option>
+                        <option value="Overseas (Vacheron Constantin)">
+                          Overseas (VC)
+                        </option>
+                        <option value="Polaris (Jaeger-LeCoultre)">
+                          Polaris (JLC)
+                        </option>
+                        <option value="Reverso (Jaeger-LeCoultre)">
+                          Reverso (JLC)
+                        </option>
+                      </optgroup>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg
+                        className="fill-current h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Select the bracelet or strap type
+                  </p>
                 </div>
 
                 <div>
@@ -1498,23 +1562,56 @@ export default function AddProduct() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Movement
                   </label>
-                  <select
-                    name="movement"
-                    value={
-                      formData.movement?.length > 0 ? formData.movement[0] : ""
-                    }
-                    onChange={handleChange}
-                    className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="">Select movement</option>
-                    <option value="Automatic">Automatic</option>
-                    <option value="Manual">Manual</option>
-                    <option value="Quartz">Quartz</option>
-                    <option value="Solar">Solar</option>
-                    <option value="Kinetic">Kinetic</option>
-                    <option value="Spring Drive">Spring Drive</option>
-                    <option value="Co-Axial">Co-Axial</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      name="movement"
+                      value={
+                        formData.movement?.length > 0
+                          ? formData.movement[0]
+                          : ""
+                      }
+                      onChange={handleChange}
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white appearance-none pr-8"
+                    >
+                      <option value="">Select movement type</option>
+                      <optgroup label="Mechanical Movements">
+                        <option value="Automatic">Automatic</option>
+                        <option value="Manual">Manual (Hand-wound)</option>
+                        <option value="Mechanical">Mechanical (General)</option>
+                        <option value="In-House">In-House Movement</option>
+                      </optgroup>
+                      <optgroup label="Quartz Movements">
+                        <option value="Quartz">Quartz (Battery)</option>
+                        <option value="Solar">Solar Powered</option>
+                        <option value="Kinetic">Kinetic (Self-charging)</option>
+                      </optgroup>
+                      <optgroup label="Specialized Movements">
+                        <option value="Spring Drive">
+                          Spring Drive (Seiko/Grand Seiko)
+                        </option>
+                        <option value="Co-Axial">Co-Axial (Omega)</option>
+                        <option value="Chronometer">
+                          COSC Certified Chronometer
+                        </option>
+                        <option value="Tourbillon">Tourbillon</option>
+                        <option value="Perpetual Calendar">
+                          Perpetual Calendar
+                        </option>
+                      </optgroup>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg
+                        className="fill-current h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Select the watches movement mechanism
+                  </p>
                 </div>
 
                 <div>
@@ -1654,144 +1751,86 @@ export default function AddProduct() {
                     disabled={isUploading}
                   />
                   <p className="ml-4 text-sm text-gray-500">
-                    Select multiple images by holding Ctrl (or Cmd) while
-                    clicking.
+                    JPG, PNG, or WEBP. Max 5 images. You must select front and
+                    back images.
                   </p>
                 </div>
 
                 {/* Image Gallery */}
                 {allImages.length > 0 && (
-                  <div className="mt-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <h4 className="text-sm font-medium text-gray-700">
-                        Product Images ({allImages.length})
-                      </h4>
-                      {!formData.imageUrl && (
-                        <p className="text-sm text-yellow-600">
-                          Please select a main (front) image
-                        </p>
-                      )}
-                    </div>
-                    <div
-                      className="max-h-[480px] overflow-y-auto pr-2"
-                      style={{ scrollbarWidth: "thin" }}
-                    >
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {allImages.map((img, index) => (
-                          <div
-                            key={index}
-                            className="relative border border-gray-300 rounded-lg overflow-hidden bg-white"
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
+                    {allImages.map((imageUrl, index) => (
+                      <div
+                        key={index}
+                        className="relative border rounded-md p-2 bg-gray-50"
+                      >
+                        <Image
+                          src={imageUrl}
+                          alt={`Product image ${index + 1}`}
+                          width={150}
+                          height={150}
+                          className="w-full h-32 object-contain mb-2"
+                          unoptimized={true}
+                        />
+
+                        <div className="flex flex-col space-y-1 mt-2">
+                          <button
+                            type="button"
+                            onClick={() => setAsMainImage(imageUrl)}
+                            className={`text-xs py-1 px-2 rounded-md ${
+                              formData.imageUrl === imageUrl
+                                ? "bg-blue-500 text-white"
+                                : "bg-gray-200 hover:bg-blue-100"
+                            }`}
                           >
-                            <div className="relative h-40 bg-gray-100">
-                              <Image
-                                src={img}
-                                alt={`Product ${index + 1}`}
-                                className="h-full w-full object-contain"
-                                width={500}
-                                height={320}
-                                unoptimized={true}
-                              />
-                              {/* Indicator icons for main/backside images */}
-                              {img === formData.imageUrl && (
-                                <div className="absolute top-0 left-0 bg-blue-500 text-white text-xs font-medium px-2 py-1 rounded-br">
-                                  Main
-                                </div>
-                              )}
-                            </div>
+                            {formData.imageUrl === imageUrl
+                              ? "Front Image ✓"
+                              : "Set as Front"}
+                          </button>
 
-                            <div className="p-2 bg-gray-50 border-t border-gray-200">
-                              <div className="flex justify-between items-center">
-                                {/* Set as main/backside */}
-                                <button
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.preventDefault(); // Prevent scrolling
-                                    setAsMainImage(img);
-                                  }}
-                                  className={`px-2 py-1 text-xs font-medium rounded ${
-                                    img === formData.imageUrl
-                                      ? "bg-blue-100 text-blue-600"
-                                      : "bg-gray-200 text-gray-700 hover:bg-blue-100 hover:text-blue-600"
-                                  }`}
-                                  title="Set as main image"
-                                >
-                                  Front
-                                </button>
+                          <div className="flex space-x-1 mt-1">
+                            <button
+                              type="button"
+                              onClick={() => moveImageUp(index)}
+                              disabled={index === 0}
+                              className={`flex-1 text-xs py-1 px-2 rounded-md ${
+                                index === 0
+                                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                  : "bg-blue-100 text-blue-600 hover:bg-blue-200"
+                              }`}
+                            >
+                              ↑ Up
+                            </button>
 
-                                {/* Delete button */}
-                                <button
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.preventDefault(); // Prevent scrolling
-                                    removeImage(img);
-                                  }}
-                                  className="p-1 bg-red-100 text-red-600 rounded hover:bg-red-200"
-                                  title="Remove image"
-                                >
-                                  <svg
-                                    className="h-4 w-4"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M6 18L18 6M6 6l12 12"
-                                    />
-                                  </svg>
-                                </button>
-                              </div>
-
-                              {/* Reorder buttons */}
-                              <div className="flex flex-col space-y-1 mt-1">
-                                <button
-                                  type="button"
-                                  className="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    moveImageUp(index);
-                                  }}
-                                  disabled={index === 0}
-                                >
-                                  ↑ Up
-                                </button>
-
-                                <button
-                                  type="button"
-                                  className="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    moveImageDown(index);
-                                  }}
-                                  disabled={index === allImages.length - 1}
-                                >
-                                  ↓ Down
-                                </button>
-
-                                <button
-                                  type="button"
-                                  className="text-xs bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    removeImage(img);
-                                  }}
-                                >
-                                  Remove
-                                </button>
-                              </div>
-                            </div>
+                            <button
+                              type="button"
+                              onClick={() => moveImageDown(index)}
+                              disabled={index === allImages.length - 1}
+                              className={`flex-1 text-xs py-1 px-2 rounded-md ${
+                                index === allImages.length - 1
+                                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                  : "bg-blue-100 text-blue-600 hover:bg-blue-200"
+                              }`}
+                            >
+                              ↓ Down
+                            </button>
                           </div>
-                        ))}
+
+                          <button
+                            type="button"
+                            onClick={() => removeImage(imageUrl)}
+                            className="text-xs py-1 px-2 rounded-md bg-red-100 hover:bg-red-200 text-red-600"
+                          >
+                            Remove
+                          </button>
+                        </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
                 )}
 
-                {/* No images message */}
                 {allImages.length === 0 && (
-                  <div className="mt-4 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
                     <svg
                       className="mx-auto h-12 w-12 text-gray-400"
                       fill="none"
@@ -1801,13 +1840,15 @@ export default function AddProduct() {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={1.5}
+                        strokeWidth="1"
                         d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                       />
                     </svg>
-                    <p className="mt-1 text-sm text-gray-500">
-                      No product images yet. Click the Upload Images button
-                      above to add images.
+                    <p className="mt-2 text-sm text-gray-500">
+                      No images uploaded yet
+                    </p>
+                    <p className="mt-1 text-xs text-gray-400">
+                      Click Upload Images to add product photos
                     </p>
                   </div>
                 )}
@@ -1820,7 +1861,7 @@ export default function AddProduct() {
                 Settings
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Status

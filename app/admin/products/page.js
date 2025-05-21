@@ -540,11 +540,10 @@ export default function ProductsManagement() {
                               : "bg-yellow-100 text-yellow-800"
                           }`}
                         >
-                          <option value="live">Live</option>
                           <option value="in_stock">In Stock</option>
                           <option value="reserved">Reserved</option>
                           <option value="archive">Archive</option>
-                          <option value="draft">Draft</option>
+                          
                           <option value="sold_out">Sold Out</option>
                         </select>
                       </td>
