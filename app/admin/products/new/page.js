@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -10,7 +10,9 @@ export default function AddProduct() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     brand: "",
+    brandId: "",
     model: "",
+    modelId: "",
     reference: "",
     year: "",
     condition: {
@@ -48,7 +50,6 @@ export default function AddProduct() {
     // Private CRM fields
     purchasePrice: "",
     serialNumber: "",
-    notes: "",
   });
 
   const [allImages, setAllImages] = useState([]);
@@ -56,6 +57,61 @@ export default function AddProduct() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [brands, setBrands] = useState([]);
+  const [models, setModels] = useState([]);
+  const [loadingBrands, setLoadingBrands] = useState(true);
+  const [loadingModels, setLoadingModels] = useState(false);
+
+  useEffect(() => {
+    fetchBrands();
+  }, []);
+
+  const fetchBrands = async () => {
+    try {
+      setLoadingBrands(true);
+      const response = await fetch("/api/brands");
+      const data = await response.json();
+
+      if (data.success) {
+        const activeBrands = data.data.filter((brand) => brand.active);
+        setBrands(activeBrands);
+      } else {
+        console.error("Failed to fetch brands:", data.message);
+        toast.error("Failed to fetch brands");
+      }
+    } catch (error) {
+      console.error("Error fetching brands:", error);
+      toast.error("Error fetching brands");
+    } finally {
+      setLoadingBrands(false);
+    }
+  };
+
+  const fetchModelsByBrand = async (brandId) => {
+    if (!brandId) {
+      setModels([]);
+      return;
+    }
+
+    try {
+      setLoadingModels(true);
+      const response = await fetch(`/api/models?brandId=${brandId}`);
+      const data = await response.json();
+
+      if (data.success) {
+        const activeModels = data.data.filter((model) => model.active);
+        setModels(activeModels);
+      } else {
+        console.error("Failed to fetch models:", data.message);
+        toast.error("Failed to fetch models");
+      }
+    } catch (error) {
+      console.error("Error fetching models:", error);
+      toast.error("Error fetching models");
+    } finally {
+      setLoadingModels(false);
+    }
+  };
 
   // Autofill function for testing
   const autoFillTestData = () => {
@@ -165,7 +221,25 @@ export default function AddProduct() {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    if (name === "hasBox" || name === "hasPapers") {
+    if (name === "brandId") {
+      // When brand changes, reset model and fetch new models
+      setFormData((prev) => ({
+        ...prev,
+        brandId: value,
+        modelId: "",
+        model: "",
+        // Set the brand name from the selected brand
+        brand: value ? brands.find((b) => b._id === value)?.name || "" : "",
+      }));
+      fetchModelsByBrand(value);
+    } else if (name === "modelId") {
+      setFormData((prev) => ({
+        ...prev,
+        modelId: value,
+        // Set the model name from the selected model
+        model: value ? models.find((m) => m._id === value)?.name || "" : "",
+      }));
+    } else if (name === "condition.hasBox" || name === "condition.hasPapers") {
       setFormData((prev) => ({
         ...prev,
         condition: {
@@ -173,10 +247,7 @@ export default function AddProduct() {
           [name]: checked,
         },
       }));
-      return;
-    }
-
-    if (name === "conditionStatus") {
+    } else if (name === "condition.status") {
       setFormData((prev) => ({
         ...prev,
         condition: {
@@ -184,10 +255,7 @@ export default function AddProduct() {
           status: value,
         },
       }));
-      return;
-    }
-
-    if (name === "conditionDetails") {
+    } else if (name === "condition.details") {
       setFormData((prev) => ({
         ...prev,
         condition: {
@@ -195,11 +263,7 @@ export default function AddProduct() {
           details: value,
         },
       }));
-      return;
-    }
-
-    // Handle the depth field
-    if (name === "depth") {
+    } else if (name === "depth") {
       if (value === "Other") {
         setFormData((prev) => ({
           ...prev,
@@ -213,27 +277,23 @@ export default function AddProduct() {
           depthCustom: "", // Clear custom depth when a predefined option is selected
         }));
       }
-      return;
-    }
-
-    // Handle the depthCustom field
-    if (name === "depthCustom") {
+    } else if (name === "depthCustom") {
       setFormData((prev) => ({
         ...prev,
         depthCustom: value,
       }));
-      return;
-    }
-
-    // Handle specification fields (caseSize, caseMaterial, dialColour, bracelet, movement)
-    const specFields = [
-      "caseSize",
-      "caseMaterial",
-      "dialColour",
-      "bracelet",
-      "movement",
-    ];
-    if (specFields.includes(name)) {
+    } else if (name === "itemCode") {
+      setFormData((prev) => ({
+        ...prev,
+        itemCode: value,
+      }));
+    } else if (
+      name === "caseSize" ||
+      name === "caseMaterial" ||
+      name === "dialColour" ||
+      name === "bracelet" ||
+      name === "movement"
+    ) {
       if (value === "") {
         // If empty value, set as empty array
         setFormData((prev) => ({
@@ -247,14 +307,13 @@ export default function AddProduct() {
           [name]: [value],
         }));
       }
-      return;
+    } else {
+      // Set the value in form data first
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }));
     }
-
-    // Set the value in form data first
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
 
     // Handle price calculations - discount is only related to price and discountedPrice
     if (name === "price" || name === "discount" || name === "discountedPrice") {
@@ -290,7 +349,6 @@ export default function AddProduct() {
           if (newDiscount >= 0) {
             setFormData((prev) => ({ ...prev, discount: newDiscount }));
           }
-          return;
         }
 
         // If user entered a discount percentage
@@ -311,7 +369,6 @@ export default function AddProduct() {
               discountedPrice: newDiscountedPrice.toString(),
             }));
           }
-          return;
         }
 
         // If user changed the price and there's a discount
@@ -569,71 +626,113 @@ export default function AddProduct() {
 
   // Prepare form data for submission
   const prepareFormDataForSubmission = () => {
-    // We'll create a copy of the form data
-    const submissionData = { ...formData };
+    // Create a copy of the form data
+    const formDataCopy = { ...formData };
+
+    // Handle empty values
+    if (!formDataCopy.discountedPrice) {
+      formDataCopy.discountedPrice = formDataCopy.price;
+    }
+
+    // Make sure brandId and modelId are included
+    if (!formDataCopy.brandId && formDataCopy.brand) {
+      const foundBrand = brands.find(
+        (b) => b.name.toLowerCase() === formDataCopy.brand.toLowerCase()
+      );
+      if (foundBrand) {
+        formDataCopy.brandId = foundBrand._id;
+      }
+    }
+
+    if (!formDataCopy.modelId && formDataCopy.model) {
+      const foundModel = models.find(
+        (m) => m.name.toLowerCase() === formDataCopy.model.toLowerCase()
+      );
+      if (foundModel) {
+        formDataCopy.modelId = foundModel._id;
+      }
+    }
+
+    // Ensure additionalImages is properly formatted
+    if (allImages.length > 0) {
+      // Main image is already set in formData.imageUrl
+      // Backside image is already set in formData.backsideImageUrl
+      
+      // For additional images, filter out the main and backside images
+      const additionalImagesArray = allImages
+        .filter(
+          (img) => img !== formDataCopy.imageUrl && img !== formDataCopy.backsideImageUrl
+        )
+        .map((url, index) => ({
+          url,
+          order: index,
+        }));
+      
+      formDataCopy.additionalImages = additionalImagesArray;
+    }
 
     // For images, we need to filter out any that haven't been set
-    if (!submissionData.imageUrl) {
+    if (!formDataCopy.imageUrl) {
       setError("Please select a main image for the product");
       return null;
     }
 
     // For condition, we have to ensure we're sending the right format
-    submissionData.condition = {
-      hasBox: formData.condition?.hasBox || false,
-      hasPapers: formData.condition?.hasPapers || false,
-      status: formData.condition?.status || "Good",
+    formDataCopy.condition = {
+      hasBox: formDataCopy.condition?.hasBox || false,
+      hasPapers: formDataCopy.condition?.hasPapers || false,
+      status: formDataCopy.condition?.status || "Good",
       details: "",
     };
 
     // Process depth field - if "Other" is selected, use the custom depth value
-    if (submissionData.depth === "Other" && submissionData.depthCustom) {
-      submissionData.depth = submissionData.depthCustom;
+    if (formDataCopy.depth === "Other" && formDataCopy.depthCustom) {
+      formDataCopy.depth = formDataCopy.depthCustom;
     }
 
     // Ensure waterResistance is a boolean
-    submissionData.waterResistance = !!submissionData.waterResistance;
+    formDataCopy.waterResistance = !!formDataCopy.waterResistance;
 
     // Process price fields to ensure consistency
-    const price = parseFloat(submissionData.price?.replace(/,/g, "") || 0) || 0;
+    const price = parseFloat(formDataCopy.price?.replace(/,/g, "") || 0) || 0;
     const discountedPrice =
-      parseFloat(submissionData.discountedPrice?.replace(/,/g, "") || 0) || 0;
-    const discount = parseFloat(submissionData.discount || 0) || 0;
+      parseFloat(formDataCopy.discountedPrice?.replace(/,/g, "") || 0) || 0;
+    const discount = parseFloat(formDataCopy.discount || 0) || 0;
 
     // Make sure price is always set as a string
-    submissionData.price = price.toString();
+    formDataCopy.price = price.toString();
 
     // Handle discounted price logic
     if (discountedPrice > 0 && discountedPrice < price) {
       // If discounted price is set and valid, use it
-      submissionData.discountedPrice = discountedPrice.toString();
+      formDataCopy.discountedPrice = discountedPrice.toString();
 
       // Calculate the discount percentage if it's not already set
       if (!discount) {
-        submissionData.discount = Math.round(
+        formDataCopy.discount = Math.round(
           ((price - discountedPrice) / price) * 100
         ).toString();
       } else {
-        submissionData.discount = discount.toString();
+        formDataCopy.discount = discount.toString();
       }
     } else if (discount > 0 && discount <= 100) {
       // If discount percentage is set, calculate the discounted price
-      submissionData.discountedPrice = Math.round(
+      formDataCopy.discountedPrice = Math.round(
         price * (1 - discount / 100)
       ).toString();
-      submissionData.discount = discount.toString();
+      formDataCopy.discount = discount.toString();
     } else {
       // If no valid discount or discounted price, clear these fields
-      submissionData.discountedPrice = "0";
-      submissionData.discount = "0";
+      formDataCopy.discountedPrice = "0";
+      formDataCopy.discount = "0";
     }
 
     // Handle originalPrice (RRP) - keep as string, don't convert to number
     if (
-      !submissionData.originalPrice ||
-      submissionData.originalPrice.trim() === ""
+      !formDataCopy.originalPrice ||
+      formDataCopy.originalPrice.trim() === ""
     ) {
-      submissionData.originalPrice = price.toString();
+      formDataCopy.originalPrice = price.toString();
     }
 
     // Convert specification fields to arrays if they're not already
@@ -646,21 +745,21 @@ export default function AddProduct() {
     ];
     specFields.forEach((field) => {
       // Convert arrays to strings (joined with comma)
-      if (Array.isArray(submissionData[field])) {
-        submissionData[field] = submissionData[field]
+      if (Array.isArray(formDataCopy[field])) {
+        formDataCopy[field] = formDataCopy[field]
           .filter(Boolean)
           .join(", ");
-      } else if (!submissionData[field]) {
-        submissionData[field] = "";
+      } else if (!formDataCopy[field]) {
+        formDataCopy[field] = "";
       } else {
         // Ensure any non-arrays are converted to strings
-        submissionData[field] = submissionData[field].toString();
+        formDataCopy[field] = formDataCopy[field].toString();
       }
     });
 
     // Process additionalImages based on allImages order, filtering out the main and backside images
-    const mainImage = submissionData.imageUrl;
-    const backsideImage = submissionData.backsideImageUrl;
+    const mainImage = formDataCopy.imageUrl;
+    const backsideImage = formDataCopy.backsideImageUrl;
 
     // Get all images except main and backside, preserving the order from allImages
     const additionalImagesInOrder = allImages
@@ -671,34 +770,34 @@ export default function AddProduct() {
       }));
 
     // Update the submission data with properly ordered additional images
-    submissionData.additionalImages = additionalImagesInOrder;
+    formDataCopy.additionalImages = additionalImagesInOrder;
 
     console.log(
       "Submitting with additionalImages:",
-      submissionData.additionalImages
+      formDataCopy.additionalImages
     );
 
     // Ensure all required fields are present and valid
-    if (!submissionData.brand || submissionData.brand.trim() === "") {
+    if (!formDataCopy.brand || formDataCopy.brand.trim() === "") {
       setError("Brand is required");
       return null;
     }
 
-    if (!submissionData.model || submissionData.model.trim() === "") {
+    if (!formDataCopy.model || formDataCopy.model.trim() === "") {
       setError("Model is required");
       return null;
     }
 
     if (
-      !submissionData.price ||
-      isNaN(parseFloat(submissionData.price.replace(/,/g, "")))
+      !formDataCopy.price ||
+      isNaN(parseFloat(formDataCopy.price.replace(/,/g, "")))
     ) {
       setError("A valid price is required");
       return null;
     }
 
     // Return the cleaned data
-    return submissionData;
+    return formDataCopy;
   };
 
   // Handle form submission
@@ -912,6 +1011,79 @@ export default function AddProduct() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Brand and Model Selection */}
+            <div className="space-y-4">
+              <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
+                Brand and Model
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Brand <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    name="brandId"
+                    value={formData.brandId}
+                    onChange={handleChange}
+                    className="w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    required
+                    disabled={loadingBrands}
+                  >
+                    <option value="">Select Brand</option>
+                    {brands.map((brand) => (
+                      <option key={brand._id} value={brand._id}>
+                        {brand.name}
+                      </option>
+                    ))}
+                  </select>
+                  {loadingBrands && (
+                    <div className="mt-2 text-sm text-gray-500">
+                      Loading brands...
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Model <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    name="modelId"
+                    value={formData.modelId}
+                    onChange={handleChange}
+                    className="w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    required
+                    disabled={!formData.brandId || loadingModels}
+                  >
+                    <option value="">Select Model</option>
+                    {models.map((model) => (
+                      <option key={model._id} value={model._id}>
+                        {model.name}
+                      </option>
+                    ))}
+                  </select>
+                  {loadingModels && (
+                    <div className="mt-2 text-sm text-gray-500">
+                      Loading models...
+                    </div>
+                  )}
+                  {formData.brandId &&
+                    models.length === 0 &&
+                    !loadingModels && (
+                      <div className="mt-2 text-sm text-amber-600">
+                        No models found for this brand.{" "}
+                        <Link
+                          href={`/admin/models/new?brandId=${formData.brandId}`}
+                          className="text-blue-600 hover:underline"
+                        >
+                          Add a new model
+                        </Link>
+                      </div>
+                    )}
+                </div>
+              </div>
+            </div>
+
             {/* Basic Information */}
             <div className="space-y-4">
               <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
@@ -937,42 +1109,6 @@ export default function AddProduct() {
                 <p className="mt-1 text-xs text-gray-500">
                   Starting with AA001, auto-generated if left blank
                 </p>
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="brand"
-                >
-                  Brand <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="brand"
-                  name="brand"
-                  value={formData.brand}
-                  onChange={handleChange}
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                  htmlFor="model"
-                >
-                  Model <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="model"
-                  name="model"
-                  value={formData.model}
-                  onChange={handleChange}
-                  className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                  required
-                />
               </div>
 
               <div>

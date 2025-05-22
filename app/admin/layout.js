@@ -103,6 +103,27 @@ export default function AdminLayout({ children }) {
             >
               Products
             </Link>
+            <Link
+              href="/admin/brands"
+              className={`block py-2.5 px-4 rounded transition duration-200 ${
+                pathname.includes("/admin/brands") &&
+                !pathname.includes("/admin/brands/")
+                  ? "bg-blue-500 text-white"
+                  : "text-gray-700 hover:bg-blue-100"
+              }`}
+            >
+              Brands
+            </Link>
+            <Link
+              href="/admin/models"
+              className={`block py-2.5 px-4 rounded transition duration-200 ${
+                pathname.includes("/admin/models")
+                  ? "bg-blue-500 text-white"
+                  : "text-gray-700 hover:bg-blue-100"
+              }`}
+            >
+              Watch Models
+            </Link>
           </div>
 
           <div className="px-4 mt-8">

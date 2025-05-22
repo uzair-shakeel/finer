@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { toast } from "react-hot-toast";
 
 // Price History Modal Component
 const PriceHistoryModal = ({ isOpen, onClose, priceHistory }) => {
@@ -147,6 +148,10 @@ export default function EditProduct({ params }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isPriceHistoryModalOpen, setIsPriceHistoryModalOpen] = useState(false);
+  const [brands, setBrands] = useState([]);
+  const [models, setModels] = useState([]);
+  const [loadingBrands, setLoadingBrands] = useState(true);
+  const [loadingModels, setLoadingModels] = useState(false);
 
   // Fetch product data
   useEffect(() => {
@@ -168,9 +173,11 @@ export default function EditProduct({ params }) {
           const product = data.product;
 
           // Initialize form data with product data
-          setFormData({
+          const formDataWithProduct = {
             brand: product.brand || "",
+            brandId: product.brandId || "",
             model: product.model || "",
+            modelId: product.modelId || "",
             reference: product.reference || "",
             year: product.year || "",
             condition: product.condition || {
@@ -227,7 +234,14 @@ export default function EditProduct({ params }) {
             serialNumber: product.serialNumber || "",
             priceHistory: product.priceHistory || [],
             notes: product.notes || "",
-          });
+          };
+
+          setFormData(formDataWithProduct);
+
+          // If we have a brandId, fetch the models for that brand
+          if (product.brandId) {
+            fetchModelsByBrand(product.brandId);
+          }
 
           // Build the initial allImages array from all image URLs in the product
           const imagesList = [
@@ -265,6 +279,45 @@ export default function EditProduct({ params }) {
   // Handle form field changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    // Handle brand selection
+    if (name === "brandId" && value) {
+      fetchModelsByBrand(value);
+
+      // Reset model when brand changes
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+        modelId: "",
+        // Keep the brand name for backward compatibility
+        brand: brands.find((brand) => brand._id === value)?.name || "",
+      }));
+      return;
+    }
+
+    // Handle model selection
+    if (name === "modelId" && value) {
+      const selectedModel = models.find((model) => model._id === value);
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+        // Keep the model name for backward compatibility
+        model: selectedModel?.name || "",
+        // If the model has common case sizes, use the first one
+        ...(selectedModel?.commonCaseSizes?.length > 0 && {
+          caseSize: [selectedModel.commonCaseSizes[0]],
+        }),
+        // If the model has common materials, use the first one
+        ...(selectedModel?.commonMaterials?.length > 0 && {
+          caseMaterial: [selectedModel.commonMaterials[0]],
+        }),
+        // If the model has a reference prefix, use it
+        ...(selectedModel?.referencePrefix && {
+          reference: selectedModel.referencePrefix,
+        }),
+      }));
+      return;
+    }
 
     if (name === "hasBox" || name === "hasPapers") {
       setFormData((prev) => ({
@@ -730,6 +783,62 @@ export default function EditProduct({ params }) {
     setIsPriceHistoryModalOpen(false);
   };
 
+  // Add this useEffect to fetch brands when the component mounts
+  useEffect(() => {
+    fetchBrands();
+  }, []);
+
+  // Add this function to fetch brands
+  const fetchBrands = async () => {
+    try {
+      setLoadingBrands(true);
+      const response = await fetch("/api/brands");
+      const data = await response.json();
+
+      if (data.success) {
+        // Only show active brands
+        const activeBrands = data.data.filter((brand) => brand.active);
+        setBrands(activeBrands);
+      } else {
+        console.error("Failed to fetch brands:", data.message);
+        toast.error("Failed to fetch brands");
+      }
+    } catch (error) {
+      console.error("Error fetching brands:", error);
+      toast.error("Error fetching brands");
+    } finally {
+      setLoadingBrands(false);
+    }
+  };
+
+  // Add this function to fetch models based on selected brand
+  const fetchModelsByBrand = async (brandId) => {
+    if (!brandId) {
+      setModels([]);
+      return;
+    }
+
+    try {
+      setLoadingModels(true);
+      const response = await fetch(`/api/models?brandId=${brandId}`);
+      const data = await response.json();
+
+      if (data.success) {
+        // Only show active models
+        const activeModels = data.data.filter((model) => model.active);
+        setModels(activeModels);
+      } else {
+        console.error("Failed to fetch models:", data.message);
+        toast.error("Failed to fetch models");
+      }
+    } catch (error) {
+      console.error("Error fetching models:", error);
+      toast.error("Error fetching models");
+    } finally {
+      setLoadingModels(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="text-center py-12">
@@ -934,15 +1043,19 @@ export default function EditProduct({ params }) {
                 >
                   Brand <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  id="brand"
-                  name="brand"
-                  value={formData.brand}
+                <select
+                  name="brandId"
+                  value={formData.brandId}
                   onChange={handleChange}
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                  required
-                />
+                >
+                  <option value="">Select brand</option>
+                  {brands.map((brand) => (
+                    <option key={brand._id} value={brand._id}>
+                      {brand.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
@@ -952,15 +1065,19 @@ export default function EditProduct({ params }) {
                 >
                   Model <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  id="model"
-                  name="model"
-                  value={formData.model}
+                <select
+                  name="modelId"
+                  value={formData.modelId}
                   onChange={handleChange}
                   className="w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-3 py-2"
-                  required
-                />
+                >
+                  <option value="">Select model</option>
+                  {models.map((model) => (
+                    <option key={model._id} value={model._id}>
+                      {model.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>

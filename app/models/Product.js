@@ -56,10 +56,18 @@ const ProductSchema = new mongoose.Schema(
       required: [true, "Please provide a brand"],
       trim: true,
     },
+    brandId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Brand",
+    },
     model: {
       type: String,
       required: [true, "Please provide a model"],
       trim: true,
+    },
+    modelId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "WatchModel",
     },
     reference: {
       type: String,
