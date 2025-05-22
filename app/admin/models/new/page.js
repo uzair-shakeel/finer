@@ -215,7 +215,7 @@ export default function NewModelPage() {
               </label>
             </div>
             <p className="text-xs text-gray-500 mt-1">
-              Inactive models won't be shown in product dropdowns
+              Inactive models wont be shown in product dropdowns
             </p>
           </div>
 
