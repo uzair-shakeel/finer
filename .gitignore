@@ -12,7 +12,9 @@
 # next.js
 /.next/
 /out/
-
+env.local
+env
+.env
 # production
 /build
 

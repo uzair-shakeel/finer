@@ -657,17 +657,19 @@ export default function AddProduct() {
     if (allImages.length > 0) {
       // Main image is already set in formData.imageUrl
       // Backside image is already set in formData.backsideImageUrl
-      
+
       // For additional images, filter out the main and backside images
       const additionalImagesArray = allImages
         .filter(
-          (img) => img !== formDataCopy.imageUrl && img !== formDataCopy.backsideImageUrl
+          (img) =>
+            img !== formDataCopy.imageUrl &&
+            img !== formDataCopy.backsideImageUrl
         )
         .map((url, index) => ({
           url,
           order: index,
         }));
-      
+
       formDataCopy.additionalImages = additionalImagesArray;
     }
 
@@ -746,9 +748,7 @@ export default function AddProduct() {
     specFields.forEach((field) => {
       // Convert arrays to strings (joined with comma)
       if (Array.isArray(formDataCopy[field])) {
-        formDataCopy[field] = formDataCopy[field]
-          .filter(Boolean)
-          .join(", ");
+        formDataCopy[field] = formDataCopy[field].filter(Boolean).join(", ");
       } else if (!formDataCopy[field]) {
         formDataCopy[field] = "";
       } else {
@@ -1011,79 +1011,6 @@ export default function AddProduct() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Brand and Model Selection */}
-            <div className="space-y-4">
-              <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
-                Brand and Model
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Brand <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="brandId"
-                    value={formData.brandId}
-                    onChange={handleChange}
-                    className="w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    required
-                    disabled={loadingBrands}
-                  >
-                    <option value="">Select Brand</option>
-                    {brands.map((brand) => (
-                      <option key={brand._id} value={brand._id}>
-                        {brand.name}
-                      </option>
-                    ))}
-                  </select>
-                  {loadingBrands && (
-                    <div className="mt-2 text-sm text-gray-500">
-                      Loading brands...
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Model <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="modelId"
-                    value={formData.modelId}
-                    onChange={handleChange}
-                    className="w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    required
-                    disabled={!formData.brandId || loadingModels}
-                  >
-                    <option value="">Select Model</option>
-                    {models.map((model) => (
-                      <option key={model._id} value={model._id}>
-                        {model.name}
-                      </option>
-                    ))}
-                  </select>
-                  {loadingModels && (
-                    <div className="mt-2 text-sm text-gray-500">
-                      Loading models...
-                    </div>
-                  )}
-                  {formData.brandId &&
-                    models.length === 0 &&
-                    !loadingModels && (
-                      <div className="mt-2 text-sm text-amber-600">
-                        No models found for this brand.{" "}
-                        <Link
-                          href={`/admin/models/new?brandId=${formData.brandId}`}
-                          className="text-blue-600 hover:underline"
-                        >
-                          Add a new model
-                        </Link>
-                      </div>
-                    )}
-                </div>
-              </div>
-            </div>
-
             {/* Basic Information */}
             <div className="space-y-4">
               <h2 className="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-4 text-blue-700">
@@ -1109,6 +1036,68 @@ export default function AddProduct() {
                 <p className="mt-1 text-xs text-gray-500">
                   Starting with AA001, auto-generated if left blank
                 </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Brand <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="brandId"
+                  value={formData.brandId}
+                  onChange={handleChange}
+                  className="w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  required
+                  disabled={loadingBrands}
+                >
+                  <option value="">Select Brand</option>
+                  {brands.map((brand) => (
+                    <option key={brand._id} value={brand._id}>
+                      {brand.name}
+                    </option>
+                  ))}
+                </select>
+                {loadingBrands && (
+                  <div className="mt-2 text-sm text-gray-500">
+                    Loading brands...
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Model <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="modelId"
+                  value={formData.modelId}
+                  onChange={handleChange}
+                  className="w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  required
+                  disabled={!formData.brandId || loadingModels}
+                >
+                  <option value="">Select Model</option>
+                  {models.map((model) => (
+                    <option key={model._id} value={model._id}>
+                      {model.name}
+                    </option>
+                  ))}
+                </select>
+                {loadingModels && (
+                  <div className="mt-2 text-sm text-gray-500">
+                    Loading models...
+                  </div>
+                )}
+                {formData.brandId && models.length === 0 && !loadingModels && (
+                  <div className="mt-2 text-sm text-amber-600">
+                    No models found for this brand.{" "}
+                    <Link
+                      href={`/admin/models/new?brandId=${formData.brandId}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Add a new model
+                    </Link>
+                  </div>
+                )}
               </div>
 
               <div>
