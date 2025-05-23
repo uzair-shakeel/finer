@@ -5,36 +5,86 @@ import WatchModel from "@/app/models/WatchModel";
 
 // GET all brands
 export async function GET(request) {
+  console.log("GET /api/brands - Starting request");
+
   try {
     const { searchParams } = new URL(request.url);
     const includeModels = searchParams.get("includeModels") === "true";
 
+    console.log("Connecting to database...");
     await connectDB();
+    console.log("Database connected successfully");
 
-    const brands = await Brand.find({}).sort({ name: 1 });
+    // Get all brands, sorted by displayOrder and name
+    console.log("Fetching brands from database...");
+    const brands = await Brand.find({})
+      .sort({ displayOrder: 1, name: 1 })
+      .lean()
+      .exec();
+
+    console.log(`Found ${brands?.length || 0} brands`);
+
+    // Transform the brands to ensure IDs are strings
+    const transformedBrands = brands.map(brand => ({
+      ...brand,
+      _id: brand._id.toString()
+    }));
+
+    if (!transformedBrands || transformedBrands.length === 0) {
+      console.log("No brands found in database");
+      return NextResponse.json({
+        success: true,
+        data: [],
+        message: "No brands found",
+      });
+    }
 
     // If includeModels is true, fetch models for each brand
     if (includeModels) {
+      console.log("Fetching models for brands...");
       const brandsWithModels = await Promise.all(
-        brands.map(async (brand) => {
-          const models = await WatchModel.find({ brandId: brand._id }).sort({
-            name: 1,
-          });
+        transformedBrands.map(async (brand) => {
+          const models = await WatchModel.find({ brandId: brand._id })
+            .sort({ name: 1 })
+            .lean()
+            .exec();
+          
+          // Transform model IDs to strings as well
+          const transformedModels = models.map(model => ({
+            ...model,
+            _id: model._id.toString(),
+            brandId: model.brandId.toString()
+          }));
+
           return {
-            ...brand.toObject(),
-            models: models,
+            ...brand,
+            models: transformedModels || [],
           };
         })
       );
 
-      return NextResponse.json({ success: true, data: brandsWithModels });
+      console.log("Successfully fetched brands with models");
+      return NextResponse.json({
+        success: true,
+        data: brandsWithModels,
+        message: "Brands with models fetched successfully",
+      });
     }
 
-    return NextResponse.json({ success: true, data: brands });
+    console.log("Successfully fetched brands");
+    return NextResponse.json({
+      success: true,
+      data: transformedBrands,
+      message: "Brands fetched successfully",
+    });
   } catch (error) {
-    console.error("Error fetching brands:", error);
+    console.error("Error in GET /api/brands:", error);
     return NextResponse.json(
-      { success: false, message: "Failed to fetch brands" },
+      {
+        success: false,
+        message: "Failed to fetch brands",
+        error: error.message,
+      },
       { status: 500 }
     );
   }

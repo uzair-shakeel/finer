@@ -9,6 +9,14 @@ export default function BrandsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Helper function to safely convert ObjectId to string
+  const safeToString = (id) => {
+    if (!id) return "";
+    if (typeof id === "string") return id;
+    if (typeof id === "object" && id.toString) return id.toString();
+    return "";
+  };
+
   useEffect(() => {
     fetchBrandsWithModels();
   }, []);
@@ -20,7 +28,16 @@ export default function BrandsPage() {
       const data = await response.json();
 
       if (data.success) {
-        setBrandsWithModels(data.data);
+        // Transform the data to ensure IDs are strings
+        const transformedBrands = data.data.map((brand) => ({
+          ...brand,
+          _id: safeToString(brand._id),
+          models: brand.models.map((model) => ({
+            ...model,
+            _id: safeToString(model._id),
+          })),
+        }));
+        setBrandsWithModels(transformedBrands);
       } else {
         setError(data.message || "Failed to fetch brands");
         toast.error(data.message || "Failed to fetch brands");

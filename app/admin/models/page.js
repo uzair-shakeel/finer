@@ -10,6 +10,8 @@ export default function ModelsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  console.log(models, "models");
+
   useEffect(() => {
     fetchModelsAndBrands();
   }, []);
@@ -29,7 +31,11 @@ export default function ModelsPage() {
       // Create a map of brand IDs to brand names for easier lookup
       const brandsMap = {};
       brandsData.data.forEach((brand) => {
-        brandsMap[brand._id] = brand;
+        // Ensure brand._id is converted to string when used as key
+        brandsMap[brand._id.toString()] = {
+          ...brand,
+          _id: brand._id.toString(),
+        };
       });
       setBrands(brandsMap);
 
@@ -37,8 +43,18 @@ export default function ModelsPage() {
       const modelsResponse = await fetch("/api/models");
       const modelsData = await modelsResponse.json();
 
+      console.log(modelsData, "modelsData");
+
       if (modelsData.success) {
-        setModels(modelsData.data);
+        // Ensure all IDs are strings
+        const transformedModels = modelsData.data.map((model) => ({
+          ...model,
+          _id: model._id.toString(),
+          brandId: model.brandId._id.toString(),
+        }));
+        setModels(transformedModels);
+        console.log("Transformed Models:", transformedModels); // Debug log
+        console.log("Brands Map:", brandsMap); // Debug log
       } else {
         throw new Error(modelsData.message || "Failed to fetch models");
       }
@@ -170,7 +186,7 @@ export default function ModelsPage() {
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end space-x-2">
                         <Link
-                          href={`/admin/brands/${model.brandId}/models`}
+                          href={`/admin/brands/${model?.brandId}/models`}
                           className="bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-1 rounded text-xs"
                         >
                           View Brand

@@ -15,6 +15,19 @@ const BrandSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
     },
+    active: {
+      type: Boolean,
+      default: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    displayOrder: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

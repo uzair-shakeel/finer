@@ -63,25 +63,38 @@ export default function AddProduct() {
   const [loadingModels, setLoadingModels] = useState(false);
 
   useEffect(() => {
+    console.log("Component mounted, fetching brands...");
     fetchBrands();
   }, []);
 
   const fetchBrands = async () => {
     try {
+      console.log("Starting to fetch brands...");
       setLoadingBrands(true);
+      setError("");
+      
+      console.log("Making API request to /api/brands");
       const response = await fetch("/api/brands");
+      console.log("API Response status:", response.status);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
+      console.log("Received brands data:", data);
 
       if (data.success) {
-        const activeBrands = data.data.filter((brand) => brand.active);
-        setBrands(activeBrands);
+        // Don't filter for active brands yet, let's see all brands first
+        console.log("Setting all brands:", data.data);
+        setBrands(data.data);
       } else {
-        console.error("Failed to fetch brands:", data.message);
-        toast.error("Failed to fetch brands");
+        throw new Error(data.message || "Failed to fetch brands");
       }
     } catch (error) {
-      console.error("Error fetching brands:", error);
-      toast.error("Error fetching brands");
+      console.error("Error in fetchBrands:", error);
+      setError("Failed to load brands. Please try refreshing the page.");
+      toast.error("Failed to load brands");
     } finally {
       setLoadingBrands(false);
     }
@@ -1042,24 +1055,45 @@ export default function AddProduct() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Brand <span className="text-red-500">*</span>
                 </label>
-                <select
-                  name="brandId"
-                  value={formData.brandId}
-                  onChange={handleChange}
-                  className="w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  required
-                  disabled={loadingBrands}
-                >
-                  <option value="">Select Brand</option>
-                  {brands.map((brand) => (
-                    <option key={brand._id} value={brand._id}>
-                      {brand.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    name="brandId"
+                    value={formData.brandId}
+                    onChange={handleChange}
+                    className={`w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
+                      loadingBrands ? "bg-gray-100" : "bg-white"
+                    }`}
+                    required
+                    disabled={loadingBrands}
+                  >
+                    <option value="">Select Brand</option>
+                    {brands && brands.length > 0 ? (
+                      brands.map((brand) => (
+                        <option key={brand._id} value={brand._id}>
+                          {brand.name} {!brand.active && "(Inactive)"}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="" disabled>No brands available</option>
+                    )}
+                  </select>
+                  {loadingBrands && (
+                    <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+                    </div>
+                  )}
+                </div>
                 {loadingBrands && (
                   <div className="mt-2 text-sm text-gray-500">
                     Loading brands...
+                  </div>
+                )}
+                {error && (
+                  <div className="mt-2 text-sm text-red-600">{error}</div>
+                )}
+                {!loadingBrands && !error && brands.length === 0 && (
+                  <div className="mt-2 text-sm text-amber-600">
+                    No brands found. <Link href="/admin/brands/new" className="text-blue-600 hover:underline">Add a new brand</Link>
                   </div>
                 )}
               </div>
