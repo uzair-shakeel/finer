@@ -30,9 +30,32 @@ export async function GET(request) {
     // Fetch models with populated brand information
     const models = await WatchModel.find(query)
       .populate("brandId", "name")
-      .sort({ name: 1 });
+      .sort({ name: 1 })
+      .lean()
+      .exec();
 
-    return NextResponse.json({ success: true, data: models });
+    // Transform the models to ensure IDs are strings
+    const transformedModels = models.map((model) => ({
+      ...model,
+      _id: model._id.toString(),
+      brandId: model.brandId._id.toString(),
+      // If brandId is populated, ensure its ID is also a string
+      ...(model.brandId &&
+        typeof model.brandId === "object" && {
+          brandId: {
+            ...model.brandId,
+            _id: model.brandId._id.toString(),
+          },
+        }),
+    }));
+
+    console.log("Transformed models:", transformedModels);
+
+    return NextResponse.json({
+      success: true,
+      data: transformedModels,
+      message: "Models fetched successfully",
+    });
   } catch (error) {
     console.error("Error fetching watch models:", error);
     return NextResponse.json(

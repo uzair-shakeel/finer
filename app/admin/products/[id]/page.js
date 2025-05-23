@@ -158,6 +158,7 @@ export default function EditProduct({ params }) {
     const fetchProduct = async () => {
       try {
         setLoading(true);
+        console.log("Fetching product data...");
         const response = await fetch(`/api/products/${id}`, {
           headers: {
             "x-is-admin": "true",
@@ -171,13 +172,14 @@ export default function EditProduct({ params }) {
         const data = await response.json();
         if (data.success && data.product) {
           const product = data.product;
+          console.log("Fetched product:", product);
 
           // Initialize form data with product data
           const formDataWithProduct = {
             brand: product.brand || "",
-            brandId: product.brandId || "",
+            brandId: product.brandId ? product.brandId.toString() : "",
             model: product.model || "",
-            modelId: product.modelId || "",
+            modelId: product.modelId ? product.modelId.toString() : "",
             reference: product.reference || "",
             year: product.year || "",
             condition: product.condition || {
@@ -236,11 +238,13 @@ export default function EditProduct({ params }) {
             notes: product.notes || "",
           };
 
+          console.log("Setting form data:", formDataWithProduct);
           setFormData(formDataWithProduct);
 
           // If we have a brandId, fetch the models for that brand
           if (product.brandId) {
-            fetchModelsByBrand(product.brandId);
+            console.log("Fetching models for brand:", product.brandId);
+            fetchModelsByBrand(product.brandId.toString());
           }
 
           // Build the initial allImages array from all image URLs in the product
@@ -248,21 +252,26 @@ export default function EditProduct({ params }) {
             product.imageUrl,
             ...(product.backsideImageUrl ? [product.backsideImageUrl] : []),
             ...(product.additionalImages?.map((img) => img.url) || []),
-          ].filter(Boolean); // Remove any undefined or null values
+          ].filter(Boolean);
 
-          console.log("all list here", imagesList);
           setAllImages(imagesList);
         }
       } catch (error) {
-        console.error("Fetch product error:", error);
-        setError("Failed to load product data");
+        console.error("Error fetching product:", error);
+        setError("Failed to fetch product data");
+        toast.error("Failed to fetch product data");
       } finally {
         setLoading(false);
       }
     };
 
     fetchProduct();
-  }, [id]); // We only need id in the dependency array since this effect only fetches data
+  }, [id]);
+
+  // Add useEffect to fetch brands when component mounts
+  useEffect(() => {
+    fetchBrands();
+  }, []);
 
   // Handle multi-select change
   const handleMultiSelectChange = (e, field) => {
@@ -282,7 +291,12 @@ export default function EditProduct({ params }) {
 
     // Handle brand selection
     if (name === "brandId" && value) {
+      console.log("Brand selected:", value);
+      console.log("Available brands:", brands);
       fetchModelsByBrand(value);
+
+      const selectedBrand = brands.find((brand) => brand._id === value);
+      console.log("Selected brand:", selectedBrand);
 
       // Reset model when brand changes
       setFormData((prev) => ({
@@ -290,7 +304,7 @@ export default function EditProduct({ params }) {
         [name]: value,
         modelId: "",
         // Keep the brand name for backward compatibility
-        brand: brands.find((brand) => brand._id === value)?.name || "",
+        brand: selectedBrand?.name || "",
       }));
       return;
     }
@@ -783,22 +797,17 @@ export default function EditProduct({ params }) {
     setIsPriceHistoryModalOpen(false);
   };
 
-  // Add this useEffect to fetch brands when the component mounts
-  useEffect(() => {
-    fetchBrands();
-  }, []);
-
   // Add this function to fetch brands
   const fetchBrands = async () => {
     try {
       setLoadingBrands(true);
+      console.log("Fetching brands...");
       const response = await fetch("/api/brands");
       const data = await response.json();
 
       if (data.success) {
-        // Only show active brands
-        const activeBrands = data.data.filter((brand) => brand.active);
-        setBrands(activeBrands);
+        console.log("Fetched brands:", data.data);
+        setBrands(data.data);
       } else {
         console.error("Failed to fetch brands:", data.message);
         toast.error("Failed to fetch brands");

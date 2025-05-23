@@ -321,11 +321,11 @@ export default function AddProduct() {
         }));
       }
     } else {
-      // Set the value in form data first
-      setFormData((prev) => ({
-        ...prev,
-        [name]: type === "checkbox" ? checked : value,
-      }));
+    // Set the value in form data first
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
     }
 
     // Handle price calculations - discount is only related to price and discountedPrice
@@ -1059,11 +1059,11 @@ export default function AddProduct() {
                   <select
                     name="brandId"
                     value={formData.brandId}
-                    onChange={handleChange}
+                  onChange={handleChange}
                     className={`w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
                       loadingBrands ? "bg-gray-100" : "bg-white"
                     }`}
-                    required
+                  required
                     disabled={loadingBrands}
                   >
                     <option value="">Select Brand</option>
@@ -1080,7 +1080,7 @@ export default function AddProduct() {
                   {loadingBrands && (
                     <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
-                    </div>
+              </div>
                   )}
                 </div>
                 {loadingBrands && (
@@ -1459,17 +1459,17 @@ export default function AddProduct() {
                     Case Size
                   </label>
                   <div className="relative">
-                    <select
-                      name="caseSize"
-                      value={
+                  <select
+                    name="caseSize"
+                    value={
                         formData.caseSize?.length > 0
                           ? formData.caseSize[0]
                           : ""
-                      }
-                      onChange={handleChange}
+                    }
+                    onChange={handleChange}
                       className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white appearance-none pr-8"
-                    >
-                      <option value="">Select case size</option>
+                  >
+                    <option value="">Select case size</option>
                       <optgroup label="Small Sizes (20-30mm)">
                         <option value="20mm">20mm - Extra Small</option>
                         <option value="22mm">22mm - Very Small</option>
@@ -1499,7 +1499,7 @@ export default function AddProduct() {
                         <option value="49mm">49mm - Extra Large</option>
                         <option value="50mm">50mm - Extra Large</option>
                       </optgroup>
-                    </select>
+                  </select>
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                       <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
                         <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
@@ -1565,40 +1565,40 @@ export default function AddProduct() {
                     Dial Colour
                   </label>
                   <div className="relative">
-                    <select
-                      name="dialColour"
-                      value={
-                        formData.dialColour?.length > 0
-                          ? formData.dialColour[0]
-                          : ""
-                      }
-                      onChange={handleChange}
+                  <select
+                    name="dialColour"
+                    value={
+                      formData.dialColour?.length > 0
+                        ? formData.dialColour[0]
+                        : ""
+                    }
+                    onChange={handleChange}
                       className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 appearance-none pr-10"
-                    >
-                      <option value="">Select dial colour</option>
+                  >
+                    <option value="">Select dial colour</option>
                       <optgroup label="Neutral Tones">
-                        <option value="Black">Black</option>
-                        <option value="White">White</option>
-                        <option value="Silver">Silver</option>
+                    <option value="Black">Black</option>
+                    <option value="White">White</option>
+                    <option value="Silver">Silver</option>
                         <option value="Grey">Grey</option>
                         <option value="Champagne">Champagne</option>
                       </optgroup>
                       <optgroup label="Primary Colors">
-                        <option value="Blue">Blue</option>
-                        <option value="Green">Green</option>
-                        <option value="Red">Red</option>
-                        <option value="Yellow">Yellow</option>
+                    <option value="Blue">Blue</option>
+                    <option value="Green">Green</option>
+                    <option value="Red">Red</option>
+                    <option value="Yellow">Yellow</option>
                       </optgroup>
                       <optgroup label="Other Colors">
-                        <option value="Orange">Orange</option>
-                        <option value="Brown">Brown</option>
-                        <option value="Purple">Purple</option>
-                        <option value="Pink">Pink</option>
-                        <option value="Mother of Pearl">Mother of Pearl</option>
-                        <option value="Meteorite">Meteorite</option>
-                        <option value="Skeleton">Skeleton</option>
+                    <option value="Orange">Orange</option>
+                    <option value="Brown">Brown</option>
+                    <option value="Purple">Purple</option>
+                    <option value="Pink">Pink</option>
+                    <option value="Mother of Pearl">Mother of Pearl</option>
+                    <option value="Meteorite">Meteorite</option>
+                    <option value="Skeleton">Skeleton</option>
                       </optgroup>
-                    </select>
+                  </select>
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                       <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
                         <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
@@ -1615,26 +1615,26 @@ export default function AddProduct() {
                     Bracelet
                   </label>
                   <div className="relative">
-                    <select
-                      name="bracelet"
-                      value={
+                  <select
+                    name="bracelet"
+                    value={
                         formData.bracelet?.length > 0
                           ? formData.bracelet[0]
                           : ""
-                      }
-                      onChange={handleChange}
+                    }
+                    onChange={handleChange}
                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white appearance-none pr-8"
-                    >
+                  >
                       <option value="">Select bracelet type</option>
                       <optgroup label="Standard Materials">
-                        <option value="Leather">Leather</option>
-                        <option value="Rubber">Rubber</option>
+                    <option value="Leather">Leather</option>
+                    <option value="Rubber">Rubber</option>
                         <option value="Fabric">Fabric</option>
                       </optgroup>
                       <optgroup label="Rolex Bracelet Types">
                         <option value="Flat Jubilee (Rolex)">
                           Flat Jubilee
-                        </option>
+                    </option>
                         <option value="Jubilee (Rolex)">Jubilee</option>
                         <option value="President (Rolex)">President</option>
                         <option value="Pearlmaster (Rolex)">Pearlmaster</option>
@@ -1650,44 +1650,44 @@ export default function AddProduct() {
                         <option value="Santos (Cartier)">
                           Santos (Cartier)
                         </option>
-                        <option value="Ballon Bleu (Cartier)">
-                          Ballon Bleu (Cartier)
-                        </option>
-                        <option value="Professional (Breitling)">
-                          Professional (Breitling)
-                        </option>
+                    <option value="Ballon Bleu (Cartier)">
+                      Ballon Bleu (Cartier)
+                    </option>
+                    <option value="Professional (Breitling)">
+                      Professional (Breitling)
+                    </option>
                         <option value="Pilot (Breitling)">
                           Pilot (Breitling)
                         </option>
-                        <option value="Navitimer (Breitling)">
-                          Navitimer (Breitling)
-                        </option>
-                        <option value="Big Bang Integrated (Hublot)">
-                          Big Bang Integrated (Hublot)
-                        </option>
-                        <option value="Royal Oak (Audemars Piguet)">
+                    <option value="Navitimer (Breitling)">
+                      Navitimer (Breitling)
+                    </option>
+                    <option value="Big Bang Integrated (Hublot)">
+                      Big Bang Integrated (Hublot)
+                    </option>
+                    <option value="Royal Oak (Audemars Piguet)">
                           Royal Oak (AP)
-                        </option>
-                        <option value="Royal Oak Offshore (Audemars Piguet)">
+                    </option>
+                    <option value="Royal Oak Offshore (Audemars Piguet)">
                           Royal Oak Offshore (AP)
-                        </option>
-                        <option value="Nautilus (Patek Philippe)">
+                    </option>
+                    <option value="Nautilus (Patek Philippe)">
                           Nautilus (Patek)
-                        </option>
-                        <option value="Aquanaut (Patek Philippe)">
+                    </option>
+                    <option value="Aquanaut (Patek Philippe)">
                           Aquanaut (Patek)
-                        </option>
-                        <option value="Overseas (Vacheron Constantin)">
+                    </option>
+                    <option value="Overseas (Vacheron Constantin)">
                           Overseas (VC)
-                        </option>
-                        <option value="Polaris (Jaeger-LeCoultre)">
+                    </option>
+                    <option value="Polaris (Jaeger-LeCoultre)">
                           Polaris (JLC)
-                        </option>
-                        <option value="Reverso (Jaeger-LeCoultre)">
+                    </option>
+                    <option value="Reverso (Jaeger-LeCoultre)">
                           Reverso (JLC)
-                        </option>
+                    </option>
                       </optgroup>
-                    </select>
+                  </select>
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                       <svg
                         className="fill-current h-4 w-4"
@@ -1722,19 +1722,19 @@ export default function AddProduct() {
                     Movement
                   </label>
                   <div className="relative">
-                    <select
-                      name="movement"
-                      value={
+                  <select
+                    name="movement"
+                    value={
                         formData.movement?.length > 0
                           ? formData.movement[0]
                           : ""
-                      }
-                      onChange={handleChange}
+                    }
+                    onChange={handleChange}
                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white appearance-none pr-8"
-                    >
+                  >
                       <option value="">Select movement type</option>
                       <optgroup label="Mechanical Movements">
-                        <option value="Automatic">Automatic</option>
+                    <option value="Automatic">Automatic</option>
                         <option value="Manual">Manual (Hand-wound)</option>
                         <option value="Mechanical">Mechanical (General)</option>
                         <option value="In-House">In-House Movement</option>
@@ -1757,7 +1757,7 @@ export default function AddProduct() {
                           Perpetual Calendar
                         </option>
                       </optgroup>
-                    </select>
+                  </select>
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                       <svg
                         className="fill-current h-4 w-4"
@@ -1919,22 +1919,22 @@ export default function AddProduct() {
                 {allImages.length > 0 && (
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
                     {allImages.map((imageUrl, index) => (
-                      <div
-                        key={index}
+                          <div
+                            key={index}
                         className="relative border rounded-md p-2 bg-gray-50"
-                      >
-                        <Image
+                          >
+                              <Image
                           src={imageUrl}
                           alt={`Product image ${index + 1}`}
                           width={150}
                           height={150}
                           className="w-full h-32 object-contain mb-2"
-                          unoptimized={true}
-                        />
+                                unoptimized={true}
+                              />
 
                         <div className="flex flex-col space-y-1 mt-2">
-                          <button
-                            type="button"
+                                <button
+                                  type="button"
                             onClick={() => setAsMainImage(imageUrl)}
                             className={`text-xs py-1 px-2 rounded-md ${
                               formData.imageUrl === imageUrl
@@ -1945,46 +1945,46 @@ export default function AddProduct() {
                             {formData.imageUrl === imageUrl
                               ? "Front Image ✓"
                               : "Set as Front"}
-                          </button>
+                                </button>
 
                           <div className="flex space-x-1 mt-1">
-                            <button
-                              type="button"
+                                <button
+                                  type="button"
                               onClick={() => moveImageUp(index)}
-                              disabled={index === 0}
+                                  disabled={index === 0}
                               className={`flex-1 text-xs py-1 px-2 rounded-md ${
                                 index === 0
                                   ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                                   : "bg-blue-100 text-blue-600 hover:bg-blue-200"
                               }`}
-                            >
-                              ↑ Up
-                            </button>
+                                >
+                                  ↑ Up
+                                </button>
 
-                            <button
-                              type="button"
+                                <button
+                                  type="button"
                               onClick={() => moveImageDown(index)}
-                              disabled={index === allImages.length - 1}
+                                  disabled={index === allImages.length - 1}
                               className={`flex-1 text-xs py-1 px-2 rounded-md ${
                                 index === allImages.length - 1
                                   ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                                   : "bg-blue-100 text-blue-600 hover:bg-blue-200"
                               }`}
-                            >
-                              ↓ Down
-                            </button>
+                                >
+                                  ↓ Down
+                                </button>
                           </div>
 
-                          <button
-                            type="button"
+                                <button
+                                  type="button"
                             onClick={() => removeImage(imageUrl)}
                             className="text-xs py-1 px-2 rounded-md bg-red-100 hover:bg-red-200 text-red-600"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </div>
-                    ))}
+                                >
+                                  Remove
+                                </button>
+                            </div>
+                          </div>
+                        ))}
                   </div>
                 )}
 
